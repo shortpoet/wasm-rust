@@ -1,0 +1,16 @@
+[package]
+name = "ssvm_nodejs_starter"
+version = "0.1.0"
+authors = ["ubuntu"]
+edition = "2018"
+
+[package.metadata.ssvmup.profile.release]
+wasm-opt = ['-O4']
+
+[lib]
+name = "ssvm_nodejs_starter_lib"
+path = "src/lib.rs"
+crate-type =["cdylib"]
+
+[dependencies]
+wasm-bindgen = "=0.2.61"
