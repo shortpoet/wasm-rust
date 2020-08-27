@@ -70,47 +70,24 @@ export default defineComponent({
 
     const html = ref('')
 
-    const options : marked.MarkedOptions =  {
+    const options: marked.MarkedOptions =  {
       // takes function that return code with syntax hightlighting
       highlight: (code: string) => hljs.highlightAuto(code).value
     }
 
     const handleEdit = () => {
-      markdown.value = contentEditable.value.innerText
+      markdown.value = contentEditable.value!.innerText
     }
 
-    // debouncing
-    // pass a timer
-    // calls function
-    // if function called again during duration
-    // restarts timer
-    // only calls function after time has passed
-    
-    // wrap function in debounce for added performance
-    // const update = debounce(
-    //   (value: string) => html.value = parse(value, options),
-    //   500
-    // )
-
-    // watch(
-    //   () => markdown.value, 
-    //   (value) => update(value),
-    //   // use optional 3rd arguement to have watch function called onMounted instead of manually copying logic in that hook
-    //   { immediate: true }
-    // )
-
-    // when passing same variable to diff functions - good chance to refactor
-
-    const update = (value: string) => html.value = marked.parse(value, options)
+    const update = (value: string) => html.value = value ? marked.parse(value, options) : marked.parse('', options)
 
     watch(
-      () => markdown.value,
+      () => markdown.value!,
       // still a function with same signature - just a func returning string so can pass in like this
       debounce(update, 500),
       // use optional 3rd arguement to have watch function called onMounted instead of manually copying logic in that hook
       { immediate: true }
     )
-
 
     const submit = () => {
 
@@ -131,7 +108,9 @@ export default defineComponent({
 
     // need to use on mounted hook to manually update a dom element to ensure it isn't null
     onMounted(() => {
-      contentEditable.value.innerText = markdown.value
+      if (contentEditable!.value!.innerText) {
+        contentEditable!.value!.innerText = markdown.value || '';
+      }
     })
 
     return {

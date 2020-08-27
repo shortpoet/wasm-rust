@@ -11,7 +11,7 @@ import moment from 'moment'
 
 import { useStore } from '../store'
 import { useRouter, useRoute } from 'vue-router'
-import { colorLog } from '../../utils/colorLog'
+import { colorLog } from '../utils/colorLog'
 
 export default defineComponent({
   name: 'NewPost',
@@ -19,9 +19,6 @@ export default defineComponent({
     PostWriter
   },
   props: {
-    currentUserId: {
-      type: Number
-    }
   },
   setup (props) {
     
@@ -34,15 +31,13 @@ export default defineComponent({
       markdown: '## New Post\nEnter your post here...',
       html: '',
       created: moment(),
-      userId: parseInt(store.getState().authors.currentId)
-
+      category: 'nodejs'
     }
 
     // composition functions
     // useRouter internally use inject and provide
     // if moved to within a different context eg nested function get error
     // inject can only be used within setup function
-
 
     const router = useRouter()
 

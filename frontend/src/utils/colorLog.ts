@@ -2,7 +2,7 @@
 
 type Options = {
   color: string;
-  background: string
+  background: string;
 }
 
 // https://www.w3schools.com/colors/colors_names.asp
@@ -12,7 +12,7 @@ export function colorLog(message: string, options?: (number | Options)): void {
   
   let color;
   let background;
-  let _options: Options = {} as Options
+  const _options: Options = {} as Options
   // use strict null check double bang to account for !0 being true
   // but then !!1 is true
   if (options == null) {
@@ -49,7 +49,8 @@ export function colorLog(message: string, options?: (number | Options)): void {
             if (!e.stack) {
               return; // IE < 10, likely
             }
-          }
+    }
+          // eslint-disable-next-line
           const stack = e.stack!.toString().split(/\r\n|\n/);
           if (message === '') {
             message = '""';
@@ -60,9 +61,11 @@ export function colorLog(message: string, options?: (number | Options)): void {
     const trace = stack[1] ? stack[1].split('src/') : null;
     // const file = trace[1].match(/(.+?):/)[1]
     if (trace) {
+      // eslint-disable-next-line
       const file = trace[1] ? trace[1].match(/.+?(?=:)/)![0] : null;
       // const line = trace[1].match(/:(.*)/)[1]
       // const line = trace[1].match(/(?<=:).*/)[0]
+      // eslint-disable-next-line
       const line = trace[1] ? trace[1].match(/(:.*)/)![0] : null;
       console.log(`%c${message}%c\t\t\t\t\t${file}%c${line}`, `color:${color};background:${background}`, `color:#003EC5;background:white;text-align:right;` ,`color:#0086E1;background:white;text-align:right;`)
     }

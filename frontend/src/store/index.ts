@@ -52,7 +52,7 @@ export const initialState = (): State => ({
 const parseQuery = (input: IPost): string => {
   return Object.entries(input).reduce((cur, [k, v]) => {
     return typeof v != 'number'
-      ? cur += `${k}: """${v.toString().replace(/"/g, '\\"')}""", `
+      ? cur += `${k}: """${v!.toString().replace(/"/g, '\\"')}""", `
       : cur += `${k}: ${v}, `
   }, '')
 }
@@ -142,13 +142,19 @@ class Store {
   async fetchPosts() {
     const query = `
       {
-        posts {
+        posts{
           id
           title
-          markdown
-          html
-          userId
-          created
+          categoryId
+          category{
+            id
+            name
+          }
+          tags{
+            id
+            name
+            
+          }
         }
       }
     `

@@ -33,11 +33,6 @@ export default defineComponent({
 
     const id = route.params.id as string
     const post = store.getState().posts.all[route.params.id as string]
-    // const post = store.getState().posts.all[id]
-    const canEdit = post.userId == parseInt(store.getState().authors.currentId, 10)
-    if (!canEdit) {
-      router.push('/')
-    }
 
     const save = async (post: IPost) => {
       console.log('save');

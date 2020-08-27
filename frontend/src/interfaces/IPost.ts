@@ -1,12 +1,14 @@
-import { Moment } from "moment";
+import { Moment } from 'moment';
+import { ITag } from './ITag';
+import { ICategory, ICategoryName } from './ICategory';
 
 export interface IPost {
   id: number;
   title: string;
-  markdown: string;
-  html: string;
-  userId: number;
+  markdown?: string;
+  html?: string;
   created: Moment;
-  [key: string]: string | number | Moment;
-  // https://stackoverflow.com/questions/32968332/how-do-i-prevent-the-error-index-signature-of-object-type-implicitly-has-an-an
+  category: ICategoryName;
+  tags?: ITag[];
+  [key: string]: number | string | Moment | ICategoryName | ITag[] | undefined
 }

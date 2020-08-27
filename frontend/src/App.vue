@@ -18,17 +18,15 @@
 
 <script lang="ts">
 import { defineComponent, computed, ref } from 'vue'
-import FormInput from './components/FormInput.vue'
 import { useModal } from './composables/useModal'
 import { required, length, validate, Status } from './utils/validators'
-import { provideStore, useStore } from './store'
+import { provideStore } from './store'
 import NavBar from './components/NavBar.vue'
 
 export default defineComponent({
   name: 'App',
   components: {
     NavBar,
-    FormInput
   },
 
   setup () {
@@ -65,3 +63,6 @@ export default defineComponent({
   }
 })
 </script>
+<style lang="scss">
+@import "~bulma/bulma";
+</style>
