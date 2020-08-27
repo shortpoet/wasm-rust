@@ -21,7 +21,7 @@ import { defineComponent, computed, ref } from 'vue'
 import { useModal } from './composables/useModal'
 import { required, length, validate, Status } from './utils/validators'
 import { provideStore } from './store'
-import NavBar from './components/NavBar.vue'
+import NavBar from './components/common/NavBar.vue'
 
 export default defineComponent({
   name: 'App',

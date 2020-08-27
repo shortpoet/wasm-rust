@@ -44,7 +44,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, watch } from 'vue'
-import { IPost } from '../interfaces/IPost'
+import { IPost } from '../../interfaces/IPost'
 import marked from 'marked'
 import hljs from 'highlight.js'
 import debounce from 'lodash/debounce'
@@ -76,12 +76,14 @@ export default defineComponent({
     }
 
     const handleEdit = () => {
+      // eslint-disable-next-line
       markdown.value = contentEditable.value!.innerText
     }
 
     const update = (value: string) => html.value = value ? marked.parse(value, options) : marked.parse('', options)
 
     watch(
+      // eslint-disable-next-line
       () => markdown.value!,
       // still a function with same signature - just a func returning string so can pass in like this
       debounce(update, 500),
@@ -108,7 +110,9 @@ export default defineComponent({
 
     // need to use on mounted hook to manually update a dom element to ensure it isn't null
     onMounted(() => {
+      // eslint-disable-next-line
       if (contentEditable!.value!.innerText) {
+        // eslint-disable-next-line
         contentEditable!.value!.innerText = markdown.value || '';
       }
     })

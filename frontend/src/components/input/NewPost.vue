@@ -5,22 +5,19 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import PostWriter from './PostWriter.vue'
-import { IPost } from '../interfaces/IPost'
+import { IPost } from '../../interfaces/IPost'
 import moment from 'moment'
 
 
-import { useStore } from '../store'
-import { useRouter, useRoute } from 'vue-router'
-import { colorLog } from '../utils/colorLog'
+import { useStore } from '../../store'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'NewPost',
   components: {
     PostWriter
   },
-  props: {
-  },
-  setup (props) {
+  setup () {
     
     const store = useStore()
 

@@ -30,7 +30,7 @@
 <script lang="ts">
 import { IPeriod } from '../interfaces/IPeriod'
 import { IPost } from '../interfaces/IPost'
-import TimelinePost from './TimelinePost.vue'
+import TimelinePost from '../components/display/TimelinePost.vue'
 import { ref, computed, defineComponent } from 'vue'
 import { useStore } from '../store'
 

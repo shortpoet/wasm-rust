@@ -12,7 +12,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import PostLayout from './PostLayout.vue'
-import Progress from '../components/Progress.vue'
+import Progress from '../components/common/Progress.vue'
 
 export default defineComponent({
   components: { 

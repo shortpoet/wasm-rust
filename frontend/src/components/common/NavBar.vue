@@ -21,14 +21,12 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import {useModal} from '../composables/useModal'
-import { useStore } from '../store'
+import {useModal} from '../../composables/useModal'
 
 export default defineComponent({
   name: 'NavBar',
   setup() {
     const modal = useModal()
-    const store = useStore()
     return {
       modal,
       component: modal.component

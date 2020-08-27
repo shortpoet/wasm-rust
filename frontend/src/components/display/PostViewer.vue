@@ -16,8 +16,8 @@
 
 <script lang="ts">
 import { ref, defineComponent } from 'vue'
-import { useStore } from '../store'
-import { useMarkdown } from '../composables/useMarkdown'
+import { useStore } from '../../store'
+import { useMarkdown } from '../../composables/useMarkdown'
 
 import marked from "marked"
 import hljs from "highlight.js"

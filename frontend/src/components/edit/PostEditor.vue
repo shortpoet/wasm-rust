@@ -4,15 +4,10 @@
 </template>
 
 <script lang="ts">
-import { IPeriod } from '../interfaces/IPeriod'
-import { IPost } from '../interfaces/IPost'
-import TimelinePost from './TimelinePost.vue'
-import { ref, computed, defineComponent } from 'vue'
-import { useStore } from '../store'
-import PostWriter from './PostWriter.vue'
-
-import moment from 'moment'
-
+import { IPost } from '../../interfaces/IPost'
+import { defineComponent } from 'vue'
+import { useStore } from '../../store'
+import PostWriter from '../input/PostWriter.vue'
 
 import { useRoute, useRouter } from 'vue-router'
 
@@ -31,7 +26,7 @@ export default defineComponent({
       await store.fetchPosts()
     }
 
-    const id = route.params.id as string
+    // const id = route.params.id as string
     const post = store.getState().posts.all[route.params.id as string]
 
     const save = async (post: IPost) => {
