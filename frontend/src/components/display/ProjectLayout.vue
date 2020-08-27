@@ -19,33 +19,39 @@
 </template>
 
 <script lang="ts">
-import { ICategory } from '../interfaces/ICategory'
-import { IPost } from '../interfaces/IPost'
+import { ICategory } from '../../interfaces/ICategory'
+import { IPost } from '../../interfaces/IPost'
 import CategoryPost from '../components/display/CategoryPost.vue'
 import { ref, computed, defineComponent } from 'vue'
-import { useStore } from '../store'
+import { useStore } from '../../store'
 
 import moment from 'moment'
 
 
-import { colorLog } from '../utils/colorLog'
-import { ICategoryName } from '../interfaces/ICategory'
+import { colorLog } from '../../utils/colorLog'
+import { ICategoryName } from '../../interfaces/ICategory'
+import { IProject } from '../../interfaces/IProject'
 
 export default defineComponent({
   components: {
     CategoryPost
   },
-  async setup() {
-    const categories: ICategoryName[] = ['browser', 'deno', 'faas', 'nodejs', 'rust', 'ssvm', 'tencentcloud']
+  props: {
+    project: {
+      type: Object as () => IProject
+    }
+  },
+  async setup(props) {
+    const types: IPost['type'][] = ['intro']
 
     // ref is generic type
-    const selectedCategory = ref<ICategoryName>('nodejs')
+    const selectedType = ref<IPost['type']>()
 
     const store = useStore()
 
     if (!store.getState().posts.loaded) {
       console.log('post layout');
-      await store.fetchPosts()
+      await store.fetchPostsByProject(props.project.name)
     }
     
     // console.log(users);

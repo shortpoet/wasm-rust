@@ -2,20 +2,10 @@
   <div style="display: flex; flex-direction: row; justify-content: space-between">
     <a data-test="project" @click="toProject" class="panel-block" style="flex-grow: 2">
       <div>
-
-        <!-- 
-          exercise for listener
-          title rendered correctly 
-        -->
-
         <a>{{ project.name }}</a>
         <div>{{ project.category }}</div>
       </div>
     </a>
-    <button class="button is-pulled-right is-rounded" style="">
-      <i class="fa fa-trash"></i>
-    </button>
-
   </div>
 </template>
 

@@ -44,28 +44,22 @@ export default defineComponent({
     const store = useStore()
     
     if (!store.getState().projects.loaded) {
-      console.log('post layout');
       await store.fetchProjects()
     }
     
-    // console.log(users);
-    // this uses the mapper to return with O(1) instead of O(n) by searching by id insead of looping over an array
     const allProjects = store.getState().projects.ids.reduce<IPost[]>((accumulator, id) => {
       const post = store.getState().projects.all[id]
       return accumulator.concat(post)
     }, [])
 
-    // computed automatically recalculates and updates the DOM anytime a reactive reference changes 
     const projects = computed(() => allProjects.filter(post => {
-      console.log(post);
-      
       return post.category == selectedCategory.value
     }))
+    
     const setCategory = (category: ICategoryName) => {
       selectedCategory.value = category
     }
     colorLog('projects')
-    console.log(projects.value);
     
     return {
       categories,

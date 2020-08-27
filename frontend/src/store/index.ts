@@ -192,10 +192,6 @@ class Store {
             id
             name
           }
-          posts {
-            id
-            title
-          }
         }
       }
     `
@@ -214,6 +210,51 @@ class Store {
       }
     } 
     this.state.projects.loaded = true
+  }
+  async fetchPostsByProject(projectName: IProject['name']) {
+    const query = `
+      query {
+        project(name: "hello-rust"){
+          id
+          name
+          category {
+            id
+            name
+          }
+          posts{
+            id
+            title
+            html
+            markdown
+            categoryId
+            created
+            category{
+              id
+              name
+            }
+            tags{
+              id
+              name
+            }
+          }
+        }
+      }
+    `
+    const response = await graphAxios(query, 'projects')
+    const dto: IProjectDTO = response.project
+    const project: IProject = {
+      ...dto,
+      category: dto.category.name,
+      posts: dto.posts.map(p => ({
+        ...p,
+        created: moment(p.created)
+      }))
+    }
+    if (project) {
+      unParseQuery(project)
+      this.state.projects.currentId = project.id.toString()
+    }
+    return project
   }
 
   public updateRecords (): IPost[] {

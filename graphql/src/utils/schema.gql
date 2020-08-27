@@ -54,6 +54,7 @@ type Project {
 type Query {
   post(id: String!): Post
   posts: [Post!]!
+  project(name: String!): Project!
   projects: [Project!]!
 }
 

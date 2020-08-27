@@ -2,12 +2,6 @@
   <div style="display: flex; flex-direction: row; justify-content: space-between">
     <a data-test="post" @click="toPost" class="panel-block" style="flex-grow: 2">
       <div>
-
-        <!-- 
-          exercise for listener
-          title rendered correctly 
-        -->
-
         <a>{{ post.title }}</a>
         <div>{{ post.created.format('Do MMM HH:mm:ss') }}</div>
       </div>
@@ -15,7 +9,6 @@
     <button class="button is-pulled-right is-rounded" @click.prevent="onDelete" style="">
       <i class="fa fa-trash"></i>
     </button>
-
   </div>
 </template>
 
