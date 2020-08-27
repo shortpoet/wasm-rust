@@ -19,7 +19,7 @@ app.use(bodyParser.raw());
 // parse text
 app.use(bodyParser.text());
 
-// app.use(express.json());
+app.use(express.json());
 
 app.use(api);
 

@@ -4,6 +4,7 @@
   "main": "server/app.js",
   "scripts": {
     "start": "ts-node ./bin/start.js",
+    "stop": "ts-node ./bin/stop.js",
     "dev": "ts-node-dev ./bin/start.js"
   },
   "license": "MIT",

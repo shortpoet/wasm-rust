@@ -9,13 +9,13 @@ const port = 8080;
 
 router.get('/', (request, response) => {
   const queryObject = url.parse(request.url,true).query;
-  console.log(queryObject);
+  console.log(request.url);
   if (!queryObject['name']) {
     response.end(`Please use command curl http://${hostname}:${port}/say/?name=MyName \n`);
   } else {
+    // response.json(say(queryObject['name']) + '\n');
     response.end(say(queryObject['name']) + '\n');
   }
-  response.json({userId: request.userId});
 });
 
 // https://stackoverflow.com/questions/27465850/typeerror-router-use-requires-middleware-function-but-got-a-object
