@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios'
-import { colorLog } from '../../utils/colorLog'
-import { chalkLog } from '../../utils/chalkLog';
+import { colorLog } from '../utils/colorLog'
+import { chalkLog } from '../utils/chalkLog';
 // Add a request interceptor
 axios.interceptors.request.use(function (config) {
   console.log('intercept before');

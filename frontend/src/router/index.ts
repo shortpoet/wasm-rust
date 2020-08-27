@@ -1,25 +1,56 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
+import NewPost from '../components/NewPost.vue'
+import EditPost from '../components/EditPost.vue'
+import ShowPost from '../components/ShowPost.vue'
 
-const routes: Array<RouteRecordRaw> = [
+export const routes =  [
   {
-    path: '/',
     name: 'Home',
+    path: '/',
     component: Home
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    name: 'ShowPost',
+    path: '/posts/:id',
+    component: ShowPost
+  },
+  {
+    name: 'NewPost',
+    path: '/posts/new',
+    component: NewPost,
+  },
+  {
+    name: 'EditPost',
+    path: '/posts/:id/edit',
+    component: EditPost,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/:catchAll(.*)',
+    component: Home
   }
 ]
 
-const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes
+export const router = createRouter({
+  history: createWebHistory(),
+  routes: routes
 })
 
-export default router
+export const makeRouter = () => createRouter({
+  history: createWebHistory(),
+  routes: routes
+})
+
+
+// https://github.com/vuejs/vue-router-next/blob/master/playground/router.ts
+// redirect catch-all
+// router.beforeEach((to, from, next) => {
+//   if (/.\/$/.test(to.path)) {
+//     to.meta.redirectCode = 301
+//     next(to.path.replace(/\/$/, ''))
+//   } else next()
+//   // next()
+// })

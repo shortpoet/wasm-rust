@@ -27,10 +27,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, shallowRef, computed, markRaw, nextTick } from 'vue'
+import { defineComponent } from 'vue'
 import {useModal} from '../composables/useModal'
-import Signup from './Signup.vue'
-import Signin from './Signin.vue'
 import { useStore } from '../store'
 
 export default defineComponent({
@@ -38,28 +36,8 @@ export default defineComponent({
   setup() {
     const modal = useModal()
     const store = useStore()
-    store.getState().authors.currentId
-    const currentUserId = computed(() => store.getState().authors.currentId)
-    const onSignUp = async () => {
-      console.log("on signup");
-      modal.component.value = markRaw(Signup)
-      modal.showModal()
-    }
-    const onSignIn = async () => {
-      console.log("on signin");
-      modal.component.value = markRaw(Signin)
-      modal.showModal()
-    }
-    const onSignOut = () => {
-      console.log("on signout");
-      store.logout();
-    }
     return {
       modal,
-      onSignUp,
-      onSignIn,
-      onSignOut,
-      currentUserId,
       component: modal.component
     }
   }

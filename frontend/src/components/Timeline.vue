@@ -37,20 +37,19 @@ import { useStore } from '../store'
 import moment from 'moment'
 
 
-import { colorLog } from '../../utils/colorLog'
+import { colorLog } from '../utils/colorLog'
 
 export default defineComponent({
   components: {
     TimelinePost
   },
   async setup() {
-    const periods : IPeriod[] = ['today', 'this week', 'this month']
+    const periods: IPeriod[] = ['today', 'this week', 'this month']
 
     // ref is generic type
     const selectedPeriod = ref<IPeriod>('today')
 
     const store = useStore()
-    const users = await store.getUsers()
 
     if (!store.getState().posts.loaded) {
       console.log('timeline');

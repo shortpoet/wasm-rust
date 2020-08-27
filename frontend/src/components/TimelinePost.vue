@@ -34,7 +34,7 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore()
-    const onDelete = () => store.deletePost(props.post.id)
+    const onDelete = () => store.deletePost(props.post.id.toString())
 
     return {
       to: `/posts/${props.post.id}`,

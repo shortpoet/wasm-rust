@@ -1,16 +1,11 @@
 import { reactive, readonly, provide, inject } from "vue"
-import axios from "axios"
-import { IUser } from "../interfaces/IUser"
 import { IPost } from "../interfaces/IPost"
-import { IAuthor } from "../interfaces/IAuthor"
 import { graphAxios } from "../ajax"
-import { ICreateUser } from "../interfaces/ICreateUser"
 import moment from 'moment'
 
 import { useStorage } from "../composables/useStorage"
-import { CURRENT_USER_ID_STORAGE_KEY } from "../constants"
 import { colorLog } from "../utils/colorLog"
-import { chalkLog } from "../utils/chalkLog"
+import { stringifyQuery } from 'vue-router'
 
 interface StoreState<T> {
   ids: string[];
@@ -20,10 +15,11 @@ interface StoreState<T> {
 }
 
 export interface State {
-  posts: StoreState<IPost>
+  posts: StoreState<IPost>;
 }
 
 // https://stackoverflow.com/questions/32308370/what-is-the-syntax-for-typescript-arrow-functions-with-generics
+
 
 export function iSS<T>(): StoreState<T> {
   return {
@@ -36,39 +32,38 @@ export function iSS<T>(): StoreState<T> {
   }
 }
 
-export const initialStoreState = <T extends {}>(x: T): StoreState<T> => ({
-  ids: [
-  ],
-  all: {
-  },
-  loaded: false,
-  currentId: undefined
-})
+// this version throws 
+// 33:49  warning  'x' is defined but never used                      @typescript-eslint/no-unused-vars
+// export const initialStoreState = <T extends {}>(x: T): StoreState<T> => ({
+//   ids: [
+//   ],
+//   all: {
+//   },
+//   loaded: false,
+//   currentId: undefined
+// })
 
-export const initialState = () : State => ({
+export const initialState = (): State => ({
   // authors: iSS<IAuthor>(),
-  posts: initialStoreState<IPost>({} as IPost)
+  // posts: initialStoreState<IPost>({} as IPost)
+  posts: iSS<IPost>()
 })
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
-
-const localStorage = useStorage();
-
-const parseQuery = (input: Record<any, any>): string => {
+const parseQuery = (input: IPost): string => {
   return Object.entries(input).reduce((cur, [k, v]) => {
     return typeof v != 'number'
       ? cur += `${k}: """${v.toString().replace(/"/g, '\\"')}""", `
       : cur += `${k}: ${v}, `
   }, '')
 }
-const unParseQuery = (input: Record<any, any>): void => {
+// https://stackoverflow.com/questions/32968332/how-do-i-prevent-the-error-index-signature-of-object-type-implicitly-has-an-an
+const unParseQuery = (input: IPost): void => {
   return Object.entries(input).forEach(([k, v]) => {
     if (typeof v == 'string') {
       input[k] = v.replace(/(\\)+"/g, '"')
     }
   })
 }
-
 
 class Store {
   protected state: State
@@ -158,7 +153,7 @@ class Store {
       }
     `
     const response = await graphAxios(query, 'posts')
-    const posts = response.posts.map(p => ({
+    const posts: IPost[] = response.posts.map((p: IPost) => ({
       ...p,
       created: moment(p.created)
     }))
@@ -193,7 +188,7 @@ export const createStore = (initState: State = initialState()) => {
   return new Store(initState)
 }
 
-export const useStore = (): Store | undefined=> {
+export const useStore = (): Store => {
   const store = inject<Store>('store')
-  return store
+  return store!
 }
