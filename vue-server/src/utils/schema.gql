@@ -48,7 +48,6 @@ type Query {
 type Tag {
   id: ID!
   name: String!
-  posts: [Post!]!
 }
 
 input UpdatePostInput {

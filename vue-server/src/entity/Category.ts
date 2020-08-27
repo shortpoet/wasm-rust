@@ -4,7 +4,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMan
 import { Post } from "./Post";
 
 @ObjectType() // signifies class is part of GraphQL
-@Entity({ name: 'categories' })
+@Entity({ name: `content_categories`, schema: 'rust' })
 export class Category implements ICategory {
   @Field(type => ID)
   @PrimaryGeneratedColumn()

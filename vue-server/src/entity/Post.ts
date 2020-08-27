@@ -39,16 +39,27 @@ export class Post implements IPost {
   categoryId: number;
 
   @Field(type => Category)
-  @ManyToOne(type => Category, category => category.posts)
+  @ManyToOne(type => Category, category => category.posts, {
+    eager: true
+  })
   @JoinColumn({ name: 'category_id' })
   category: Category;
 
   @Field(type => [Tag])
   @ManyToMany(type => Tag, tag => tag.posts, {
     cascade: true,
-    nullable: true
+    nullable: true,
+    eager: true
   })
-  @JoinTable({ name: 'content_posts_tags' })
+  @JoinTable({
+    name: 'content_posts_tags',
+    joinColumns: [
+      {name: 'post_id'},
+    ],
+    inverseJoinColumns: [
+      {name: 'tag_id'}
+  ]
+  })
   tags: Tag[];
 
 }

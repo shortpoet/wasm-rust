@@ -16,12 +16,6 @@ export class Tag implements ITag {
   @Field()
   @Column()
   name: string;
-
-  @Field(type => [Post])
-  @ManyToMany(type => Post, post => post.tags, {
-    nullable: true
-  })
-  @JoinTable({ name: 'content_posts_tags' })
-  posts: Post[];
   
+  posts: Post[]
 }
