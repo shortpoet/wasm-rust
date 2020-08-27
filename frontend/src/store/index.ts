@@ -1,11 +1,10 @@
 import { reactive, readonly, provide, inject } from "vue"
 import { IPost } from "../interfaces/IPost"
+import { IPostDTO } from "../interfaces/IPostDTO"
 import { graphAxios } from "../ajax"
 import moment from 'moment'
 
-import { useStorage } from "../composables/useStorage"
 import { colorLog } from "../utils/colorLog"
-import { stringifyQuery } from 'vue-router'
 
 interface StoreState<T> {
   ids: string[];
@@ -52,6 +51,7 @@ export const initialState = (): State => ({
 const parseQuery = (input: IPost): string => {
   return Object.entries(input).reduce((cur, [k, v]) => {
     return typeof v != 'number'
+      // eslint-disable-next-line
       ? cur += `${k}: """${v!.toString().replace(/"/g, '\\"')}""", `
       : cur += `${k}: ${v}, `
   }, '')
@@ -145,7 +145,10 @@ class Store {
         posts{
           id
           title
+          html
+          markdown
           categoryId
+          created
           category{
             id
             name
@@ -153,15 +156,15 @@ class Store {
           tags{
             id
             name
-            
           }
         }
       }
     `
     const response = await graphAxios(query, 'posts')
-    const posts: IPost[] = response.posts.map((p: IPost) => ({
+    const posts: IPost[] = response.posts.map((p: IPostDTO) => ({
       ...p,
-      created: moment(p.created)
+      created: moment(p.created),
+      category: p.category.name
     }))
     if (posts) {
       for (const post of posts) {
@@ -196,5 +199,6 @@ export const createStore = (initState: State = initialState()) => {
 
 export const useStore = (): Store => {
   const store = inject<Store>('store')
+  // eslint-disable-next-line
   return store!
 }
