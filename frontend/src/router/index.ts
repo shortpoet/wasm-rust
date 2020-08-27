@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import NewPost from '../components/input/NewPost.vue'
-import EditPost from '../components/edit/EditPost.vue'
-import ShowPost from '../components/display/ShowPost.vue'
+import WaitEditPost from '../components/edit/WaitEditPost.vue'
+import WaitShowPost from '../components/display/WaitShowPost.vue'
 
 export const routes =  [
   {
@@ -11,9 +11,9 @@ export const routes =  [
     component: Home
   },
   {
-    name: 'ShowPost',
+    name: 'WaitShowPost',
     path: '/posts/:id',
-    component: ShowPost
+    component: WaitShowPost
   },
   {
     name: 'NewPost',
@@ -21,9 +21,9 @@ export const routes =  [
     component: NewPost,
   },
   {
-    name: 'EditPost',
+    name: 'WaitEditPost',
     path: '/posts/:id/edit',
-    component: EditPost,
+    component: WaitEditPost,
   },
   {
     path: '/:catchAll(.*)',

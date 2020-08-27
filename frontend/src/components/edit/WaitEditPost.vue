@@ -14,7 +14,7 @@ import { defineComponent } from 'vue'
 import PostEditor from './PostEditor.vue'
 import Progress from '../common/Progress.vue'
 export default defineComponent({
-  name: 'ShowPost',
+  name: 'WaitShowPost',
   components: {
     PostEditor,
     Progress

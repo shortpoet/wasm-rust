@@ -14,7 +14,7 @@ import { defineComponent } from 'vue'
 import PostViewer from './PostViewer.vue'
 import Progress from '../common/Progress.vue'
 export default defineComponent({
-  name: 'ShowPost',
+  name: 'WaitShowPost',
   components: {
     PostViewer,
     Progress
