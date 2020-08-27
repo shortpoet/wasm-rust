@@ -1,5 +1,5 @@
 import { ObjectType, ID, Field, Int } from 'type-graphql';
-import { ICategory } from "../interfaces/ICategory";
+import { ICategory, ICategoryName } from "../interfaces/ICategory";
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany, OneToOne } from "typeorm";
 import { Post } from "./Post";
 
@@ -12,7 +12,7 @@ export class Category implements ICategory {
 
   @Field() // default is string
   @Column()
-  name: string
+  name: ICategoryName
 
   @Field(type => Post)
   @OneToMany(type => Post, post => post.categoryId)

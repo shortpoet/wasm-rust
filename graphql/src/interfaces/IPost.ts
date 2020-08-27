@@ -10,5 +10,5 @@ export interface IPost {
   created: Moment;
   categoryId: number;
   category: ICategory;
-  tags: ITag[];
+  tags?: ITag[];
 }

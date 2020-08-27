@@ -10,13 +10,25 @@ INSERT INTO "rust"."content_categories"
 )
 VALUES
 ( 
- 'node'
+ 'browser'
+),
+( 
+ 'deno'
+),
+( 
+ 'faas'
+),
+( 
+ 'nodejs'
 ),
 ( 
  'rust'
 ),
 ( 
- 'bash'
+ 'ssvm'
+),
+( 
+ 'tencentcloud'
 );
 
 
@@ -29,10 +41,10 @@ VALUES
  'Today', 'Content', '<p>Content</p>', 1, NOW()
 ),
 ( 
- 'This Week','Content', '<p>Content</p>', 2, CURRENT_DATE - integer '6'
+ 'This Week','Content', '<p>Content</p>', 4, CURRENT_DATE - integer '6'
 ),
 ( 
- 'This Month','Content', '<p>Content</p>', 3, CURRENT_DATE - integer '13'
+ 'This Month','Content', '<p>Content</p>', 5, CURRENT_DATE - integer '13'
 );
 
 

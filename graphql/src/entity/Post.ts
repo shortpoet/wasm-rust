@@ -60,7 +60,7 @@ export class Post implements IPost {
       {name: 'tag_id'}
   ]
   })
-  tags: Tag[];
+  tags?: Tag[];
 
 }
 
