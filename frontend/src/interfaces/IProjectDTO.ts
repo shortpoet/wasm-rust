@@ -1,11 +1,10 @@
 import { ICategory } from "./ICategory";
 import { IPost } from "./IPost";
 
-export interface IProject {
+export interface IProjectDTO {
   id: number;
   name: string;
   categoryId: number;
-  category: ICategory['name'];
+  category: ICategory;
   posts: IPost[];
-  [key: string]: number | string | IPost[] | undefined
 }

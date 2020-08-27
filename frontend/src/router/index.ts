@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import NewPost from '../components/input/NewPost.vue'
 import WaitEditPost from '../components/edit/WaitEditPost.vue'
+import WaitShowProject from '../components/display/WaitShowProject.vue'
 import WaitShowPost from '../components/display/WaitShowPost.vue'
 
 export const routes =  [
@@ -9,6 +10,11 @@ export const routes =  [
     name: 'Home',
     path: '/',
     component: Home
+  },
+  {
+    name: 'WaitShowProject',
+    path: '/posts/:name',
+    component: WaitShowProject
   },
   {
     name: 'WaitShowPost',

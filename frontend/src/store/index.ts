@@ -1,10 +1,12 @@
 import { reactive, readonly, provide, inject } from "vue"
 import { IPost } from "../interfaces/IPost"
 import { IPostDTO } from "../interfaces/IPostDTO"
+import { IProjectDTO } from "../interfaces/IProjectDTO"
 import { graphAxios } from "../ajax"
 import moment from 'moment'
 
 import { colorLog } from "../utils/colorLog"
+import { IProject } from '@/interfaces/IProject'
 
 interface StoreState<T> {
   ids: string[];
@@ -14,6 +16,7 @@ interface StoreState<T> {
 }
 
 export interface State {
+  projects: StoreState<IProject>;
   posts: StoreState<IPost>;
 }
 
@@ -45,10 +48,11 @@ export function iSS<T>(): StoreState<T> {
 export const initialState = (): State => ({
   // authors: iSS<IAuthor>(),
   // posts: initialStoreState<IPost>({} as IPost)
+  projects: iSS<IProject>(),
   posts: iSS<IPost>()
 })
 
-const parseQuery = (input: IPost): string => {
+const parseQuery = (input: IPost | IProject): string => {
   return Object.entries(input).reduce((cur, [k, v]) => {
     return typeof v != 'number'
       // eslint-disable-next-line
@@ -57,7 +61,7 @@ const parseQuery = (input: IPost): string => {
   }, '')
 }
 // https://stackoverflow.com/questions/32968332/how-do-i-prevent-the-error-index-signature-of-object-type-implicitly-has-an-an
-const unParseQuery = (input: IPost): void => {
+const unParseQuery = (input: IPost | IProject ): void => {
   return Object.entries(input).forEach(([k, v]) => {
     if (typeof v == 'string') {
       input[k] = v.replace(/(\\)+"/g, '"')
@@ -180,41 +184,36 @@ class Store {
 
   async fetchProjects() {
     const query = `
-      {
-        posts{
+      query {
+        projects {
           id
-          title
-          html
-          markdown
-          categoryId
-          created
-          category{
+          name
+          category {
             id
             name
           }
-          tags{
+          posts {
             id
-            name
+            title
           }
         }
       }
     `
-    const response = await graphAxios(query, 'posts')
-    const posts: IPost[] = response.posts.map((p: IPostDTO) => ({
+    const response = await graphAxios(query, 'projects')
+    const projects: IProject[] = response.projects.map((p: IProjectDTO) => ({
       ...p,
-      created: moment(p.created),
       category: p.category.name
     }))
-    if (posts) {
-      for (const post of posts) {
-        unParseQuery(post)
-        if (!this.state.posts.ids.includes(post.id.toString())) {
-          this.state.posts.ids.push(post.id.toString())
+    if (projects) {
+      for (const proj of projects) {
+        unParseQuery(proj)
+        if (!this.state.projects.ids.includes(proj.id.toString())) {
+          this.state.projects.ids.push(proj.id.toString())
         }
-        this.state.posts.all[post.id] = post
+        this.state.projects.all[proj.id] = proj
       }
     } 
-    this.state.posts.loaded = true
+    this.state.projects.loaded = true
   }
 
   public updateRecords (): IPost[] {
