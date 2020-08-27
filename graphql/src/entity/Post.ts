@@ -4,11 +4,7 @@ import { IPost } from "../interfaces/IPost";
 import moment, { Moment } from "moment";
 import { Tag } from "./Tag";
 import { Category } from "./Category";
-// i'm thinking because 
-// entity imports happen first then 
-// the redis client was being exported 
-// so it was hit earlier in the build chain
-// moved it here so env var is not undefined
+import { Project } from "./Project";
 
 @ObjectType()
 @Entity({ name: `content_posts`, schema: 'rust' })
@@ -33,6 +29,15 @@ export class Post implements IPost {
   @Field(type => GraphQLISODateTime)
   @Column({ type: 'timestamp', default: moment() })
   created: Moment;
+
+  @Field(type => Int)
+  @Column({ name: 'project_id' })
+  projectId: number;
+
+  @Field(type => Project)
+  @ManyToOne(type => Project, project => project.posts)
+  @JoinColumn({ name: 'project_id' })
+  project: Project
 
   @Field(type => Int)
   @Column({ name: 'category_id' })

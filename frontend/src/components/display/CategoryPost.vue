@@ -39,8 +39,7 @@ export default defineComponent({
     const router = useRouter()
     const onDelete = () => store.deletePost(props.post.id.toString())
     const toPost = () => {
-      colorLog('#### to post ####')
-      
+      colorLog('#### to show post ####')
       router.push({ name: 'WaitShowPost', params: {id: props.post.id, title: props.post.title}})
     }
 

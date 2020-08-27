@@ -7,6 +7,7 @@ type Category {
   id: ID!
   name: String!
   posts: Post!
+  projects: Project!
 }
 
 input CreatePostInput {
@@ -36,8 +37,18 @@ type Post {
   html: String
   id: ID!
   markdown: String
+  project: Project!
+  projectId: Int!
   tags: [Tag!]!
   title: String!
+}
+
+type Project {
+  category: Category!
+  categoryId: Int!
+  id: ID!
+  name: String!
+  posts: [Post!]!
 }
 
 type Query {

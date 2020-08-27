@@ -2,9 +2,9 @@
   <div class="columns">
     <div class="column"/>
     <div class="column is-two-thirds">
-      <router-link data-test="can-edit" :to="to" class="button is-pulled-right is-rounded is-link">
+      <a data-test="can-edit" @click="toPost" class="button is-pulled-right is-rounded is-link">
         <i class="fas fa-edit" />
-      </router-link>
+      </a>
       <h1>
         Post Title is: {{ post.title }}
       </h1>
@@ -22,8 +22,9 @@ import { useMarkdown } from '../../composables/useMarkdown'
 import marked from "marked"
 import hljs from "highlight.js"
 
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { IPost } from '../../interfaces/IPost'
+import { colorLog } from '../../utils/colorLog'
 
 export default defineComponent({
   name: 'PostViewer',
@@ -32,12 +33,15 @@ export default defineComponent({
   async setup(props) {
     const route = useRoute()
     const store = useStore()
+    const router = useRouter()
+
+    // on reload there is no pushed id or loaded posts param so must do 'expensive' search instead
 
     if (!store.getState().posts.loaded) {
       await store.fetchPosts()
     }
-    let post;
-    // on reload there is no pushed id param so must do 'expensive' search instead
+
+    let post: IPost;
     if (!route.params.id) {
       const allPosts = store.getState().posts.ids.reduce<IPost[]>((accumulator, id) => {
         const post = store.getState().posts.all[id]
@@ -58,12 +62,16 @@ export default defineComponent({
     if (post.html) {
       html.value = update(post.html)
     }
+    const toPost = () => {
+      colorLog('#### to edit post ####')
+      router.push({ name: 'WaitEditPost', params: { id: post.id, title: post.title }})
+    }
 
 return {
       post,
-      to: `/posts/${post.title}/edit`,
       markdown,
-      html
+      html,
+      toPost
     }
   }
 })

@@ -2,7 +2,21 @@
 
 
 \c rust_test rust_user
--- Insert rows into table 'posts'
+
+INSERT INTO "rust"."content_projects"
+( -- columns to insert data into
+ name
+)
+VALUES
+( 
+ 'hello-rust'
+),
+( 
+ 'quadratic'
+),
+( 
+ 'functions'
+);
 
 INSERT INTO "rust"."content_categories"
 ( -- columns to insert data into
@@ -34,17 +48,17 @@ VALUES
 
 INSERT INTO "rust"."content_posts"
 ( -- columns to insert data into
- title, markdown, html, category_id, created
+ title, type, markdown, html, project_id, category_id, created
 )
 VALUES
 ( 
- 'hello-rust', '# Hello Rust', '<h1>Hello Rust</h1>', 4, NOW()
+ 'hello-rust', 'intro', '# Hello Rust', '<h1>Hello Rust</h1>', 1, 4, NOW()
 ),
 ( 
- 'quadratic','# Quadratic', '<h1>Quadratic</h1>', 4, CURRENT_DATE - integer '6'
+ 'quadratic', 'intro', '# Quadratic', '<h1>Quadratic</h1>', 2, 4, CURRENT_DATE - integer '6'
 ),
 ( 
- 'functions','# Functions', '<h1>Functions</h1>', 4, CURRENT_DATE - integer '13'
+ 'functions', 'intro', '# Functions', '<h1>Functions</h1>', 3, 4, CURRENT_DATE - integer '13'
 );
 
 
