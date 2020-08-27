@@ -12,8 +12,9 @@ export const routes =  [
   },
   {
     name: 'WaitShowPost',
-    path: '/posts/:id',
+    path: '/posts/:title',
     component: WaitShowPost
+    // props: (route: any) => ({ id: route.query.q })
   },
   {
     name: 'NewPost',
@@ -22,7 +23,7 @@ export const routes =  [
   },
   {
     name: 'WaitEditPost',
-    path: '/posts/:id/edit',
+    path: '/posts/:title/edit',
     component: WaitEditPost,
   },
   {

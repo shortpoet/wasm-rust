@@ -15,6 +15,11 @@ import PostViewer from './PostViewer.vue'
 import Progress from '../common/Progress.vue'
 export default defineComponent({
   name: 'WaitShowPost',
+  props: {
+    id: {
+      type: String
+    }
+  },
   components: {
     PostViewer,
     Progress

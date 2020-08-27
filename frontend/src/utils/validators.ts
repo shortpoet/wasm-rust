@@ -1,27 +1,31 @@
 // base type
 
 interface Rule {
-  type: 'required' | 'length' | 'match'
+  type: 'required' | 'length' | 'match' | 'title';
 }
 
 // enforce that all types have minimum type value in Rule
 interface Require extends Rule {
-  type: 'required'
+  type: 'required';
 } 
 
 interface MinMaxOptions {
-  min: number
-  max: number
+  min: number;
+  max: number;
 }
 
 interface Length extends Rule {
-  type: 'length'
-  options: MinMaxOptions
+  type: 'length';
+  options: MinMaxOptions;
 }
 
 interface Confirm extends Rule {
-  type: 'match'
-  reference: string
+  type: 'match';
+  reference: string;
+}
+
+interface Title extends Rule {
+  type: 'title';
 }
 
 export function required(): Require {
@@ -41,14 +45,19 @@ export function match(reference: string): Confirm {
     reference
   }
 }
+export function title(): Title {
+  return {
+    type: 'title'
+  }
+}
 
 // a union of all the validators available
-type Validator = Require | Length | Confirm
+type Validator = Require | Length | Confirm | Title
 
 export interface Status {
-  valid: boolean
+  valid: boolean;
   // nullable bec if valid no need for error
-  message?: string
+  message?: string;
 }
 
 
@@ -79,6 +88,14 @@ export function validate(value: string, validators: Validator[]): Status {
       return {
         valid: false,
         message: `Passwords must match`
+      }
+    }
+
+    // check for title validator
+    if (validator.type == 'title' && value.match(/\s/) ) {
+      return {
+        valid: false,
+        message: `Title must not have a space`
       }
     }
 

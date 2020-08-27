@@ -178,6 +178,13 @@ class Store {
     this.state.posts.loaded = true
   }
 
+  public updateRecords (): IPost[] {
+    return this.state.posts.ids.reduce<any[]>((accumulator, id) => {
+      const record = this.state.posts.all[id]
+      return accumulator.concat(record)
+    }, [])
+  }
+
 }
 
 export const store = new Store(initialState())

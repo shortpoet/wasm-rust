@@ -38,13 +38,13 @@ INSERT INTO "rust"."content_posts"
 )
 VALUES
 ( 
- 'Today', 'Content', '<p>Content</p>', 1, NOW()
+ 'hello-rust', '# Hello Rust', '<h1>Hello Rust</h1>', 4, NOW()
 ),
 ( 
- 'This Week','Content', '<p>Content</p>', 4, CURRENT_DATE - integer '6'
+ 'quadratic','# Quadratic', '<h1>Quadratic</h1>', 4, CURRENT_DATE - integer '6'
 ),
 ( 
- 'This Month','Content', '<p>Content</p>', 5, CURRENT_DATE - integer '13'
+ 'functions','# Functions', '<h1>Functions</h1>', 4, CURRENT_DATE - integer '13'
 );
 
 
@@ -60,7 +60,7 @@ VALUES
  'rust'
 ),
 ( 
- 'bash'
+ 'math'
 );
 
 INSERT INTO "rust"."content_posts_tags"
