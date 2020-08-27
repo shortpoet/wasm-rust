@@ -5,7 +5,7 @@ import { IProject } from "../interfaces/IProject";
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, JoinColumn } from "typeorm";
 
 @ObjectType() // signifies class is part of GraphQL
-@Entity({ name: 'projects' })
+@Entity({ name: 'content_projects' , schema: "rust"})
 export class Project implements IProject {
   
   @Field(type => ID)

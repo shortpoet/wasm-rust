@@ -1,7 +1,7 @@
 <template>
   <Suspense>
     <template #default>
-      <PostLayout />
+      <MainLayout />
     </template>
     <template #fallback>
       <Progress />
@@ -11,12 +11,12 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import PostLayout from './PostLayout.vue'
+import MainLayout from './MainLayout.vue'
 import Progress from '../components/common/Progress.vue'
 
 export default defineComponent({
   components: { 
-    PostLayout,
+    MainLayout,
     Progress
   },
   name: 'Home'

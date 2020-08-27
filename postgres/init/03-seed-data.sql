@@ -2,22 +2,6 @@
 
 
 \c rust_test rust_user
-
-INSERT INTO "rust"."content_projects"
-( -- columns to insert data into
- name
-)
-VALUES
-( 
- 'hello-rust'
-),
-( 
- 'quadratic'
-),
-( 
- 'functions'
-);
-
 INSERT INTO "rust"."content_categories"
 ( -- columns to insert data into
  name
@@ -44,6 +28,22 @@ VALUES
 ( 
  'tencentcloud'
 );
+
+INSERT INTO "rust"."content_projects"
+( -- columns to insert data into
+ name, category_id
+)
+VALUES
+( 
+ 'hello-rust', 4
+),
+( 
+ 'quadratic', 4
+),
+( 
+ 'functions', 4
+);
+
 
 
 INSERT INTO "rust"."content_posts"

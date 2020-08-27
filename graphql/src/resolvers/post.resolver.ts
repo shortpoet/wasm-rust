@@ -7,7 +7,7 @@ import { CreatePostInput, UpdatePostInput } from "../inputs/post.input";
 import { chalkLog } from "../utils/chalkLog";
 
 @Resolver(of => Post)
-export class PostResolver {
+export class PostsResolver {
 
   // will return server error 500 if not set nullable: true
   @Query(returns => Post, { nullable: true })

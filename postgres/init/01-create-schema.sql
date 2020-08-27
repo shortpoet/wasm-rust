@@ -9,6 +9,7 @@ CREATE SCHEMA "rust";
 -- content_projects table
 CREATE TABLE "rust"."content_projects" (
   id serial primary key,
+  category_id INTEGER NOT NULL,
   name VARCHAR 
   CHECK(name !~ '\s') NOT NULL
 );
@@ -46,6 +47,7 @@ CREATE TABLE "rust"."content_categories" (
 CREATE UNIQUE INDEX categories_name_idx ON "rust"."content_categories"(name);
 
 
+ALTER TABLE "rust"."content_projects" ADD FOREIGN KEY (category_id) REFERENCES "rust"."content_categories"(id) ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE "rust"."content_posts" ADD FOREIGN KEY (project_id) REFERENCES "rust"."content_projects"(id) ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE "rust"."content_posts" ADD FOREIGN KEY (category_id) REFERENCES "rust"."content_categories"(id) ON DELETE NO ACTION ON UPDATE CASCADE;
 

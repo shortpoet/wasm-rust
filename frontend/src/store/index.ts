@@ -178,6 +178,45 @@ class Store {
     this.state.posts.loaded = true
   }
 
+  async fetchProjects() {
+    const query = `
+      {
+        posts{
+          id
+          title
+          html
+          markdown
+          categoryId
+          created
+          category{
+            id
+            name
+          }
+          tags{
+            id
+            name
+          }
+        }
+      }
+    `
+    const response = await graphAxios(query, 'posts')
+    const posts: IPost[] = response.posts.map((p: IPostDTO) => ({
+      ...p,
+      created: moment(p.created),
+      category: p.category.name
+    }))
+    if (posts) {
+      for (const post of posts) {
+        unParseQuery(post)
+        if (!this.state.posts.ids.includes(post.id.toString())) {
+          this.state.posts.ids.push(post.id.toString())
+        }
+        this.state.posts.all[post.id] = post
+      }
+    } 
+    this.state.posts.loaded = true
+  }
+
   public updateRecords (): IPost[] {
     return this.state.posts.ids.reduce<any[]>((accumulator, id) => {
       const record = this.state.posts.all[id]

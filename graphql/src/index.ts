@@ -8,8 +8,9 @@ import { generateSchema } from "./utils/generateSchema";
 import { buildSchema } from 'type-graphql';
 import { isContext } from 'vm';
 import { Post } from './entity/Post';
-import { PostResolver } from './resolvers/post.resolver';
+import { PostsResolver } from './resolvers/post.resolver';
 import { loggingMiddleware } from './middleware/loggingMiddleware';
+import { ProjectsResolver } from './resolvers/project.resolvers';
 
 // const config = require('../ormconfig.js');
 require("dotenv").config();
@@ -44,7 +45,7 @@ const util = require('util');
     app.use(cors());
     
     app.use(loggingMiddleware);
-    const schema = await generateSchema(PostResolver);
+    const schema = await generateSchema(PostsResolver, ProjectsResolver);
     app.use('/graphql', graphqlHTTP((req) => ({
       schema,
       graphiql: true,

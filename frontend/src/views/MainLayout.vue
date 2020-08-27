@@ -1,13 +1,4 @@
 <template>
-<!-- 
-
-  refactor possibility
-
-<CategorySelector>
-   <ICategory name="today" />
-</CategorySelector> 
-
--->
   <div class="message is-info is-marginless">
     <div class="message-header">
       <p>Posts</p>
