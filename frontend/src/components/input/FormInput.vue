@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts">
-  import {defineComponent} from 'vue'
+  import {defineComponent, onMounted} from 'vue'
 
   export default defineComponent({
 
@@ -35,7 +35,7 @@
         // emitting special update event with modifier called modelValue updated the prop which is v-model
         ctx.emit('update:modelValue', event.target.value)
       }
-
+      // onMounted(() => ctx.emit('update:modelValue', props.modelValue))
       return {
         handleInput
       }

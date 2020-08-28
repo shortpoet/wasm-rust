@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-  import {defineComponent, computed} from 'vue'
+  import {defineComponent, computed, onMounted} from 'vue'
 import { colorLog } from '../../utils/colorLog';
 
   export default defineComponent({
@@ -60,11 +60,10 @@ import { colorLog } from '../../utils/colorLog';
     },
 
     setup(props, ctx) {
-      console.log(props.defaultValue);
-      
+      onMounted(() => ctx.emit('update:modelValue', {type: props.itemType, value: props.defaultValue}))
       const handleInput = (event: any) => {
         // emitting special update event with modifier called modelValue updated the prop which is v-model
-        colorLog('base selector input')        
+        // colorLog('base selector input')        
         ctx.emit('update:modelValue', {type: props.itemType, value: event.target.value})
       }
       return {

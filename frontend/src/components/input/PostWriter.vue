@@ -54,23 +54,16 @@ export default defineComponent({
   },
   
   setup(props, ctx) {
-    console.log(props.post.title);
-    
     const title = ref(props.post.title)
-
     // declare new ref with initial value null
     // because needs to execute setup first
     const contentEditable = ref<null | HTMLDivElement>(null)
-
     const markdown = ref(props.post.markdown)
-
     const html = ref('')
-
     const options: marked.MarkedOptions =  {
       // takes function that return code with syntax hightlighting
       highlight: (code: string) => hljs.highlightAuto(code).value
     }
-
     const titleStatus = computed<Status>(() => {
       return validate(
         title.value, 
@@ -80,14 +73,11 @@ export default defineComponent({
         ]
       )
     })
-
     const handleEdit = () => {
       // eslint-disable-next-line
       markdown.value = contentEditable.value!.innerText
     }
-
     const update = (value: string) => html.value = value ? marked.parse(value, options) : marked.parse('', options)
-
     watch(
       () => props.post.title,
       () => title.value = props.post.title,
@@ -104,7 +94,6 @@ export default defineComponent({
     )
 
     const submit = () => {
-
       const post: IPost = {
         // spread 
         ...props.post,
@@ -112,12 +101,10 @@ export default defineComponent({
         markdown: markdown.value,
         html: html.value
       }
-
       ctx.emit(
         'save',
         post
       )
-
     }
 
     // need to use on mounted hook to manually update a dom element to ensure it isn't null

@@ -63,22 +63,22 @@ export default defineComponent({
     const types: IPost['type'][] = ['intro']
 
     const selectedType = ref<IPost['type']>()
-    colorLog(JSON.stringify(route.params), 0)
+    // colorLog(JSON.stringify(route.params), 0)
     const project: IProject = await store.fetchPostsByProject(route.params.name as string)
 
     const posts = computed(() => project.posts.filter(post => {
-      console.log(post);
+      // console.log(post);
       return selectedType.value ? post.type == selectedType.value : true
     }))
 
     const setType = (type: IPost['type']) => {
       selectedType.value = type
     }
-    colorLog('posts')
-    console.log(posts.value);
+    // colorLog('posts')
+    // console.log(posts.value);
 
     const newPost = () => {
-      router.push({ name: 'NewPost', params: {id: project.id, name: project.name}})
+      router.push({ name: 'NewPost', params: {id: project.id, name: project.name, category: project.category}})
     }
     return {
       project,

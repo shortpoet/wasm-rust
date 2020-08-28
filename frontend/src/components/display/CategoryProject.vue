@@ -28,7 +28,7 @@ export default defineComponent({
     const store = useStore()
     const router = useRouter()
     const toProject = () => {
-      colorLog('#### to show project ####')
+      // colorLog('#### to show project ####')
       router.push({ name: 'WaitShowProject', params: {id: props.project.id, name: props.project.name}})
     }
 
