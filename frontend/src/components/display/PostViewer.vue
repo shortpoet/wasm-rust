@@ -52,12 +52,7 @@ export default defineComponent({
       post = store.getState().posts.all[route.params.id as string]
     }
     
-    const markdown = useMarkdown().update
-    const options: marked.MarkedOptions =  {
-      // takes function that return code with syntax hightlighting
-      highlight: (code: string) => hljs.highlightAuto(code).value
-    }
-    const update = (value: string) => marked.parse(value, options)
+    const update = useMarkdown().update
     const html = ref()
     if (post.html) {
       html.value = update(post.html)
@@ -70,7 +65,6 @@ export default defineComponent({
 
 return {
       post,
-      markdown,
       html,
       toPost
     }

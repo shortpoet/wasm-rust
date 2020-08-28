@@ -8,7 +8,9 @@ export function useMarkdown() {
     highlight: (code: string) => hljs.highlightAuto(code).value
   }
 
-  const update = (value: string) => marked.parse(value, options)
+  // const update = (value: string) => marked.parse(value, options)
+  const update = (value: string) => value = value ? marked.parse(value, options) : marked.parse('', options)
+
 
   return {
     update

@@ -108,6 +108,8 @@ class Store {
     this.state.posts.ids.push(post.id.toString())
   }
   async updatePost(input: IUpdatePost) {
+    console.log(input);
+    
     const createPost: string = parseQuery(input)
     const query = `
       mutation {

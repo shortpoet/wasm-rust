@@ -13,7 +13,7 @@
       <p class="panel-tabs">
         <!-- define a test specific selector so that future code changes to tag, class, or id, which don't nec change functionality, don't break test eg a => div -->
         <a v-for="type in types" :key="type" data-test="type"
-          :class="[ type === selectedType ? 'is-active' : '']"
+          :class="[ type == selectedType ? 'is-active' : '']"
           @click="setType(type)"
         >
           {{ type }}
@@ -60,7 +60,7 @@ export default defineComponent({
     if (!store.getState().projects.loaded) {
       await store.fetchProjects()
     }    
-    const types: IPost['type'][] = ['intro']
+    const types: IPost['type'][] = ['intro', 'code', 'all']
 
     const selectedType = ref<IPost['type']>()
     // colorLog(JSON.stringify(route.params), 0)
@@ -72,7 +72,7 @@ export default defineComponent({
     }))
 
     const setType = (type: IPost['type']) => {
-      selectedType.value = type
+      selectedType.value = type == 'all' ? '' : type
     }
     // colorLog('posts')
     // console.log(posts.value);

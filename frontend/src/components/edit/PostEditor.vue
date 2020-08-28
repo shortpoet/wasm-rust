@@ -39,13 +39,7 @@ export default defineComponent({
         const project = store.getState().projects.all[id]
         return accumulator.concat(project)
       }, [])
-      console.log(allProjects);
-      console.log(route.params);
-      console.log(allProjects.filter(project => project.name == route.params.name));
-      
       project = allProjects.filter(project => project.name == route.params.name)[0]
-      console.log(project);
-      
       store.setCurrentProject(project.id)
     } else {
       project = store.getState().projects.all[store.getState().projects.currentId as string]
@@ -53,51 +47,42 @@ export default defineComponent({
 
     let post: IPost;
     if (store.getState().posts.currentId) {
-      colorLog('1')
       post = store.getState().posts.all[store.getState().posts.currentId as string]
-      console.log(post);
-      
     } else {
-      colorLog('2')
       if (!store.getState().posts.loaded) {
         await store.fetchPostsByProject(project.name)
       }
       if (route.params.title) {
-        colorLog('3')
-        console.log(route.params.title);
-        
         const allPosts = store.getState().posts.ids.reduce<IPost[]>((accumulator, id) => {
           const post = store.getState().posts.all[id]
           return accumulator.concat(post)
         }, [])
-        console.log(allPosts);
-        
         post = allPosts.filter(post => post.title == route.params.title)[0]
         if (post == undefined) {
           // wrong or old name reroute home
           router.push('/')
         }
-        console.log(post);
-        
       } else {
-        colorLog('4')
         post = store.getState().posts.all[route.params.id as string]
       }
     }
-    colorLog('5')
     console.log(post);
     
-    const updatePost: IUpdatePost = {
-      ...post,
-      categoryId: parseInt(project.categoryId.toString()),
-      projectId: parseInt(store.getState().projects.currentId as string)
+    const makeUpdatePost = (p: IPost): IUpdatePost => {
+      delete p['category']
+      return {
+        ...p,
+        categoryId: parseInt(project.categoryId.toString()),
+        projectId: parseInt(store.getState().projects.currentId as string)
+      }
     }
+    const updatePost = makeUpdatePost(post)
 
-    const save = async (post: IUpdatePost) => {
+    const save = async (post: IPost) => {
       console.log('save');
       console.log(post);
       
-      await store.updatePost(post)
+      await store.updatePost(makeUpdatePost(post))
       router.push('/')
     }
 

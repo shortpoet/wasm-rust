@@ -19,7 +19,6 @@
         <!-- new kind of ref 'template ref' to keep track of user entered value instead of v-model -->
         <!-- box panel message card content textarea input -->
         <div contenteditable id="markdown" class="box" ref="contentEditable" @input="handleEdit" data-test="markdown">
-          {{ markdown }}
         </div>
       </div>
       <div class="column is-one-half">
