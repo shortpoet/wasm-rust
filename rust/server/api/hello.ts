@@ -1,5 +1,8 @@
+const fs = require('fs')
+const path = require('path')
+const express = require('express');
+import { Request, Response } from 'express';
 import { router } from ".";
-
 const { say } = require('../../hello-world/pkg/ssvm_nodejs_starter_lib.js');
 
 const http = require('http');
@@ -7,7 +10,10 @@ const url = require('url');
 const hostname = '127.0.0.1';
 const port = 8080;
 
-router.get('/', (request, response) => {
+router.get('/', (request: Request, response: Response) => {
+  response.set({
+    'Content-Type': 'text/plain'
+  })
   const queryObject = url.parse(request.url,true).query;
   console.log(request.url);
   if (!queryObject['name']) {

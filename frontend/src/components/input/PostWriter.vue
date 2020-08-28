@@ -1,26 +1,21 @@
 <template>
   <div>
-
     <div class="columns">
-      <div class="column">
-        <div class="field">
-          <div class="label">Post Title</div>
-          <div class="control">
-            <input type="text" v-model="title" class="input" data-test="post-title" />
-            <!-- vue automatically calls .value on a ref -->
-            {{ title }}
-          </div>
-        </div>
+      <div class="column is-three-fourths">
+        <FormInput type="text" name="Post Title" v-model="title" :error="titleStatus.message"/>
+      </div>
+      <div class="column is-one-fourths">
+        <button @click="submit" class="button is-primary is-pulled-right" data-test="submit-post">
+          Submit
+        </button>
       </div>
     </div>
-
     <div class="columns">
       <div class="column is-one-half">
         <!-- input only uses text on one line
         textarea does not implement syntax highlighting and other features
         contentEditable allows to write any text in div
         but can't use with v-model - implementation here -->
-
         <!-- new kind of ref 'template ref' to keep track of user entered value instead of v-model -->
         <!-- box panel message card content textarea input -->
         <div contenteditable id="markdown" class="box" ref="contentEditable" @input="handleEdit" data-test="markdown">
@@ -30,28 +25,27 @@
         <div v-html="html"></div>
       </div>
     </div>
-
     <div class="columns">
       <div class="column">
-        <button @click="submit" class="button is-primary is-pulled-right" data-test="submit-post">
-          Submit
-        </button>
       </div>
     </div>
-
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, watch } from 'vue'
+import { defineComponent, ref, onMounted, watch, computed } from 'vue'
 import { IPost } from '../../interfaces/IPost'
 import marked from 'marked'
 import hljs from 'highlight.js'
 import debounce from 'lodash/debounce'
+import { Status, validate, contiguous, required } from '../../utils/validators'
+import FormInput from './FormInput.vue'
 
 export default defineComponent({
   name: 'PostWriter',
-
+  components: {
+    FormInput
+  },
   props: {
     post: {
       type: Object as () => IPost,
@@ -60,6 +54,8 @@ export default defineComponent({
   },
   
   setup(props, ctx) {
+    console.log(props.post.title);
+    
     const title = ref(props.post.title)
 
     // declare new ref with initial value null
@@ -75,6 +71,16 @@ export default defineComponent({
       highlight: (code: string) => hljs.highlightAuto(code).value
     }
 
+    const titleStatus = computed<Status>(() => {
+      return validate(
+        title.value, 
+        [
+          contiguous(),
+          required()
+        ]
+      )
+    })
+
     const handleEdit = () => {
       // eslint-disable-next-line
       markdown.value = contentEditable.value!.innerText
@@ -83,7 +89,13 @@ export default defineComponent({
     const update = (value: string) => html.value = value ? marked.parse(value, options) : marked.parse('', options)
 
     watch(
+      () => props.post.title,
+      () => title.value = props.post.title,
+      { immediate: true }
+    )
+    watch(
       // eslint-disable-next-line
+      // because can be null
       () => markdown.value!,
       // still a function with same signature - just a func returning string so can pass in like this
       debounce(update, 500),
@@ -119,6 +131,7 @@ export default defineComponent({
 
     return {
       title,
+      titleStatus,
       contentEditable,
       handleEdit,
       markdown,

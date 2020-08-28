@@ -1,0 +1,9 @@
+div.new-post-container {
+  display: flex;
+  flex-direction: column;
+  div.selector-container.field > .control {
+    display: flex;
+    flex-direction: row;
+    // background-color: $olive-green;
+  }
+}

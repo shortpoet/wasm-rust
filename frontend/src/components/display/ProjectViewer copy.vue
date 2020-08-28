@@ -40,7 +40,7 @@ import { useStore } from '../../store'
 // import marked from "marked"
 // import hljs from "highlight.js"
 
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { IProject } from '../../interfaces/IProject'
 import { colorLog } from '../../utils/colorLog'
 import { IPost } from '../../interfaces/IPost'
@@ -54,18 +54,35 @@ export default defineComponent({
   async setup() {
     const route = useRoute()
     const store = useStore()
-    const router = useRouter()
+    // const router = useRouter()
 
+    // on reload there is no pushed id or loaded projects param so must do 'expensive' search instead
 
     if (!store.getState().projects.loaded) {
       await store.fetchProjects()
-    }    
+    }
+
+    // let project: IProject;
+    // if (!route.params.id) {
+    //   const allProjects = store.getState().projects.ids.reduce<IProject[]>((accumulator, id) => {
+    //     const project = store.getState().projects.all[id]
+    //     return accumulator.concat(project)
+    //   }, [])
+    //   project = allProjects.filter(project => project.title == route.params.title)[0]
+    // } else {
+    //   project = store.getState().projects.all[route.params.id as string]
+    // }
+    
     const types: IPost['type'][] = ['intro']
 
+    // ref is generic type
     const selectedType = ref<IPost['type']>()
     colorLog(JSON.stringify(route.params), 0)
     const project: IProject = await store.fetchPostsByProject(route.params.name as string)
 
+
+
+    // computed automatically recalculates and updates the DOM anytime a reactive reference changes 
     const posts = computed(() => project.posts.filter(post => {
       console.log(post);
       return selectedType.value ? post.type == selectedType.value : true
@@ -77,16 +94,28 @@ export default defineComponent({
     colorLog('posts')
     console.log(posts.value);
 
-    const newPost = () => {
-      router.push({ name: 'NewPost', params: {id: project.id, name: project.name}})
-    }
-    return {
+
+    // const markdown = useMarkdown().update
+    // const options: marked.MarkedOptions =  {
+    //   // takes function that return code with syntax hightlighting
+    //   highlight: (code: string) => hljs.highlightAuto(code).value
+    // }
+    // const update = (value: string) => marked.parse(value, options)
+    // const html = ref()
+    // if (project.html) {
+    //   html.value = update(project.html)
+    // }
+    // const toProject = () => {
+    //   colorLog('#### to edit post ####')
+    //   router.push({ name: 'WaitEditPost', params: { id: project.id, name: project.name }})
+    // }
+
+return {
       project,
       setType,
       types,
       selectedType,
-      posts,
-      newPost
+      posts
     }
   }
 })

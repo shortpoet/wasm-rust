@@ -1,0 +1,10 @@
+div.project-viewer {
+  display: flex;
+  flex-direction: column;
+  .control-panel {
+    flex-direction: row;
+    a.panel-block>span.control-element {
+      flex-direction: column;
+    }
+  }
+}

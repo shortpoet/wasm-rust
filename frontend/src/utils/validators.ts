@@ -1,7 +1,7 @@
 // base type
 
 interface Rule {
-  type: 'required' | 'length' | 'match' | 'title';
+  type: 'required' | 'length' | 'match' | 'contiguous';
 }
 
 // enforce that all types have minimum type value in Rule
@@ -24,8 +24,8 @@ interface Confirm extends Rule {
   reference: string;
 }
 
-interface Title extends Rule {
-  type: 'title';
+interface Contiguous extends Rule {
+  type: 'contiguous';
 }
 
 export function required(): Require {
@@ -45,14 +45,14 @@ export function match(reference: string): Confirm {
     reference
   }
 }
-export function title(): Title {
+export function contiguous(): Contiguous {
   return {
-    type: 'title'
+    type: 'contiguous'
   }
 }
 
 // a union of all the validators available
-type Validator = Require | Length | Confirm | Title
+type Validator = Require | Length | Confirm | Contiguous
 
 export interface Status {
   valid: boolean;
@@ -92,7 +92,7 @@ export function validate(value: string, validators: Validator[]): Status {
     }
 
     // check for title validator
-    if (validator.type == 'title' && value.match(/\s/) ) {
+    if (validator.type == 'contiguous' && value.match(/\s/) ) {
       return {
         valid: false,
         message: `Title must not have a space`

@@ -6,7 +6,7 @@ module.exports = {
     loaderOptions: {
       scss: {
         prependData: `
-        @import "@/assets/scss/_variables.scss";
+        @import "@/assets/scss/main.scss";
         @import "~bulma/sass/utilities/_all";
       `
       }

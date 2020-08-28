@@ -214,7 +214,7 @@ class Store {
   async fetchPostsByProject(projectName: IProject['name']) {
     const query = `
       query {
-        project(name: "hello-rust"){
+        project(name: "${projectName}"){
           id
           name
           category {

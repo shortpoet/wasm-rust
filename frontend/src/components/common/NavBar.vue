@@ -1,17 +1,15 @@
 <template>
-  <nav class="navbar">
+  <nav class="main-nav navbar is-primary">
     <div class="navbar-end">
       <div class="buttons">
-
-        <router-link to="/" class="button">Home</router-link>
-
+        <router-link to="/" class="button">
+          <i class="home-icon fa fa-home"></i>
+        </router-link>
         <div>
-          <router-link class="button" :to="{path: '/posts/new'}">New Post</router-link>
+          <!-- <router-link class="button" :to="{name: 'NewPost', params: {id: props.project.id, name: props.project.name}}">New Post</router-link> -->
         </div>
-        
       </div>
       </div>
-
     <teleport to="#modal" v-if="modal.visible">
       <component :is="component" :modal="modal"/>
     </teleport>
