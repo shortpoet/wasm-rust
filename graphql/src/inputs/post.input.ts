@@ -2,6 +2,7 @@ import { Field, Int, GraphQLISODateTime, InputType } from "type-graphql";
 import { IPost } from "../interfaces/IPost";
 import { Post } from "../entity/Post";
 import moment, { Moment } from "moment";
+import { Tag } from "../entity/Tag";
 
 @InputType()
 export class CreatePostInput implements Partial<Post> {
@@ -18,11 +19,17 @@ export class CreatePostInput implements Partial<Post> {
   @Field(type => GraphQLISODateTime)
   created: Moment;
   
+  @Field()
+  type: string;
+
+  @Field(type => Int)
+  projectId: number;
+
   @Field(type => Int)
   categoryId: number;
   
-  @Field({ nullable: true })
-  tag?: string;
+  @Field(type => String, { nullable: true })
+  tags?: Tag[];
 }
 @InputType()
 export class UpdatePostInput {
@@ -32,6 +39,9 @@ export class UpdatePostInput {
 
   @Field()
   title: string;
+
+  @Field()
+  type: string;
   
   @Field({ nullable: true })
   markdown?: string;
@@ -41,11 +51,14 @@ export class UpdatePostInput {
   
   @Field(type => GraphQLISODateTime)
   created: Moment;
+  
+  @Field(type => Int)
+  projectId: number;
 
   @Field(type => Int)
   categoryId: number;
   
-  @Field({ nullable: true })
-  tag?: string;
+  @Field(type => String, { nullable: true })
+  tags?: Tag[];
 
 }

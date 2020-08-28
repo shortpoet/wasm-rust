@@ -1,15 +1,20 @@
 <template>
-  <div>Post Editor</div>
-  <PostWriter :post="post" @save="save"/>
+  <div class="post-editor-container" >
+    <div>Post Editor</div>
+    <PostWriter :post="updatePost" @save="save" v-if="loaded"/>    
+  </div>
 </template>
 
 <script lang="ts">
 import { IPost } from '../../interfaces/IPost'
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
 import { useStore } from '../../store'
 import PostWriter from '../input/PostWriter.vue'
+import { IUpdatePost } from '../../interfaces/IUpdatePost'
 
 import { useRoute, useRouter } from 'vue-router'
+import { IProject } from '../../interfaces/IProject'
+import { colorLog } from '../../utils/colorLog'
 
 export default defineComponent({
   name: 'PostEditor',
@@ -23,32 +28,83 @@ export default defineComponent({
     const store = useStore()
 
     // on reload there is no pushed id or loaded posts param so must do 'expensive' search instead
+    const loaded = computed(() => store.getState().projects.loaded)
 
-    if (!store.getState().posts.loaded) {
-      await store.fetchPosts()
+    let project: IProject
+    if (!store.getState().projects.currentId) {
+      if (!store.getState().projects.loaded) {
+        store.fetchProjects()
+      }
+      const allProjects = store.getState().projects.ids.reduce<IProject[]>((accumulator, id) => {
+        const project = store.getState().projects.all[id]
+        return accumulator.concat(project)
+      }, [])
+      console.log(allProjects);
+      console.log(route.params);
+      console.log(allProjects.filter(project => project.name == route.params.name));
+      
+      project = allProjects.filter(project => project.name == route.params.name)[0]
+      console.log(project);
+      
+      store.setCurrentProject(project.id)
+    } else {
+      project = store.getState().projects.all[store.getState().projects.currentId as string]
     }
 
     let post: IPost;
-    if (!route.params.id) {
-      const allPosts = store.getState().posts.ids.reduce<IPost[]>((accumulator, id) => {
-        const post = store.getState().posts.all[id]
-        return accumulator.concat(post)
-      }, [])
-      post = allPosts.filter(post => post.title == route.params.title)[0]
+    if (store.getState().posts.currentId) {
+      colorLog('1')
+      post = store.getState().posts.all[store.getState().posts.currentId as string]
+      console.log(post);
+      
     } else {
-      post = store.getState().posts.all[route.params.id as string]
+      colorLog('2')
+      if (!store.getState().posts.loaded) {
+        await store.fetchPostsByProject(project.name)
+      }
+      if (route.params.title) {
+        colorLog('3')
+        console.log(route.params.title);
+        
+        const allPosts = store.getState().posts.ids.reduce<IPost[]>((accumulator, id) => {
+          const post = store.getState().posts.all[id]
+          return accumulator.concat(post)
+        }, [])
+        console.log(allPosts);
+        
+        post = allPosts.filter(post => post.title == route.params.title)[0]
+        if (post == undefined) {
+          // wrong or old name reroute home
+          router.push('/')
+        }
+        console.log(post);
+        
+      } else {
+        colorLog('4')
+        post = store.getState().posts.all[route.params.id as string]
+      }
+    }
+    colorLog('5')
+    console.log(post);
+    
+    const updatePost: IUpdatePost = {
+      ...post,
+      categoryId: parseInt(project.categoryId.toString()),
+      projectId: parseInt(store.getState().projects.currentId as string)
     }
 
-    const save = async (post: IPost) => {
+    const save = async (post: IUpdatePost) => {
       console.log('save');
+      console.log(post);
+      
       await store.updatePost(post)
       router.push('/')
     }
 
     return {
-      post,
-      to: `/posts/${post.id}/edit`,
-      save
+      updatePost,
+      save,
+      loaded
     }
   }
 })

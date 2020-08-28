@@ -1,10 +1,12 @@
 import { Resolver, Query, Arg, Info, Mutation } from "type-graphql";
 import { Post } from "../entity/Post";
-import { getRepository, DeleteResult, Any, SaveOptions } from "typeorm";
+import { getRepository, DeleteResult, Any, SaveOptions, DeepPartial } from "typeorm";
 import { GraphQLResolveInfo } from "graphql";
 import { IPost } from "../interfaces/IPost";
 import { CreatePostInput, UpdatePostInput } from "../inputs/post.input";
 import { chalkLog } from "../utils/chalkLog";
+import { Category } from "../entity/Category";
+import { Project } from "../entity/Project";
 
 @Resolver(of => Post)
 export class PostsResolver {
@@ -43,8 +45,8 @@ export class PostsResolver {
   @Mutation(returns => Post)
   async createPost(@Arg("post") postInput: CreatePostInput): Promise<Post> {
     console.log('#### create post ####');
-    const repo = getRepository(Post);
-    const results = await repo.save(<Post>postInput);
+    const repo = getRepository(Post);    
+    const results = await repo.save(postInput);
     return results;
 
     // below is for upsert
@@ -73,12 +75,12 @@ export class PostsResolver {
     console.log('#### create post ####');
     const repo = getRepository(Post);
     const oldPost = await repo.findOne(parseInt(postInput.id));
-    // console.log(oldPost);
+    console.log(oldPost);
     const newPost = await repo.create(<Post>{
       ...postInput,
       id: oldPost.id
     });
-    // console.log(newPost);
+    console.log(newPost);
     const results = await repo.save(<Post>newPost);
     return results;
   }

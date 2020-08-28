@@ -64,6 +64,7 @@ export default defineComponent({
     }
     const toPost = () => {
       colorLog('#### to edit post ####')
+      store.setCurrentPost(post.id)
       router.push({ name: 'WaitEditPost', params: { id: post.id, title: post.title }})
     }
 

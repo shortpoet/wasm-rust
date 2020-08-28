@@ -15,8 +15,10 @@ input CreatePostInput {
   created: DateTime!
   html: String
   markdown: String
-  tag: String
+  projectId: Int!
+  tags: String
   title: String!
+  type: String!
 }
 
 """
@@ -41,6 +43,7 @@ type Post {
   projectId: Int!
   tags: [Tag!]!
   title: String!
+  type: String!
 }
 
 type Project {
@@ -69,6 +72,8 @@ input UpdatePostInput {
   html: String
   id: String!
   markdown: String
-  tag: String
+  projectId: Int!
+  tags: String
   title: String!
+  type: String!
 }

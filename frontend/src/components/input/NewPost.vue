@@ -1,5 +1,5 @@
 <template>
-  <div class="new-post-container">
+  <div class="new-post-container" v-if="loaded">
     <div class="selector-container field">
       <div class="control">
         <BaseSelector
@@ -38,6 +38,8 @@ import { useStore } from '../../store'
 import { useRouter, useRoute } from 'vue-router'
 import { colorLog } from '../../utils/colorLog'
 import { ICategoryName } from '../../interfaces/ICategory'
+import { ICreatePost } from '../../interfaces/ICreatePost'
+import { IProject } from '../../interfaces/IProject'
 
 export default defineComponent({
   name: 'NewPost',
@@ -50,7 +52,7 @@ export default defineComponent({
     const store = useStore()
     const route = useRoute()
     const router = useRouter()
-
+    const loaded = computed(() => store.getState().projects.loaded)
     // const selections: Ref<{[key: string]: string }> = ref({
     //   type: '',
     //   category: ''
@@ -58,23 +60,41 @@ export default defineComponent({
     // const title = computed(() => `${project}-${selections.value.type}`)
 
     const selectedType = ref('')
-    const project = route.params.name
-    const title = computed(() => `${project}-${selectedType.value}`)
+    let projectName
+    let project: IProject
 
-    const post: Ref<IPost> = computed(() => ({
+    if (!store.getState().projects.currentId) {
+      if (!store.getState().projects.loaded) {
+        store.fetchProjects()
+      }
+      const allProjects = store.getState().projects.ids.reduce<IProject[]>((accumulator, id) => {
+        const project = store.getState().projects.all[id]
+        return accumulator.concat(project)
+      }, [])
+      project = allProjects.filter(project => project.name == route.params.name)[0]
+      store.setCurrentProject(project.id)
+    } else {
+      project = store.getState().projects.all[store.getState().projects.currentId as string]
+    }
+    
+    const title = computed(() => `${project.name}-${selectedType.value}`)
+
+    const post: Ref<ICreatePost> = computed(() => ({      
       // set id to -1 to represent post that has not yet been created in db
-      id: -1,
       title: title.value,
       markdown: '## New Post\nEnter your post here...',
       html: '',
       created: moment(),
-      project: `${project}`,
-      category: `${route.params.category}` as ICategoryName
+      type: selectedType.value,
+      projectId: parseInt(store.getState().projects.currentId as string),
+      categoryId: parseInt(project.categoryId.toString())
     }))
 
 
-    const save = async (post: IPost) => {
+    const save = async (post: ICreatePost) => {
       console.log('save');
+      console.log(post);
+      
       await store.createPost(post)
       router.push('/')
     }
@@ -89,7 +109,8 @@ export default defineComponent({
       post,
       save,
       onUpdateSelect,
-      selectedType
+      selectedType,
+      loaded
     }
   }
 })

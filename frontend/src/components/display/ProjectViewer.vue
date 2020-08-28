@@ -78,7 +78,7 @@ export default defineComponent({
     // console.log(posts.value);
 
     const newPost = () => {
-      router.push({ name: 'NewPost', params: {id: project.id, name: project.name, category: project.category}})
+      router.push({ name: 'NewPost', params: {id: project.id, name: project.name, category: project.category, categoryId: project.categoryId}})
     }
     return {
       project,

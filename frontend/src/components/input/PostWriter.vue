@@ -19,6 +19,7 @@
         <!-- new kind of ref 'template ref' to keep track of user entered value instead of v-model -->
         <!-- box panel message card content textarea input -->
         <div contenteditable id="markdown" class="box" ref="contentEditable" @input="handleEdit" data-test="markdown">
+          {{ markdown }}
         </div>
       </div>
       <div class="column is-one-half">
@@ -112,6 +113,8 @@ export default defineComponent({
       // eslint-disable-next-line
       if (contentEditable!.value!.innerText) {
         // eslint-disable-next-line
+        console.log(markdown.value);
+        
         contentEditable!.value!.innerText = markdown.value || '';
       }
     })

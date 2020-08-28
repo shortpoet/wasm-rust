@@ -17,6 +17,10 @@ export class Post implements IPost {
   @Field()
   @Column()
   title: string;
+
+  @Field()
+  @Column()
+  type: string;
   
   @Field({ nullable: true })
   @Column({ nullable: true })
