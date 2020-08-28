@@ -1,8 +1,11 @@
 <template>
   <div class="message is-info is-marginless">
     <div class="message-header">
-      <p>Project Name is: {{ project.name }}</p>
-      <p>Posts</p>
+      <p>Project Name: {{ project.name }}</p>
+      <p>Project Category: {{ project.category }}</p>
+    </div>
+    <div class="message-body">
+      <p>Posts by type (default all) </p>
     </div>
   </div>
   <nav class="is-primary panel">

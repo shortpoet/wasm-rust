@@ -20,6 +20,40 @@ axios.interceptors.request.use(function (config) {
   return Promise.reject(error);
 });
 
+export const rustAxios
+  = async (method: AxiosRequestConfig['method'], rustFunc: string, query?: any): Promise<any> => {
+    try {
+      const res = await axios({
+        method: method,
+        baseURL: process.env.VUE_APP_RUST_API,
+        url: rustFunc,
+        params: query, 
+        validateStatus: (status) => status < 500
+      }
+      )
+      console.log(res);
+      
+      if (res.status == 200) {
+        return res.data
+      }
+      if (res.status == 500) {
+        // defaults to 0
+        colorLog("Graph Axios NOT OK", new Number().valueOf());
+        return res
+      }
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response.data);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log(`Error when fetching: ${error.message}`);
+      }
+      console.log(error.config);
+    }
+  }
+
 // query type corresponds to key for redis cache
 export const graphAxios
   = async (query: any, queryType?: string): Promise<any> => {
@@ -34,7 +68,7 @@ export const graphAxios
     const port = process.env.VUE_APP_API_PORT
     
 
-    const url = `${process.env.VUE_APP_API}/graphql`
+    const url = `${process.env.VUE_APP_GRAPH_API}/graphql`
     console.log(url);
     
     try {

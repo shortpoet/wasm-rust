@@ -28,6 +28,7 @@ export default defineComponent({
       markdown: '## New Post\nEnter your post here...',
       html: '',
       created: moment(),
+      project: 'hello-rust',
       category: 'nodejs'
     }
 

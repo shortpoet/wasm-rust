@@ -19,17 +19,13 @@
 </template>
 
 <script lang="ts">
-import { ICategory } from '../interfaces/ICategory'
-import { IPost } from '../interfaces/IPost'
 import CategoryProject from '../components/display/CategoryProject.vue'
 import { ref, computed, defineComponent } from 'vue'
 import { useStore } from '../store'
 
-import moment from 'moment'
-
-
 import { colorLog } from '../utils/colorLog'
 import { ICategoryName } from '../interfaces/ICategory'
+import { IProject } from '../interfaces/IProject'
 
 export default defineComponent({
   components: {
@@ -47,7 +43,7 @@ export default defineComponent({
       await store.fetchProjects()
     }
     
-    const allProjects = store.getState().projects.ids.reduce<IPost[]>((accumulator, id) => {
+    const allProjects = store.getState().projects.ids.reduce<IProject[]>((accumulator, id) => {
       const post = store.getState().projects.all[id]
       return accumulator.concat(post)
     }, [])
@@ -55,7 +51,7 @@ export default defineComponent({
     const projects = computed(() => allProjects.filter(post => {
       return post.category == selectedCategory.value
     }))
-    
+
     const setCategory = (category: ICategoryName) => {
       selectedCategory.value = category
     }
