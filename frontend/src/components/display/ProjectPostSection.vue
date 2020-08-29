@@ -15,7 +15,6 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { IPost } from "../../interfaces/IPost";
-import { useStore } from "../../store";
 import { useRouter } from "vue-router";
 import { colorLog } from "../../utils/colorLog";
 import { useMarkdown } from "../../composables/useMarkdown";
@@ -32,7 +31,6 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const store = useStore();
     const router = useRouter();
     const showBody = ref(true)
     const update = useMarkdown().update

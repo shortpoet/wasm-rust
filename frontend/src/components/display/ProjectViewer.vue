@@ -34,7 +34,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue'
-import { useStore } from '../../store'
+import { useStore, POST_STORE_SYMBOL } from '../../store'
 // import { useMarkdown } from '../../composables/useMarkdown'
 
 // import marked from "marked"
@@ -45,6 +45,7 @@ import { IProject } from '../../interfaces/IProject'
 import { colorLog } from '../../utils/colorLog'
 import { IPost } from '../../interfaces/IPost'
 import ProjectPost from './ProjectPost.vue'
+import { PostStore } from '../../store/post/post.store'
 
 export default defineComponent({
   name: 'ProjectViewer',
@@ -53,18 +54,18 @@ export default defineComponent({
   },
   async setup() {
     const route = useRoute()
-    const store = useStore()
+    const postStore: PostStore = useStore<PostStore>(POST_STORE_SYMBOL) as PostStore
     const router = useRouter()
 
 
-    if (!store.getState().projects.loaded) {
-      await store.fetchProjects()
+    if (!postStore.getState().projects.loaded) {
+      await postStore.fetchRecords()
     }    
     const types: IPost['type'][] = ['intro', 'code', 'all']
 
     const selectedType = ref<IPost['type']>()
-    // colorLog(JSON.stringify(route.params), 0)
-    const project: IProject = await store.fetchPostsByProject(route.params.name as string)
+    colorLog(JSON.stringify(route.params), 0)
+    const project: IProject = await postStore.fetchPostsByProject(route.params.name as string)
 
     const posts = computed(() => project.posts.filter(post => {
       // console.log(post);

@@ -20,6 +20,18 @@ COMMENT ON TABLE "rust"."content_projects" IS
 'This holds projects for the sample apps on rust.';
 
 
+-- content_projects table
+CREATE TABLE "rust"."content_sections" (
+  id serial primary key,
+  project_id INTEGER NOT NULL,
+  name VARCHAR NOT NULL
+);
+
+
+COMMENT ON TABLE "rust"."content_sections" IS
+'This holds sections for the posts on rust.';
+
+
 -- content_posts table
 CREATE TABLE "rust"."content_posts" (
   id SERIAL PRIMARY KEY,
@@ -27,6 +39,7 @@ CREATE TABLE "rust"."content_posts" (
   type TEXT NOT NULL,
   markdown TEXT NULL,
   html TEXT NULL,
+  section_id INTEGER NOT NULL,
   category_id INTEGER NOT NULL,
   project_id INTEGER NOT NULL,
   created TIMESTAMP NOT NULL
@@ -49,6 +62,7 @@ CREATE UNIQUE INDEX categories_name_idx ON "rust"."content_categories"(name);
 
 ALTER TABLE "rust"."content_projects" ADD FOREIGN KEY (category_id) REFERENCES "rust"."content_categories"(id) ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE "rust"."content_posts" ADD FOREIGN KEY (project_id) REFERENCES "rust"."content_projects"(id) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE "rust"."content_posts" ADD FOREIGN KEY (section_id) REFERENCES "rust"."content_sections"(id) ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE "rust"."content_posts" ADD FOREIGN KEY (category_id) REFERENCES "rust"."content_categories"(id) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 

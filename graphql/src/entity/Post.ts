@@ -5,6 +5,7 @@ import moment, { Moment } from "moment";
 import { Tag } from "./Tag";
 import { Category } from "./Category";
 import { Project } from "./Project";
+import { Section } from "./Section";
 
 @ObjectType()
 @Entity({ name: `content_posts`, schema: 'rust' })
@@ -35,18 +36,28 @@ export class Post implements IPost {
   created: Moment;
 
   @Field(type => Int)
+  @Column({ name: 'section_id' })
+  sectionId: number;
+  @Field(type => Section)
+  @ManyToOne(type => Section, section => section.posts, {
+    eager: true
+  })
+  @JoinColumn({ name: 'section_id' })
+  section: Section;
+
+
+  @Field(type => Int)
   @Column({ name: 'project_id' })
   projectId: number;
-
   @Field(type => Project)
   @ManyToOne(type => Project, project => project.posts)
   @JoinColumn({ name: 'project_id' })
   project: Project
 
+  
   @Field(type => Int)
   @Column({ name: 'category_id' })
   categoryId: number;
-
   @Field(type => Category)
   @ManyToOne(type => Category, category => category.posts, {
     eager: true

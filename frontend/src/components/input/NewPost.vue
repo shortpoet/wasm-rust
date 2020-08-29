@@ -11,6 +11,7 @@
           :default-value="'code'"
           @update:modelValue="onUpdateSelect"
         />
+        choose from sections or make new section
         <!-- <BaseSelector
           :itemType="'category'"
           :options="['browser', 'deno', 'faas', 'nodejs', 'rust', 'ssvm', 'tencentcloud']"
@@ -34,12 +35,15 @@ import { IPost } from '../../interfaces/IPost'
 import moment from 'moment'
 
 
-import { useStore } from '../../store'
+import { useStore, POST_STORE_SYMBOL, PROJECT_STORE_SYMBOL } from '../../store'
 import { useRouter, useRoute } from 'vue-router'
 import { colorLog } from '../../utils/colorLog'
 import { ICategoryName } from '../../interfaces/ICategory'
 import { ICreatePost } from '../../interfaces/ICreatePost'
 import { IProject } from '../../interfaces/IProject'
+import { PostStore } from '../../store/post/post.store'
+import { ProjectStore } from '../../store/project/project.store'
+import { PROJECTS } from '../../store/project/constants'
 
 export default defineComponent({
   name: 'NewPost',
@@ -49,10 +53,11 @@ export default defineComponent({
   },
   setup () {
     
-    const store = useStore()
+    const postStore: PostStore = useStore<PostStore>(POST_STORE_SYMBOL) as PostStore
+    const projectStore: ProjectStore = useStore<ProjectStore>(PROJECT_STORE_SYMBOL) as ProjectStore
     const route = useRoute()
     const router = useRouter()
-    const loaded = computed(() => store.getState().projects.loaded)
+    const loaded = computed(() => projectStore.getState().records.loaded)
     // const selections: Ref<{[key: string]: string }> = ref({
     //   type: '',
     //   category: ''
@@ -63,19 +68,16 @@ export default defineComponent({
     let projectName
     let project: IProject
 
-    if (!store.getState().projects.currentId) {
-      if (!store.getState().projects.loaded) {
-        store.fetchProjects()
-      }
-      const allProjects = store.getState().projects.ids.reduce<IProject[]>((accumulator, id) => {
-        const project = store.getState().projects.all[id]
-        return accumulator.concat(project)
-      }, [])
-      project = allProjects.filter(project => project.name == route.params.name)[0]
-      store.setCurrentProject(project.id)
-    } else {
-      project = store.getState().projects.all[store.getState().projects.currentId as string]
-    }
+    // if (!projectStore.getState().records.currentId) {
+    //   if (!projectStore.getState().records.loaded) {
+    //     projectStore.fetchRecords()
+    //   }
+    //   const allProjects = await projectStore.loadRecords(PROJECTS)
+    //   project = allProjects.filter(project => project.name == route.params.name)[0]
+    //   store.setCurrentProject(project.id)
+    // } else {
+    //   project = store.getState().projects.all[store.getState().projects.currentId as string]
+    // }
     
     const title = computed(() => `${project.name}-${selectedType.value}`)
 
@@ -86,8 +88,9 @@ export default defineComponent({
       html: '',
       created: moment(),
       type: selectedType.value,
-      projectId: parseInt(store.getState().projects.currentId as string),
-      categoryId: parseInt(project.categoryId.toString())
+      projectId: parseInt(projectStore.getState().records.currentId as string),
+      categoryId: parseInt(project.categoryId.toString()),
+
     }))
 
 
@@ -95,7 +98,7 @@ export default defineComponent({
       console.log('save');
       console.log(post);
       
-      await store.createPost(post)
+      await postStore.createRecord(post)
       router.push('/')
     }
 

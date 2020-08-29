@@ -41,6 +41,8 @@ type Post {
   markdown: String
   project: Project!
   projectId: Int!
+  section: Section!
+  sectionId: Int!
   tags: [Tag!]!
   title: String!
   type: String!
@@ -52,6 +54,7 @@ type Project {
   id: ID!
   name: String!
   posts: [Post!]!
+  sections: [Section!]!
 }
 
 type Query {
@@ -59,6 +62,13 @@ type Query {
   posts: [Post!]!
   project(name: String!): Project!
   projects: [Project!]!
+}
+
+type Section {
+  id: ID!
+  name: String!
+  posts: Post!
+  projectId: Int!
 }
 
 type Tag {

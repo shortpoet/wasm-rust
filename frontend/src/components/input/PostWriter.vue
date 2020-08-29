@@ -2,6 +2,7 @@
   <div>
     <div class="columns">
       <div class="column is-three-fourths">
+        <FormInput type="text" name="Project Section" v-model="section" :error="sectionStatus.message"/>
         <FormInput type="text" name="Post Title" v-model="title" :error="titleStatus.message"/>
       </div>
       <div class="column is-one-fourths">
@@ -60,6 +61,7 @@ export default defineComponent({
     const contentEditable = ref<null | HTMLDivElement>(null)
     const markdown = ref(props.post.markdown)
     const html = ref('')
+    const section = ref('')
     const options: marked.MarkedOptions =  {
       // takes function that return code with syntax hightlighting
       highlight: (code: string) => hljs.highlightAuto(code).value
@@ -69,6 +71,14 @@ export default defineComponent({
         title.value, 
         [
           contiguous(),
+          required()
+        ]
+      )
+    })
+    const sectionStatus = computed<Status>(() => {
+      return validate(
+        section.value, 
+        [
           required()
         ]
       )
@@ -99,7 +109,8 @@ export default defineComponent({
         ...props.post,
         title: title.value,
         markdown: markdown.value,
-        html: html.value
+        html: html.value,
+        section: section.value
       }
       ctx.emit(
         'save',
@@ -119,6 +130,8 @@ export default defineComponent({
     })
 
     return {
+      section,
+      sectionStatus,
       title,
       titleStatus,
       contentEditable,
@@ -130,3 +143,7 @@ export default defineComponent({
   }
 })
 </script>
+
+WebAssembly (often shortened to Wasm) is an open standard that defines a portable binary-code format for executable programs, and a corresponding textual assembly language, as well as interfaces for facilitating interactions between such programs and their host environment.[1][2][3][4] The main goal of WebAssembly is to enable high-performance applications on web pages, but the format is designed to be executed and integrated in other environments as well, including standalone ones.[5][6][7]
+
+WebAssembly (i.e. WebAssembly Core Specification and WebAssembly JavaScript Interface[8]) became a World Wide Web Consortium recommendation on 5 December 2019[9] and, alongside HTML, CSS, and JavaScript, is the fourth language to run natively in browsers

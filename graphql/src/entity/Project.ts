@@ -3,6 +3,7 @@ import { ObjectType, ID, Field, Int } from 'type-graphql';
 import { Post } from "./Post";
 import { IProject } from "../interfaces/IProject";
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, JoinColumn } from "typeorm";
+import { Section } from "./Section";
 
 @ObjectType() // signifies class is part of GraphQL
 @Entity({ name: 'content_projects' , schema: "rust"})
@@ -32,6 +33,11 @@ export class Project implements IProject {
     eager: true
   })
   posts: Post[]
+
+  @Field(type => [Section]) // != Task[]
+  @OneToMany(type => Post, post => post.section, {
+  })
+  sections: Section[]
 
   // one option to load related entites
   // for more fine-grained control declare in viewmodel  

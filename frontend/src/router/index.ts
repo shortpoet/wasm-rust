@@ -4,7 +4,7 @@ import NewPost from '../components/input/NewPost.vue'
 import WaitEditPost from '../components/edit/WaitEditPost.vue'
 import WaitShowProject from '../components/display/WaitShowProject.vue'
 import WaitShowPost from '../components/display/WaitShowPost.vue'
-import { store } from '@/store'
+// import { store } from '../store'
 
 export const routes =  [
   {
@@ -49,12 +49,12 @@ export const makeRouter = () => createRouter({
   routes: routes
 })
 
-router.beforeEach(async (to, from, next) => {
-  if (!store.getState().projects.loaded) {
-    await store.fetchProjects()
-  }
-  next()
-})
+// router.beforeEach(async (to, from, next) => {
+//   if (!store.getState().projects.loaded) {
+//     await store.fetchProjects()
+//   }
+//   next()
+// })
 
 // https://github.com/vuejs/vue-router-next/blob/master/playground/router.ts
 // redirect catch-all

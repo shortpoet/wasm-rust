@@ -5,7 +5,6 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { IPost } from "../../interfaces/IPost";
-import { useStore } from "../../store";
 import { useRouter } from "vue-router";
 import { colorLog } from "../../utils/colorLog";
 import { rustAxios } from "../../ajax";
@@ -22,7 +21,6 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const store = useStore()
     const router = useRouter()
     const message = ref();
     const onRust = async () => {

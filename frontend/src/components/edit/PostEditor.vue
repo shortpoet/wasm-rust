@@ -8,13 +8,17 @@
 <script lang="ts">
 import { IPost } from '../../interfaces/IPost'
 import { defineComponent, computed } from 'vue'
-import { useStore } from '../../store'
+import { useStore, POST_STORE_SYMBOL, PROJECT_STORE_SYMBOL } from '../../store'
 import PostWriter from '../input/PostWriter.vue'
 import { IUpdatePost } from '../../interfaces/IUpdatePost'
 
 import { useRoute, useRouter } from 'vue-router'
 import { IProject } from '../../interfaces/IProject'
 import { colorLog } from '../../utils/colorLog'
+import { PostStore } from '../../store/post/post.store'
+import { ProjectStore } from '../../store/project/project.store'
+import { PROJECTS } from '../../store/project/constants'
+import { POSTS } from '../../store/post/constants'
 
 export default defineComponent({
   name: 'PostEditor',
@@ -25,45 +29,40 @@ export default defineComponent({
   async setup() {
     const route = useRoute()
     const router = useRouter()
-    const store = useStore()
+    const postStore: PostStore = useStore<PostStore>(POST_STORE_SYMBOL) as PostStore
+    const projectStore: ProjectStore = useStore<ProjectStore>(PROJECT_STORE_SYMBOL) as ProjectStore
 
     // on reload there is no pushed id or loaded posts param so must do 'expensive' search instead
-    const loaded = computed(() => store.getState().projects.loaded)
+    const loaded = computed(() => projectStore.getState().records.loaded)
 
     let project: IProject
-    if (!store.getState().projects.currentId) {
-      if (!store.getState().projects.loaded) {
-        store.fetchProjects()
+    if (!projectStore.getState().records.currentId) {
+      if (!projectStore.getState().records.loaded) {
+        projectStore.fetchRecords()
       }
-      const allProjects = store.getState().projects.ids.reduce<IProject[]>((accumulator, id) => {
-        const project = store.getState().projects.all[id]
-        return accumulator.concat(project)
-      }, [])
+      const allProjects = await projectStore.loadRecords(PROJECTS)
       project = allProjects.filter(project => project.name == route.params.name)[0]
-      store.setCurrentProject(project.id)
+      projectStore.setCurrentId(project.id)
     } else {
-      project = store.getState().projects.all[store.getState().projects.currentId as string]
+      project = projectStore.getRecordById(projectStore.getState().records.currentId as string)
     }
 
     let post: IPost;
-    if (store.getState().posts.currentId) {
-      post = store.getState().posts.all[store.getState().posts.currentId as string]
+    if (postStore.getState().records.currentId) {
+      post = postStore.getRecordById(postStore.getState().records.currentId as string)
     } else {
-      if (!store.getState().posts.loaded) {
-        await store.fetchPostsByProject(project.name)
+      if (!postStore.getState().records.loaded) {
+        await postStore.fetchPostsByProject(project.name)
       }
       if (route.params.title) {
-        const allPosts = store.getState().posts.ids.reduce<IPost[]>((accumulator, id) => {
-          const post = store.getState().posts.all[id]
-          return accumulator.concat(post)
-        }, [])
+        const allPosts = await postStore.loadRecords(POSTS)
         post = allPosts.filter(post => post.title == route.params.title)[0]
         if (post == undefined) {
           // wrong or old name reroute home
           router.push('/')
         }
       } else {
-        post = store.getState().posts.all[route.params.id as string]
+        post = postStore.getRecordById(route.params.id as string)
       }
     }
     console.log(post);
@@ -73,7 +72,7 @@ export default defineComponent({
       return {
         ...p,
         categoryId: parseInt(project.categoryId.toString()),
-        projectId: parseInt(store.getState().projects.currentId as string)
+        projectId: parseInt(projectStore.getState().records.currentId as string)
       }
     }
     const updatePost = makeUpdatePost(post)
@@ -82,7 +81,7 @@ export default defineComponent({
       console.log('save');
       console.log(post);
       
-      await store.updatePost(makeUpdatePost(post))
+      await postStore.editRecord(post, makeUpdatePost(post))
       router.push('/')
     }
 

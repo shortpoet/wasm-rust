@@ -12,9 +12,10 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { IProject } from "../../interfaces/IProject";
-import { useStore } from "../../store";
+import { useStore, PROJECT_STORE_SYMBOL } from "../../store";
 import { useRouter } from "vue-router";
 import { colorLog } from "../../utils/colorLog";
+import { ProjectStore } from "../../store/project/project.store";
 
 export default defineComponent({
 
@@ -25,11 +26,12 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const store = useStore()
+    const projectStore: ProjectStore = useStore<ProjectStore>(PROJECT_STORE_SYMBOL) as ProjectStore
+    
     const router = useRouter()
     const toProject = () => {
       // colorLog('#### to show project ####')
-      store.setCurrentProject(props.project.id)
+      projectStore.setCurrentId(props.project.id)
       router.push({ name: 'WaitShowProject', params: {category: props.project.category, id: props.project.id, name: props.project.name}})
 
     }

@@ -1,5 +1,6 @@
 import { ICategory } from "./ICategory";
 import { IPost } from "./IPost";
+import { ISection } from "./ISection";
 
 export interface IProject {
   id: number;
@@ -7,4 +8,5 @@ export interface IProject {
   categoryId: number;
   category: ICategory;
   posts: IPost[];
+  sections: ISection[];
 }

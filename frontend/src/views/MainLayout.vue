@@ -21,11 +21,13 @@
 <script lang="ts">
 import CategoryProject from '../components/display/CategoryProject.vue'
 import { ref, computed, defineComponent } from 'vue'
-import { useStore } from '../store'
+import { useStore, PROJECT_STORE_SYMBOL } from '../store'
 
 import { colorLog } from '../utils/colorLog'
 import { ICategoryName } from '../interfaces/ICategory'
 import { IProject } from '../interfaces/IProject'
+import { ProjectStore } from '../store/project/project.store'
+import { PROJECTS } from '../store/project/constants'
 
 export default defineComponent({
   components: {
@@ -37,16 +39,14 @@ export default defineComponent({
     // ref is generic type
     const selectedCategory = ref<ICategoryName>('nodejs')
 
-    const store = useStore()
+    const projectStore: ProjectStore = useStore<ProjectStore>(PROJECT_STORE_SYMBOL) as ProjectStore
     
-    if (!store.getState().projects.loaded) {
-      await store.fetchProjects()
+
+    if (!projectStore.getState().records.loaded) {
+      await projectStore.fetchRecords()
     }
     
-    const allProjects = store.getState().projects.ids.reduce<IProject[]>((accumulator, id) => {
-      const post = store.getState().projects.all[id]
-      return accumulator.concat(post)
-    }, [])
+    const allProjects = await projectStore.loadRecords(PROJECTS)
 
     const projects = computed(() => allProjects.filter(post => {
       return post.category == selectedCategory.value

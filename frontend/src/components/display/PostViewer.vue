@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import { ref, defineComponent } from 'vue'
-import { useStore } from '../../store'
+import { useStore, POST_STORE_SYMBOL } from '../../store'
 import { useMarkdown } from '../../composables/useMarkdown'
 
 import marked from "marked"
@@ -25,6 +25,8 @@ import hljs from "highlight.js"
 import { useRoute, useRouter } from 'vue-router'
 import { IPost } from '../../interfaces/IPost'
 import { colorLog } from '../../utils/colorLog'
+import { PostStore } from '../../store/post/post.store'
+import { POSTS } from '../../store/post/constants'
 
 export default defineComponent({
   name: 'PostViewer',
@@ -32,24 +34,21 @@ export default defineComponent({
   },
   async setup(props) {
     const route = useRoute()
-    const store = useStore()
+    const postStore: PostStore = useStore<PostStore>(POST_STORE_SYMBOL) as PostStore
     const router = useRouter()
 
     // on reload there is no pushed id or loaded posts param so must do 'expensive' search instead
 
-    if (!store.getState().posts.loaded) {
-      await store.fetchPosts()
+    if (!postStore.getState().records.loaded) {
+      await postStore.fetchRecords()
     }
 
     let post: IPost;
     if (!route.params.id) {
-      const allPosts = store.getState().posts.ids.reduce<IPost[]>((accumulator, id) => {
-        const post = store.getState().posts.all[id]
-        return accumulator.concat(post)
-      }, [])
+      const allPosts = await postStore.loadRecords(POSTS)
       post = allPosts.filter(post => post.title == route.params.title)[0]
     } else {
-      post = store.getState().posts.all[route.params.id as string]
+      post = postStore.getRecordById(route.params.id as string)
     }
     
     const update = useMarkdown().update
@@ -59,7 +58,7 @@ export default defineComponent({
     }
     const toPost = () => {
       colorLog('#### to edit post ####')
-      store.setCurrentPost(post.id)
+      postStore.setCurrentId(post.id)
       router.push({ name: 'WaitEditPost', params: { id: post.id, title: post.title }})
     }
 

@@ -2,6 +2,7 @@ import { Moment } from 'moment';
 import { ITag } from './ITag';
 import { ICategory, ICategoryName } from './ICategory';
 import { IProject } from './IProject';
+import { ISection } from './ISection';
 
 export interface IPost {
   id: number;
@@ -9,6 +10,7 @@ export interface IPost {
   markdown?: string;
   html?: string;
   created: Moment;
+  section: ISection['name'];
   project: IProject['name'];
   category: ICategoryName;
   type: string;
