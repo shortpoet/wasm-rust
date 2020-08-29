@@ -71,7 +71,7 @@ export class ProjectStore extends Store<IProject> implements IStore<IProject> {
   async fetchRecords() {
     const query = FETCH_PROJECTS
     const response = await graphAxios(query, PROJECTS_INIT)
-    console.log(response.projects);
+    // console.log(response.projects);
     
     const projects: IProject[] = response.projects.map((p: IProjectDTO) => ({
       ...p,

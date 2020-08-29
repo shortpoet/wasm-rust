@@ -11,6 +11,7 @@ import { graphAxios } from '@/ajax';
 import { colorLog } from '@/utils/colorLog';
 import {  FETCH_POSTS_BY_PROJECT, POSTS_BY_PROJECT, POSTS_INIT, FETCH_POSTS, CREATE_POST, UPDATE_POST, DELETE_POST } from './constants';
 import { Store, IStore, StoreState, initStoreState } from '../store.interface';
+import { ISection } from '@/interfaces/ISection';
 
 
 
@@ -134,16 +135,25 @@ export class PostStore extends Store<IPost> {
     const project: IProject = {
       ...dto,
       category: dto.category.name,
-      posts: dto.posts.map(p => ({
-        ...p,
-        created: moment(p.created)
-      }))
+      sections: dto.sections.map(s => ({
+        ...s,
+        posts: s.posts.map(p => ({
+          ...p,
+          created: moment(p.created),
+          section: s.name,
+          project: dto.name,
+          category: dto.category.name
+        }))
+      })),
+      posts: dto.sections.reduce<IPost[]>((acc, val) => acc = [...val.posts], [])
     }
     if (project) {
       unParseQuery(project)
       // this.state.project.currentId = project.id.toString()
       this.addRecords(project.posts)
     }
+    console.log(project);
+    
     return project
   }
 

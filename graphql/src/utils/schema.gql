@@ -67,7 +67,8 @@ type Query {
 type Section {
   id: ID!
   name: String!
-  posts: Post!
+  posts: [Post!]!
+  project: Project!
   projectId: Int!
 }
 

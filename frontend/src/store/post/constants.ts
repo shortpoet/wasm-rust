@@ -38,23 +38,28 @@ export const FETCH_POSTS_BY_PROJECT = (projectName: IProject['name']) => `
         id
         name
       }
-      posts{
+      sections {
         id
-        title
-        type
-        html
-        markdown
-        sectionId
-        categoryId
-        created
-        category{
+        name
+        projectId
+        posts{
           id
-          name
-        }
-        tags{
-          id
-          name
-        }
+          title
+          type
+          html
+          markdown
+          created
+          sectionId
+          categoryId
+          category{
+            id
+            name
+          }
+          tags{
+            id
+            name
+          }
+        }  
       }
     }
   }

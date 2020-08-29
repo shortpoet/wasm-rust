@@ -19,9 +19,15 @@ export class Section implements ISection {
   @Field(type => Int)
   @Column({ name: 'project_id' })
   projectId: number;
+  @Field(type => Project)
+  @ManyToOne(type => Project, project => project.posts)
+  @JoinColumn({ name: 'project_id' })
+  project: Project
 
-  @Field(type => Post)
-  @OneToMany(type => Post, post => post.sectionId)
+  @Field(type => [Post])
+  @OneToMany(type => Post, post => post.section, {
+    eager: true
+  })
   @JoinColumn({ name: 'section_id' })
   posts: Post[]
 

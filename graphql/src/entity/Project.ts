@@ -35,7 +35,8 @@ export class Project implements IProject {
   posts: Post[]
 
   @Field(type => [Section]) // != Task[]
-  @OneToMany(type => Post, post => post.section, {
+  @OneToMany(type => Section, section => section.project, {
+    eager: true
   })
   sections: Section[]
 

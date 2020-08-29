@@ -6,29 +6,29 @@
         <p>Project Category: {{ project.category }}</p>
       </div>
       <div class="message-body">
-        <p>Posts by type (default all)</p>
+        <p>Project by section (default all)</p>
       </div>
     </div>
     <nav class="control-panel is-primary panel">
       <p class="panel-tabs">
         <!-- define a test specific selector so that future code changes to tag, class, or id, which don't nec change functionality, don't break test eg a => div -->
-        <a v-for="type in types" :key="type" data-test="type"
-          :class="[ type == selectedType ? 'is-active' : '']"
-          @click="setType(type)"
+        <a v-for="section in sectionNames" :key="section" data-test="section"
+          :class="[ section == selectedSection ? 'is-active' : '']"
+          @click="setSection(section)"
         >
-          {{ type }}
+          {{ section }}
         </a>
       </p>
       <a class="panel-block">
         <span class="control-element">
-          <button class="button is-pulled-right is-rounded" @click.prevent="newPost" style="">
+          <button class="button is-pulled-right is-rounded" @click.prevent="newSection" style="">
             <i class="fa fa-edit"></i>
           </button>
-          <p>NewPost</p>
+          <p>New Section</p>
         </span>
       </a>
     </nav>
-    <ProjectPost v-for="post in posts" :key="post.id" :post="post"/>
+    <ProjectSection v-for="section in sections" :key="section.id" :section="section"/>
   </div>
 </template>
 
@@ -44,13 +44,14 @@ import { useRoute, useRouter } from 'vue-router'
 import { IProject } from '../../interfaces/IProject'
 import { colorLog } from '../../utils/colorLog'
 import { IPost } from '../../interfaces/IPost'
-import ProjectPost from './ProjectPost.vue'
+import ProjectSection from './ProjectSection.vue'
 import { PostStore } from '../../store/post/post.store'
+import { ISection } from '../../interfaces/ISection'
 
 export default defineComponent({
   name: 'ProjectViewer',
   components: {
-    ProjectPost
+    ProjectSection
   },
   async setup() {
     const route = useRoute()
@@ -61,33 +62,32 @@ export default defineComponent({
     if (!postStore.getState().records.loaded) {
       await postStore.fetchRecords()
     }    
-    const types: IPost['type'][] = ['intro', 'code', 'all']
-
-    const selectedType = ref<IPost['type']>()
+    const selectedSection = ref<ISection['name']>()
     colorLog(JSON.stringify(route.params), 0)
     const project: IProject = await postStore.fetchPostsByProject(route.params.name as string)
+    console.log(project);
+    
+    const sectionNames: ISection['name'][] = project.sections.map(p => p.name).concat(['all']);
 
-    const posts = computed(() => project.posts.filter(post => {
+    const sections = computed(() => project.sections.filter(section => {
       // console.log(post);
-      return selectedType.value ? post.type == selectedType.value : true
+      return selectedSection.value ? section.name == selectedSection.value : true
     }))
 
-    const setType = (type: IPost['type']) => {
-      selectedType.value = type == 'all' ? '' : type
+    const setSection = (section: ISection['name']) => {
+      selectedSection.value = section == 'all' ? '' : section
     }
-    // colorLog('posts')
-    // console.log(posts.value);
 
-    const newPost = () => {
-      router.push({ name: 'NewPost', params: {id: project.id, name: project.name, category: project.category, categoryId: project.categoryId}})
+    const newSection = () => {
+      // router.push({ name: 'NewPost', params: {id: project.id, name: project.name, category: project.category, categoryId: project.categoryId}})
     }
     return {
       project,
-      setType,
-      types,
-      selectedType,
-      posts,
-      newPost
+      setSection,
+      sectionNames,
+      selectedSection,
+      sections,
+      newSection
     }
   }
 })

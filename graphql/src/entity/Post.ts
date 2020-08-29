@@ -40,7 +40,9 @@ export class Post implements IPost {
   sectionId: number;
   @Field(type => Section)
   @ManyToOne(type => Section, section => section.posts, {
-    eager: true
+    // can't do both sides
+    // choose one or do manually
+    // eager: true
   })
   @JoinColumn({ name: 'section_id' })
   section: Section;
