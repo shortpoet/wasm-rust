@@ -18,7 +18,10 @@ p {
 
 .main-nav {
   border-radius: .25em;
-  .home-icon {
-    font-size: 1.25em;
+  a.button {
+    background-color: $royal-purple-highlight;
+    .home-icon {
+      font-size: 1.25em;
+    }
   }
 }

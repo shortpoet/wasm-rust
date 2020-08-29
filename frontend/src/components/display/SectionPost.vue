@@ -1,10 +1,10 @@
 <template>
   <div class="message is-info is-marginless">
     <div class="message-header" @click="showBody = !showBody">
-      <button class="button is-rounded" @click.prevent="toPost">
+      <button class="header-highlight-button button is-rounded" @click.prevent="toPost">
         <i class="fa fa-external-link-alt"></i>
       </button>
-      <span>{{ post.title }}</span>
+      <span class="header-highlight">{{ post.title }}</span>
     </div>
     <div class="message-body" v-if="showBody ">
       <hello-rust :code="html"/>

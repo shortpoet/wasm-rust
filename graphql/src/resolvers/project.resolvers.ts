@@ -1,10 +1,12 @@
-import { Resolver, Arg, Info, Query } from 'type-graphql';
+import { Resolver, Arg, Info, Query, Mutation } from 'type-graphql';
 import { Project } from '../entity/Project';
 import { getRepository, FindOneOptions } from 'typeorm';
 import { RequestInfo } from 'express-graphql';
 import { MetadataStorage } from 'class-validator';
 import { GraphQLResolveInfo } from 'graphql';
 import { report } from 'process';
+import { Section } from '../entity/Section';
+import { CreateSectionInput } from '../inputs/section.input';
 // import { IProjectDTO } from '../interfaces/IProjectDTO';
 // import { ICategoryDTO } from '../interfaces/ICategoryDTO';
 // import { ITaskDTO } from '../interfaces/ITaskDTO';
@@ -45,4 +47,13 @@ export class ProjectsResolver {
     // no eager loading
     return getRepository(Project).find();
   }
+
+  @Mutation(returns => Section)
+  async createSection(@Arg("section") sectionInput: CreateSectionInput): Promise<Section> {
+    console.log('#### create post ####');
+    const repo = getRepository(Section);    
+    const results = await repo.save(sectionInput);
+    return results;
+  }
+
 }

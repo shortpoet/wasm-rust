@@ -2,7 +2,7 @@
   <div class="project-section">
     <div class="message is-info is-marginless">
       <div class="message-header">
-        <p>Section Name: {{ section.name }}</p>
+        <p><span class="has-text-primary">Section Name:</span> <span class="header-highlight">{{ section.name }}</span></p>
       </div>
       <div class="message-body">
         <p>Posts by type (default all)</p>

@@ -8,3 +8,10 @@ div.project-viewer {
     }
   }
 }
+
+.header-highlight {
+  color: $cyan-highlight;
+}
+button.button.header-highlight-button {
+  background-color: $cyan-highlight;
+}

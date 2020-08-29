@@ -2,8 +2,8 @@
   <div class="project-viewer">
     <div class="message is-info is-marginless">
       <div class="message-header">
-        <p>Project Name: {{ project.name }}</p>
-        <p>Project Category: {{ project.category }}</p>
+        <p><span class="has-text-primary">Project Name:</span> <span class="header-highlight">{{ project.name }}</span></p>
+        <p><span class="has-text-primary">Project Category:</span> <span class="header-highlight">{{ project.category }}</span></p>
       </div>
       <div class="message-body">
         <p>Project by section (default all)</p>
