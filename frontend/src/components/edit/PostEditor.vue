@@ -65,7 +65,6 @@ export default defineComponent({
         post = postStore.getRecordById(route.params.id as string)
       }
     }
-    console.log(post);
     
     const makeUpdatePost = (p: IPost): IUpdatePost => {
       delete p['category']

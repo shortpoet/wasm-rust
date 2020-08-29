@@ -34,8 +34,8 @@ export class PostStore extends Store<IPost> {
   modules?: Record<string, any> | undefined
   getRecordById<T>(id: string | number): T
   getRecordById(id: string | number): any
-  getRecordById(id: any) {
-    super.getRecordById(id);
+  getRecordById(id: any): IPost {
+    return super.getRecordById(id);
   }
   public setCurrentId(id: string | number): void {
     super.setCurrentId(id);

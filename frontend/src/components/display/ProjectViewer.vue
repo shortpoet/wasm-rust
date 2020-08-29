@@ -58,7 +58,7 @@ export default defineComponent({
     const router = useRouter()
 
 
-    if (!postStore.getState().projects.loaded) {
+    if (!postStore.getState().records.loaded) {
       await postStore.fetchRecords()
     }    
     const types: IPost['type'][] = ['intro', 'code', 'all']
