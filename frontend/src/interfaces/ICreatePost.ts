@@ -1,15 +1,19 @@
 import { Moment } from 'moment';
 import { ITag } from './ITag';
 import { ICategory, ICategoryName } from './ICategory';
+import { ISection } from './ISection';
+import { IProject } from './IProject';
 
 export interface ICreatePost {
+  id: number;
   title: string;
   markdown?: string;
   html?: string;
   created: Moment;
-  projectId: number;
-  categoryId: number;
+  sectionName: ISection['name'];
+  projectName: IProject['name'];
+  categoryName: ICategoryName;
   type: string;
   tags?: ITag[];
-  [key: string]: number | string | Moment  | ITag[] | undefined
+  [key: string]: string | Moment  | ITag[] | undefined | number
 }

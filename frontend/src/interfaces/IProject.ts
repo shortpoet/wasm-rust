@@ -5,9 +5,8 @@ import { ISection } from './ISection';
 export interface IProject {
   id: number;
   name: string;
-  categoryId: number;
-  category: ICategory['name'];
+  categoryName: ICategory['name'];
   sections: ISection[];
-  posts: IPost[];
-  [key: string]: number | string | IPost[] | undefined | ISection[]
+  // posts: IPost[];
+  [key: string]: number | string | IPost[] | ISection[] 
 }

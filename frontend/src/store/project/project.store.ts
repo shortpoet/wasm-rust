@@ -21,7 +21,7 @@ export class ProjectStore extends Store<IProject> implements IStore<IProject> {
   getState(): DeepReadonly<UnwrapRef<StoreState<IProject>>> {
     return readonly<StoreState<IProject>>(this.state)
   }
-  categoryId?: number;
+  categoryName?: string;
   loaded = false;
   idSymbol: string;
   modules?: Record<string, any> | undefined;
@@ -33,8 +33,8 @@ export class ProjectStore extends Store<IProject> implements IStore<IProject> {
   public setCurrentId(id: string | number): void {
     super.setCurrentId(id);
   }
-  setCategoryId(categoryId: number): void {
-    this.categoryId = categoryId;
+  setCategoryName(categoryName: string): void {
+    this.categoryName = categoryName;
   }
 
   getLast<T>(): any {
@@ -79,12 +79,9 @@ export class ProjectStore extends Store<IProject> implements IStore<IProject> {
   async fetchRecords() {
     const query = FETCH_PROJECTS
     const response = await graphAxios(query, PROJECTS_INIT)
-    // console.log(response.projects);
-    
     const projects: IProject[] = response.projects.map((p: IProjectDTO) => ({
       ...p,
-      category: p.category.name,
-      categoryId: p.category.id
+      categoryName: p.category.name
     }))
     const records = projects;
     if (records) {

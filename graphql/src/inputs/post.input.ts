@@ -22,11 +22,14 @@ export class CreatePostInput implements Partial<Post> {
   @Field()
   type: string;
 
-  @Field(type => Int)
-  projectId: number;
+  @Field()
+  projectName: string;
 
-  @Field(type => Int)
-  categoryId: number;
+  @Field()
+  sectionName: string;
+
+  @Field()
+  categoryName: string;
   
   @Field(type => String, { nullable: true })
   tags?: Tag[];
@@ -52,11 +55,14 @@ export class UpdatePostInput {
   @Field(type => GraphQLISODateTime)
   created: Moment;
   
-  @Field(type => Int)
-  projectId: number;
+  @Field()
+  projectName: string;
 
-  @Field(type => Int)
-  categoryId: number;
+  @Field()
+  sectionName: string;
+
+  @Field()
+  categoryName: string;
   
   @Field(type => String, { nullable: true })
   tags?: Tag[];

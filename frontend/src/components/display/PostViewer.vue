@@ -36,21 +36,15 @@ export default defineComponent({
     const route = useRoute()
     const postStore: PostStore = useStore<PostStore>(POST_STORE_SYMBOL) as PostStore
     const router = useRouter()
-
+    colorLog('post viewer')
     // on reload there is no pushed id or loaded posts param so must do 'expensive' search instead
 
     if (!postStore.getState().records.loaded) {
       await postStore.fetchRecords()
     }
 
-    let post: IPost;
-    if (!route.params.id) {
-      const allPosts = await postStore.loadRecords(POSTS)
-      post = allPosts.filter(post => post.title == route.params.title)[0]
-    } else {
-      post = postStore.getRecordById(route.params.id as string)
-    }
-    
+    const post: IPost = postStore.getRecordById(route.params.name as string)
+
     const update = useMarkdown().update
     const html = ref()
     if (post.html) {

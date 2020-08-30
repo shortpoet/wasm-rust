@@ -9,21 +9,20 @@
           :small="true"
           :modelValue="selectedType"
           :default-value="'code'"
-          @update:modelValue="onUpdateSelect"
+          @update:modelValue="onUpdateType"
         />
-        choose from sections or make new section
-        <!-- <BaseSelector
-          :itemType="'category'"
-          :options="['browser', 'deno', 'faas', 'nodejs', 'rust', 'ssvm', 'tencentcloud']"
+        <BaseSelector
+          :itemType="'section'"
+          :options="sections"
           :name="'Category Options'"
           :small="true"
-          :modelValue="selections.category"
-          :default-value="'nodejs'"
-          @update:modelValue="onUpdateSelect"
-        /> -->
+          :modelValue="selectedSection"
+          :default-value="sections[0]"
+          @update:modelValue="onUpdateSection"
+        />
       </div>
     </div>
-    <PostWriter :post="post" @save="save"/>
+    <PostWriter :post="post" @save="save" />
   </div>
 </template>
 
@@ -60,32 +59,25 @@ export default defineComponent({
     const loaded = computed(() => postStore.getState().records.loaded)
     colorLog('new post')
     
-    // const selections: Ref<{[key: string]: string }> = ref({
-    //   type: '',
-    //   category: ''
-    // })
-    // const title = computed(() => `${project}-${selections.value.type}`)
-
     const selectedType = ref('')
-    let projectName
-    let project: IProject
-
-    // if(!loaded.value) {
-    //   // await postStore.fetchPostsByProject(route.params.name as string)
-    // }
+    const project = await postStore.fetchPostsByProject(route.params.name as string)
+    const sections = project.sections.map(s => s.name)
+    const selectedSection = ref(sections[0])
     const title = computed(() => `${route.params.name}-${selectedType.value}`)
-
-    const post: Ref<ICreatePost> = computed(() => ({      
+    const sectionComputed = computed(() => selectedSection.value)
+    
+    const post: Ref<IPost> = computed(() => ({
       // set id to -1 to represent post that has not yet been created in db
+      id: -1,
       title: title.value,
       markdown: '## New Post\nEnter your post here...',
       html: '',
       created: moment(),
       type: selectedType.value,
-      projectId: parseInt(projectStore.getState().records.currentId as string),
-      categoryId: projectStore.categoryId as number
+      sectionName: sectionComputed.value,
+      projectName: project.name,
+      categoryName: projectStore.categoryName as ICategoryName
     }))
-
 
     const save = async (post: ICreatePost) => {
       console.log('save');
@@ -93,16 +85,20 @@ export default defineComponent({
       router.push('/')
     }
 
-    const onUpdateSelect = (e: any) => {
-      // selections.value[`${e.type}`] = e.value
+    const onUpdateType = (e: any) => {
       selectedType.value = e.value
+    }
+    const onUpdateSection = (e: any) => {
+      selectedSection.value = e.value
     }
     
     return {
-      // selections,
+      sections,
       post,
       save,
-      onUpdateSelect,
+      onUpdateType,
+      onUpdateSection,
+      selectedSection,
       selectedType,
       loaded
     }

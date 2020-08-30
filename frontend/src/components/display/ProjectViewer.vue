@@ -70,23 +70,16 @@ export default defineComponent({
       await postStore.fetchRecords()
     }    
     const selectedSection = ref<ISection['name']>()
-    colorLog(JSON.stringify(route.params), 0)
+    // colorLog(JSON.stringify(route.params), 0)
     const project: IProject = await postStore.fetchPostsByProject(route.params.name as string)
-    const categoryName = project.category
-    console.log(categoryName);
-    console.log(project);
-    
+    const categoryName = project.categoryName
     const sectionNames: ISection['name'][] = project.sections.map(p => p.name).concat(['all']);
-
     const sections = computed(() => project.sections.filter(section => {
-      // console.log(post);
       return selectedSection.value ? section.name == selectedSection.value : true
     }))
-
     const setSection = (section: ISection['name']) => {
       selectedSection.value = section == 'all' ? '' : section
     }
-
     const newSection = () => {
       // router.push({ name: 'NewPost', params: {id: project.id, name: project.name, category: project.category, categoryId: project.categoryId}})
     }

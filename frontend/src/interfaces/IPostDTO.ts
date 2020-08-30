@@ -2,6 +2,7 @@ import { Moment } from 'moment';
 import { ITag } from './ITag';
 import { ICategory, ICategoryName } from './ICategory';
 import { ISection } from './ISection';
+import { IProject } from './IProject';
 
 export interface IPostDTO {
   id: number;
@@ -10,8 +11,12 @@ export interface IPostDTO {
   html?: string;
   type: string;
   created: Moment;
+  projectName: string;
+  sectionName: string;
+  categoryName: string;
+  project: IProject;
   category: ICategory;
   section: ISection;
   tags?: ITag[];
-  [key: string]: number | string | Moment | ICategory | ISection | ITag[] | undefined
+  [key: string]: number | string | Moment | ICategory | ISection | ITag[] | IProject | undefined
 }

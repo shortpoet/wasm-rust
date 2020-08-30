@@ -10,9 +10,9 @@ export interface IPost {
   markdown?: string;
   html?: string;
   created: Moment;
-  section: ISection['name'];
-  project: IProject['name'];
-  category: ICategoryName;
+  sectionName: ISection['name'];
+  projectName: IProject['name'];
+  categoryName: ICategoryName;
   type: string;
   tags?: ITag[];
   [key: string]: number | string | Moment | ICategoryName | ITag[] | undefined

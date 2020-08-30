@@ -2,7 +2,8 @@
   <div>
     <div class="columns">
       <div class="column is-three-fourths">
-        <FormInput type="text" name="Project Section" v-model="section" :error="sectionStatus.message"/>
+        <!-- <FormInput type="text" name="Project Section" v-model="section" :error="sectionStatus.message"/> -->
+        <FormInput type="text" name="Post Section" v-model="section" :error="sectionStatus.message"/>
         <FormInput type="text" name="Post Title" v-model="title" :error="titleStatus.message"/>
       </div>
       <div class="column is-one-fourths">
@@ -34,13 +35,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, watch, computed } from 'vue'
+import { defineComponent, ref, onMounted, watch, computed, Ref } from 'vue'
 import { IPost } from '../../interfaces/IPost'
 import marked from 'marked'
 import hljs from 'highlight.js'
 import debounce from 'lodash/debounce'
 import { Status, validate, contiguous, required } from '../../utils/validators'
 import FormInput from './FormInput.vue'
+import { colorLog } from '../../utils/colorLog'
+import { ICreatePost } from '../../interfaces/ICreatePost'
 
 export default defineComponent({
   name: 'PostWriter',
@@ -56,12 +59,15 @@ export default defineComponent({
   
   setup(props, ctx) {
     const title = ref(props.post.title)
+    const section = ref(props.post.sectionName)
+    colorLog('post writer')
+    console.log(section.value);
+    
     // declare new ref with initial value null
     // because needs to execute setup first
     const contentEditable = ref<null | HTMLDivElement>(null)
     const markdown = ref(props.post.markdown)
     const html = ref('')
-    const section = ref('')
     const options: marked.MarkedOptions =  {
       // takes function that return code with syntax hightlighting
       highlight: (code: string) => hljs.highlightAuto(code).value
@@ -94,6 +100,11 @@ export default defineComponent({
       { immediate: true }
     )
     watch(
+      () => props.post.section,
+      () => section.value = props.post.sectionName,
+      { immediate: true }
+    )
+    watch(
       // eslint-disable-next-line
       // because can be null
       () => markdown.value!,
@@ -104,17 +115,19 @@ export default defineComponent({
     )
 
     const submit = () => {
-      const post: IPost = {
-        // spread 
+      const createPost: Ref<ICreatePost> = computed(() => ({
+        // set id to -1 to represent post that has not yet been created in db
         ...props.post,
         title: title.value,
         markdown: markdown.value,
         html: html.value,
-        section: section.value
-      }
+        sectionName: props.post.sectionName,
+        projectName: props.post.projectName,
+        categoryName: props.post.categoryName
+      }))
       ctx.emit(
         'save',
-        post
+        createPost.value
       )
     }
 

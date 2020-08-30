@@ -115,6 +115,8 @@ export class Store<T> extends BaseStore<T> {
     // console.log(this.state.records)
     // console.log(this.state.records.all)
     if (this.state.records.all[id]) {
+      // console.log(this.state.records.all);
+      // console.log(this.state.records.all[id]);
       return this.state.records.all[id]
     } else {
       console.log('is null')

@@ -49,12 +49,17 @@ export default defineComponent({
 
     let post: IPost;
     if (postStore.getState().records.currentId) {
+      colorLog('1')
       post = postStore.getRecordById(postStore.getState().records.currentId as string)
+      console.log(post);
+      
     } else {
+      colorLog('2')
       if (!postStore.getState().records.loaded) {
         await postStore.fetchPostsByProject(project.name)
       }
       if (route.params.title) {
+        colorLog('3')
         const allPosts = await postStore.loadRecords(POSTS)
         post = allPosts.filter(post => post.title == route.params.title)[0]
         if (post == undefined) {
@@ -62,16 +67,16 @@ export default defineComponent({
           router.push('/')
         }
       } else {
+        colorLog('4')
         post = postStore.getRecordById(route.params.id as string)
       }
     }
+    console.log(post);
     
     const makeUpdatePost = (p: IPost): IUpdatePost => {
       delete p['category']
       return {
-        ...p,
-        categoryId: parseInt(project.categoryId.toString()),
-        projectId: parseInt(projectStore.getState().records.currentId as string)
+        ...p
       }
     }
     const updatePost = makeUpdatePost(post)

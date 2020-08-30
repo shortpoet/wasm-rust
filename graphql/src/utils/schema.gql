@@ -11,11 +11,12 @@ type Category {
 }
 
 input CreatePostInput {
-  categoryId: Int!
+  categoryName: String!
   created: DateTime!
   html: String
   markdown: String
-  projectId: Int!
+  projectName: String!
+  sectionName: String!
   tags: String
   title: String!
   type: String!
@@ -84,12 +85,13 @@ type Tag {
 }
 
 input UpdatePostInput {
-  categoryId: Int!
+  categoryName: String!
   created: DateTime!
   html: String
   id: String!
   markdown: String
-  projectId: Int!
+  projectName: String!
+  sectionName: String!
   tags: String
   title: String!
   type: String!

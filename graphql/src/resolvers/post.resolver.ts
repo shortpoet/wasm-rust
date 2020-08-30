@@ -7,6 +7,7 @@ import { CreatePostInput, UpdatePostInput } from "../inputs/post.input";
 import { chalkLog } from "../utils/chalkLog";
 import { Category } from "../entity/Category";
 import { Project } from "../entity/Project";
+import { Section } from "../entity/Section";
 
 @Resolver(of => Post)
 export class PostsResolver {
@@ -37,7 +38,7 @@ export class PostsResolver {
   @Query(returns => [Post])
   async posts(): Promise<Post[]> {
     chalkLog('magentaBright', '#### database fetch ####')
-    const data = await getRepository(Post).find()
+    const data = await getRepository(Post).find({relations: ['section', 'project', 'category', 'tags']})
     // chalkLog('magenta', data)
     return data;
   }
@@ -76,12 +77,19 @@ export class PostsResolver {
     const repo = getRepository(Post);
     const oldPost = await repo.findOne(parseInt(postInput.id));
     console.log(oldPost);
-    const newPost = await repo.create(<Post>{
+    const category = await getRepository(Category).findOne({ name: postInput.categoryName as Category['name'] })
+    const section = await getRepository(Section).findOne({ name: postInput.sectionName as Section['name'] })
+    const project = await getRepository(Project).findOne({ name: postInput.projectName as Project['name'] })
+    const newPost = await repo.create(<Partial<Post>>{
       ...postInput,
-      id: oldPost.id
+      id: oldPost.id,
+      // category: category,
+      categoryId: category.id,
+      sectionId: section.id,
+      projectId: project.id
     });
     console.log(newPost);
-    const results = await repo.save(<Post>newPost);
+    const results = await repo.save(<Partial<Post>>newPost);
     return results;
   }
 

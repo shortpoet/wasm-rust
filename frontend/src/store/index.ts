@@ -5,8 +5,8 @@ import { IProject } from '@/interfaces/IProject';
 import { provide, inject } from 'vue';
 import { IPost } from '@/interfaces/IPost';
 
-export const PROJECT_ID_SYMBOL = 'id';
-export const POST_ID_SYMBOL = 'id';
+export const PROJECT_ID_SYMBOL = 'name';
+export const POST_ID_SYMBOL = 'title';
 
 export const PROJECT_STORE_SYMBOL = Symbol('projectStore');
 export const POST_STORE_SYMBOL = Symbol('postStore');
@@ -21,7 +21,7 @@ function provideStoreMaker(storeSymbol: symbol, idSymbol: string) {
 
 
 export const provideStore = () => {
-  provideStoreMaker(PROJECT_STORE_SYMBOL, POST_ID_SYMBOL)
+  provideStoreMaker(PROJECT_STORE_SYMBOL, PROJECT_ID_SYMBOL)
   provideStoreMaker(POST_STORE_SYMBOL, POST_ID_SYMBOL)
 };
 

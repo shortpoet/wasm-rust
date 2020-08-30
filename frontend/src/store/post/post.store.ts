@@ -102,11 +102,17 @@ export class PostStore extends Store<IPost> {
   async fetchRecords() {
     const query = FETCH_POSTS
     const response = await graphAxios(query, POSTS_INIT)
-    
     const posts: IPost[] = response.posts.map((p: IPostDTO) => ({
-      ...p,
+      id: p.id,
+      title: p.title,
+      type: p.type,
+      markdown: p.markdown,
+      html: p.html,
+      tags: p.tags,
       created: moment(p.created),
-      category: p.category.name
+      sectionName: p.section.name,
+      projectName: p.project.name,
+      categoryName: p.category.name
     }))
 
     const records = posts;
@@ -118,8 +124,6 @@ export class PostStore extends Store<IPost> {
       colorLog('posts loaded', 1)
       this.loaded = true
       this.state.records.loaded = true
-      console.log(this.state.records.loaded);
-      
     } else {
       console.log("No posts Found")
     }
@@ -140,40 +144,45 @@ export class PostStore extends Store<IPost> {
     const response = await graphAxios(query, POSTS_BY_PROJECT)
     const dto: IProjectDTO = response.project
     const project: IProject = {
-      ...dto,
-      category: dto.category.name,
-      categoryId: dto.category.id,
+      id: dto.id,
+      name: dto.name,
+      categoryName: dto.category.name,
       sections: dto.sections.map(s => ({
         ...s,
         posts: s.posts.map(p => ({
-          ...p,
+          id: p.id,
+          title: p.title,
+          type: p.type,
+          markdown: p.markdown,
+          html: p.html,
+          tags: p.tags,
           created: moment(p.created),
-          section: s.name,
-          project: dto.name,
-          category: dto.category.name
-        }))
+          sectionName: s.name,
+          projectName: dto.name,
+          categoryName: dto.category.name
+        } as IPost))
       })),
-      posts: dto.sections.reduce<IPost[]>((acc, val) => acc = [...val.posts], [])
+      // this preserves original post info could be useful
+      // posts: dto.sections.reduce<IPost[]>((acc, val) => acc = [...val.posts], [])
     }
     if (project) {
       unParseQuery(project)
       // this.state.project.currentId = project.id.toString()
-      this.addRecords(project.posts)
+      this.addRecords(project.sections.map(s => s.posts))
     }
-    console.log(project);
+    // console.log(project);
     const storage = useStorage()
     const session: ISession = {
       created: moment(),
-      projectId: project.id,
       projectName: project.name,
-      categoryId: project.categoryId
+      categoryName: project.categoryName
     }
     storage.setWExpiry(`rust-session` , session)
     colorLog('project posts loaded', 1)
+    colorLog(JSON.stringify(session))
     this.loaded = true
     this.state.records.loaded = true
     console.log(this.state.records.loaded);
-
     return project
   }
 

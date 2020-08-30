@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import CategoryProject from '../components/display/CategoryProject.vue'
-import { ref, computed, defineComponent } from 'vue'
+import { ref, computed, defineComponent, ComputedRef } from 'vue'
 import { useStore, PROJECT_STORE_SYMBOL } from '../store'
 
 import { colorLog } from '../utils/colorLog'
@@ -36,26 +36,27 @@ export default defineComponent({
   async setup() {
     const categories: ICategoryName[] = ['browser', 'deno', 'faas', 'nodejs', 'rust', 'ssvm', 'tencentcloud']
 
-    // ref is generic type
     const selectedCategory = ref<ICategoryName>('nodejs')
 
     const projectStore: ProjectStore = useStore<ProjectStore>(PROJECT_STORE_SYMBOL) as ProjectStore
-    
 
     if (!projectStore.getState().records.loaded) {
       await projectStore.fetchRecords()
     }
     
-    const allProjects = await projectStore.loadRecords(PROJECTS)
+    const allProjects: IProject[] = await projectStore.loadRecords(PROJECTS)
 
-    const projects = computed(() => allProjects.filter(post => {
-      return post.category == selectedCategory.value
+    const projects: ComputedRef<IProject[]> = computed(() => allProjects.filter(project => {
+      return project.categoryName == selectedCategory.value
     }))
 
     const setCategory = (category: ICategoryName) => {
       selectedCategory.value = category
     }
-    colorLog('projects')
+    // colorLog('projects')
+    // console.log(projects.value);
+    // console.log(projectStore.getRecordById('hello-rust'));
+    
     
     return {
       categories,

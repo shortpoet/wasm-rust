@@ -4,18 +4,15 @@ import { ICategory } from './ICategory';
 import { IProject } from './IProject';
 import { ISection } from './ISection';
 
-export interface IPost {
+export interface IPostDTO {
   id: number;
   title: string;
-  type: string;
   markdown?: string;
   html?: string;
   created: Moment;
-  sectionId: number;
-  section: ISection;
-  projectId: number;
-  project: IProject;
-  categoryId: number;
-  category: ICategory;
+  sectionName: number;
+  projectName: number;
+  categoryName: number;
   tags?: ITag[];
+  type: string;
 }

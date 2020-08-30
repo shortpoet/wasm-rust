@@ -13,9 +13,15 @@ export const FETCH_POSTS = `
       type
       html
       markdown
-      sectionId
-      categoryId
+      section {
+        id
+        name
+      }
       created
+      project {
+        id
+        name
+      }
       category{
         id
         name
@@ -49,12 +55,6 @@ export const FETCH_POSTS_BY_PROJECT = (projectName: IProject['name']) => `
           html
           markdown
           created
-          sectionId
-          categoryId
-          category{
-            id
-            name
-          }
           tags{
             id
             name
@@ -101,3 +101,16 @@ export const DELETE_POST = (record: IPost) => `
         deletePost(id: "${record['id']}")
       }
     `
+
+    // project {
+    //   id
+    //   name
+    // }
+    // section {
+    //   id
+    //   name
+    // }
+    // category{
+    //   id
+    //   name
+    // }
