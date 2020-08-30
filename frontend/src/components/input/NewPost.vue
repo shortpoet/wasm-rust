@@ -1,5 +1,5 @@
 <template>
-  <div class="new-post-container" v-if="loaded">
+  <div class="new-post-container">
     <div class="selector-container field">
       <div class="control">
         <BaseSelector
@@ -51,13 +51,15 @@ export default defineComponent({
     BaseSelector,
     PostWriter
   },
-  setup () {
+  async setup () {
     
     const postStore: PostStore = useStore<PostStore>(POST_STORE_SYMBOL) as PostStore
     const projectStore: ProjectStore = useStore<ProjectStore>(PROJECT_STORE_SYMBOL) as ProjectStore
     const route = useRoute()
     const router = useRouter()
-    const loaded = computed(() => projectStore.getState().records.loaded)
+    const loaded = computed(() => postStore.getState().records.loaded)
+    colorLog('new post')
+    
     // const selections: Ref<{[key: string]: string }> = ref({
     //   type: '',
     //   category: ''
@@ -68,18 +70,10 @@ export default defineComponent({
     let projectName
     let project: IProject
 
-    // if (!projectStore.getState().records.currentId) {
-    //   if (!projectStore.getState().records.loaded) {
-    //     projectStore.fetchRecords()
-    //   }
-    //   const allProjects = await projectStore.loadRecords(PROJECTS)
-    //   project = allProjects.filter(project => project.name == route.params.name)[0]
-    //   store.setCurrentProject(project.id)
-    // } else {
-    //   project = store.getState().projects.all[store.getState().projects.currentId as string]
+    // if(!loaded.value) {
+    //   // await postStore.fetchPostsByProject(route.params.name as string)
     // }
-    
-    const title = computed(() => `${project.name}-${selectedType.value}`)
+    const title = computed(() => `${route.params.name}-${selectedType.value}`)
 
     const post: Ref<ICreatePost> = computed(() => ({      
       // set id to -1 to represent post that has not yet been created in db
@@ -89,15 +83,12 @@ export default defineComponent({
       created: moment(),
       type: selectedType.value,
       projectId: parseInt(projectStore.getState().records.currentId as string),
-      categoryId: parseInt(project.categoryId.toString()),
-
+      categoryId: projectStore.categoryId as number
     }))
 
 
     const save = async (post: ICreatePost) => {
       console.log('save');
-      console.log(post);
-      
       await postStore.createRecord(post)
       router.push('/')
     }

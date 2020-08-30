@@ -19,16 +19,22 @@
           {{ section }}
         </a>
       </p>
-      <a class="panel-block">
+      <div class="panel-block">
         <span class="control-element">
-          <button class="button is-pulled-right is-rounded" @click.prevent="newSection" style="">
+          <button class="button is-rounded" @click.prevent="newSection" style="">
             <i class="fa fa-edit"></i>
           </button>
-          <p>New Section</p>
+          <span>New Section</span>
         </span>
-      </a>
+      </div>
     </nav>
-    <ProjectSection v-for="section in sections" :key="section.id" :section="section"/>
+    <ProjectSection
+      v-for="section in sections"
+      :key="section.id"
+      :section="section"
+      :project-name="project.name"
+      :category-name="categoryName"
+    />
   </div>
 </template>
 
@@ -53,11 +59,12 @@ export default defineComponent({
   components: {
     ProjectSection
   },
+  props: {
+  },
   async setup() {
     const route = useRoute()
     const postStore: PostStore = useStore<PostStore>(POST_STORE_SYMBOL) as PostStore
     const router = useRouter()
-
 
     if (!postStore.getState().records.loaded) {
       await postStore.fetchRecords()
@@ -65,6 +72,8 @@ export default defineComponent({
     const selectedSection = ref<ISection['name']>()
     colorLog(JSON.stringify(route.params), 0)
     const project: IProject = await postStore.fetchPostsByProject(route.params.name as string)
+    const categoryName = project.category
+    console.log(categoryName);
     console.log(project);
     
     const sectionNames: ISection['name'][] = project.sections.map(p => p.name).concat(['all']);
@@ -82,6 +91,7 @@ export default defineComponent({
       // router.push({ name: 'NewPost', params: {id: project.id, name: project.name, category: project.category, categoryId: project.categoryId}})
     }
     return {
+      categoryName,
       project,
       setSection,
       sectionNames,

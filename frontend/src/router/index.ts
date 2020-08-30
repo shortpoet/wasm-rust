@@ -1,10 +1,29 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
-import NewPost from '../components/input/NewPost.vue'
 import WaitEditPost from '../components/edit/WaitEditPost.vue'
 import WaitShowProject from '../components/display/WaitShowProject.vue'
 import WaitShowPost from '../components/display/WaitShowPost.vue'
-// import { store } from '../store'
+import WaitNewPost from '../components/display/WaitNewPost.vue'
+import { projectStore, postStore } from '../store'
+import { PROJECTS } from '@/store/project/constants'
+import { ProjectStore } from '@/store/project/project.store'
+import { colorLog } from '@/utils/colorLog'
+
+// const beforeProjects = async (to: any, from: any, next: any) => {
+//   if (!projectStore.getState().projects.loaded) {
+//     await projectStore.fetchRecords()
+//   }
+//   next()
+// }
+// const beforePosts = async (to: any, from: any, next: any) => {
+//   if (!postStore.getState().posts) {
+//     colorLog('before beforePosts')
+//     await postStore.fetchRecords()
+//     console.log(postStore);
+    
+//   }
+//   next()
+// }
 
 export const routes =  [
   {
@@ -24,9 +43,10 @@ export const routes =  [
     // props: (route: any) => ({ id: route.query.q })
   },
   {
-    name: 'NewPost',
+    name: 'WaitNewPost',
     path: '/projects/:category/:name/posts/new',
-    component: NewPost,
+    component: WaitNewPost,
+    // beforeEnter: (to: any, from: any, next: any) => beforePosts(to, from, next)
   },
   {
     name: 'WaitEditPost',
@@ -49,12 +69,7 @@ export const makeRouter = () => createRouter({
   routes: routes
 })
 
-// router.beforeEach(async (to, from, next) => {
-//   if (!store.getState().projects.loaded) {
-//     await store.fetchProjects()
-//   }
-//   next()
-// })
+
 
 // https://github.com/vuejs/vue-router-next/blob/master/playground/router.ts
 // redirect catch-all

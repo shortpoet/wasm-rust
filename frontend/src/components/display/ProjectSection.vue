@@ -19,14 +19,14 @@
           @click="setType(type)"
         >{{ type }}</a>
       </p>
-      <a class="panel-block">
+      <div class="panel-block">
         <span class="control-element">
-          <button class="button is-pulled-right is-rounded" @click.prevent="newPost" style>
+          <button class="button  is-rounded" @click.prevent="newPost" style>
             <i class="fa fa-edit"></i>
           </button>
           <p>New Post</p>
         </span>
-      </a>
+      </div>
     </nav>
     <SectionPost v-for="post in posts" :key="post.id" :post="post" />
   </div>
@@ -50,8 +50,19 @@ export default defineComponent({
       type: Object as () => ISection,
       required: true,
     },
+    projectName: {
+      type: String,
+      required: true
+    },
+    categoryName: {
+      type: String,
+      required: true
+    }
   },
   setup(props) {
+    colorLog('project section')
+    console.log(props.categoryName);
+    
     const typeNames: IPost["type"][] = props.section.posts.map(p => p.type).concat(['all']);
 
     const selectedType = ref<IPost["type"]>();
@@ -79,6 +90,9 @@ export default defineComponent({
         // params: { id: props.post.id, title: props.post.title },
       });
     };
+    const newPost = () => {
+      router.push({ name: 'WaitNewPost', params: { name: props.projectName, category: props.categoryName }})
+    }
 
     return {
       onRust,
@@ -88,6 +102,7 @@ export default defineComponent({
       typeNames,
       selectedType,
       posts,
+      newPost
     };
   },
 });

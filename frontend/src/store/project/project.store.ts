@@ -6,6 +6,9 @@ import { graphAxios } from '@/ajax';
 // import moment from 'moment';
 import { unParseQuery } from '@/utils/graphqlQueryParsers';
 import { Store, IStore, StoreState } from '../store.interface';
+import { useStorage } from '@/composables/useStorage';
+import { ISession } from '../session/session.interface';
+import moment from 'moment';
 
 export class ProjectStore extends Store<IProject> implements IStore<IProject> {
   protected state: StoreState<IProject>
@@ -18,15 +21,20 @@ export class ProjectStore extends Store<IProject> implements IStore<IProject> {
   getState(): DeepReadonly<UnwrapRef<StoreState<IProject>>> {
     return readonly<StoreState<IProject>>(this.state)
   }
-  idSymbol: string
-  modules?: Record<string, any> | undefined
-  getRecordById<T>(id: string | number): T
-  getRecordById(id: string | number): any
+  categoryId?: number;
+  loaded = false;
+  idSymbol: string;
+  modules?: Record<string, any> | undefined;
+  getRecordById<T>(id: string | number): T;
+  getRecordById(id: string | number): any;
   getRecordById(id: any): IProject {
     return super.getRecordById(id);
   }
   public setCurrentId(id: string | number): void {
     super.setCurrentId(id);
+  }
+  setCategoryId(categoryId: number): void {
+    this.categoryId = categoryId;
   }
 
   getLast<T>(): any {
@@ -84,6 +92,7 @@ export class ProjectStore extends Store<IProject> implements IStore<IProject> {
         unParseQuery(rec)
       }
       this.addRecords(projects)
+      this.loaded = true
       this.state.records.loaded = true
     } else {
       console.log("No projects Found")

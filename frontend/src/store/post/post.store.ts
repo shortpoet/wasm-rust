@@ -12,6 +12,8 @@ import { colorLog } from '@/utils/colorLog';
 import {  FETCH_POSTS_BY_PROJECT, POSTS_BY_PROJECT, POSTS_INIT, FETCH_POSTS, CREATE_POST, UPDATE_POST, DELETE_POST } from './constants';
 import { Store, IStore, StoreState, initStoreState } from '../store.interface';
 import { ISection } from '@/interfaces/ISection';
+import { useStorage } from '@/composables/useStorage';
+import { ISession } from '../session/session.interface';
 
 
 
@@ -33,6 +35,7 @@ export class PostStore extends Store<IPost> {
   protected state: StoreState<IPost>;
   idSymbol: string
   modules?: Record<string, any> | undefined
+  loaded = false;
   getRecordById<T>(id: string | number): T
   getRecordById(id: string | number): any
   getRecordById(id: any): IPost {
@@ -112,7 +115,11 @@ export class PostStore extends Store<IPost> {
         unParseQuery(rec)
       }
       this.addRecords(posts)
+      colorLog('posts loaded', 1)
+      this.loaded = true
       this.state.records.loaded = true
+      console.log(this.state.records.loaded);
+      
     } else {
       console.log("No posts Found")
     }
@@ -135,6 +142,7 @@ export class PostStore extends Store<IPost> {
     const project: IProject = {
       ...dto,
       category: dto.category.name,
+      categoryId: dto.category.id,
       sections: dto.sections.map(s => ({
         ...s,
         posts: s.posts.map(p => ({
@@ -153,7 +161,19 @@ export class PostStore extends Store<IPost> {
       this.addRecords(project.posts)
     }
     console.log(project);
-    
+    const storage = useStorage()
+    const session: ISession = {
+      created: moment(),
+      projectId: project.id,
+      projectName: project.name,
+      categoryId: project.categoryId
+    }
+    storage.setWExpiry(`rust-session` , session)
+    colorLog('project posts loaded', 1)
+    this.loaded = true
+    this.state.records.loaded = true
+    console.log(this.state.records.loaded);
+
     return project
   }
 

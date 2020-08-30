@@ -1,4 +1,4 @@
-import { initStoreState, Store} from './store.interface'
+import { initStoreState, Store, IStore} from './store.interface'
 import { ProjectStore } from './project/project.store';
 import { PostStore } from './post/post.store';
 import { IProject } from '@/interfaces/IProject';
@@ -27,10 +27,15 @@ export const provideStore = () => {
 
 
 export function createStore<T>(storeSymbol: symbol, idSymbol: string) {
-  const store = new Store<T>(idSymbol, initStoreState<T>())
-  store.getState()
-  return store
+  if (storeSymbol == PROJECT_STORE_SYMBOL) {
+    return new ProjectStore(idSymbol, initStoreState<IProject>())
+  } else {
+    return new PostStore(idSymbol, initStoreState<IPost>())
+  }
 }
+
+export const projectStore: ProjectStore = createStore<ProjectStore>(PROJECT_STORE_SYMBOL, PROJECT_ID_SYMBOL) as ProjectStore
+export const postStore: PostStore = createStore(POST_STORE_SYMBOL, POST_ID_SYMBOL) as PostStore
 
 // export function useStore<T>(storeSymbol: symbol): PostStore | ProjectStore | undefined {
 //   const store: PostStore | ProjectStore | undefined = storeSymbol == PROJECT_STORE_SYMBOL

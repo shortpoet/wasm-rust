@@ -51,6 +51,7 @@ export interface IStore<T> {
   getState(): DeepReadonly<UnwrapRef<StoreState<T>>>;
   getRecordById<T>(id: string | number): T;
   getRecordById(id: string | number): any;
+  setCurrentId(id: string | number, categoryId: number): void;
   setCurrentId(id: string | number): void;
   getLast<T>(): T;
   createRecord(record: any, pushToDb: boolean): void;
@@ -79,6 +80,7 @@ abstract class BaseStore<T> implements IStore<T> {
   abstract getState(): DeepReadonly<UnwrapRef<StoreState<T>>>;
   abstract getRecordById<T>(id: string | number): T;
   abstract getRecordById(id: string | number): any;
+  abstract setCurrentId(id: string | number, categoryId: number): void;
   abstract setCurrentId(id: string | number): void;
   abstract getLast<T>(): T; 
   abstract getLast(): any; 

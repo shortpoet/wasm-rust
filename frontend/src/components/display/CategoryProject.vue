@@ -32,6 +32,7 @@ export default defineComponent({
     const toProject = () => {
       // colorLog('#### to show project ####')
       projectStore.setCurrentId(props.project.id)
+      projectStore.setCategoryId(props.project.categoryId)
       router.push({ name: 'WaitShowProject', params: {category: props.project.category, id: props.project.id, name: props.project.name}})
 
     }
