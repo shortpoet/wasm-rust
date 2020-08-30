@@ -1,7 +1,7 @@
 <template>
   <div class="project-section">
     <div class="message is-info is-marginless">
-      <div class="message-header" @click="showBody = !showBody">
+      <div class="message-header">
         <p><span class="header-text has-text-primary">Section Name:</span> <span class="header-text header-highlight">{{ section.name }}</span></p>
         <button id="display-toggle" @click="showBody = !showBody" v-if="showBody" class="compress-icon button is-rounded"><i class="fas fa-compress-alt"></i></button>
         <button id="display-toggle" @click="showBody = !showBody" v-else class="expand-icon button is-rounded"><i class="fas fa-expand-alt"></i></button>
@@ -28,6 +28,12 @@
           </button>
           <p>New Post</p>
         </span>
+        <span class="control-element">
+          <button class="button  is-rounded" @click.prevent="deleteSection" style>
+            <i class="fa fa-trash"></i>
+          </button>
+          <p>Delete Section</p>
+        </span>
       </div>
     </nav>
     <SectionPost v-for="post in posts" :key="post.id" :post="post" />
@@ -42,6 +48,8 @@ import { colorLog } from "../../utils/colorLog";
 import { rustAxios } from "../../ajax";
 import SectionPost from "./SectionPost.vue";
 import { ISection } from "../../interfaces/ISection";
+import { ProjectStore } from "../../store/project/project.store";
+import { useStore, PROJECT_STORE_SYMBOL } from "../../store";
 
 export default defineComponent({
   components: {
@@ -61,9 +69,10 @@ export default defineComponent({
       required: true
     }
   },
-  setup(props) {
-    colorLog('project section')
-    console.log(props.categoryName);
+  emits: ['delete-section'],
+  setup(props, ctx) {
+    // colorLog('project section')
+    // console.log(props.categoryName);
     const showBody = ref(true)
     
     const typeNames: IPost["type"][] = props.section.posts.map(p => p.type).concat(['all']);
@@ -94,7 +103,14 @@ export default defineComponent({
       });
     };
     const newPost = () => {
-      router.push({ name: 'WaitNewPost', params: { name: props.projectName, category: props.categoryName }})
+      router.push({ name: 'WaitNewPost', params: { name: props.projectName, category: props.categoryName, section: props.section.name }})
+    }
+    const projectStore: ProjectStore = useStore<ProjectStore>(PROJECT_STORE_SYMBOL) as ProjectStore
+
+    const deleteSection = async () => {
+      colorLog('delete section')
+      await projectStore.deleteSection(props.section)
+      ctx.emit('delete-section')
     }
 
     return {
@@ -106,7 +122,8 @@ export default defineComponent({
       typeNames,
       selectedType,
       posts,
-      newPost
+      newPost,
+      deleteSection
     };
   },
 });

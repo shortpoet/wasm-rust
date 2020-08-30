@@ -1,4 +1,5 @@
 import { ICreateSection } from '@/interfaces/ICreateSection'
+import { ISection } from '@/interfaces/ISection'
 
 export const PROJECTS = 'projects'
 export const PROJECTS_INIT = 'projects_init'
@@ -34,3 +35,8 @@ mutation {
   }
 }
 `
+export const DELETE_SECTION = (record: ISection) => `
+      mutation {
+        deleteSection(id: "${(record['id'])}")
+      }
+    `

@@ -1,17 +1,3 @@
-
-.item.featured {
-  grid-area: featured;
-}
-
-.item-2 {
-  grid-area: item-1;
-}
-
-.item-3 {
-  grid-area: item-2;
-}
-
-
 div.project-section,
 div.project-viewer {
   .message-header {
@@ -48,7 +34,11 @@ div.project-viewer {
   .control-panel {
     flex-direction: row;
     div.panel-block {
+      // justify-content: space-between;
+      // align-content: flex-start;
+      // margin-right: auto;
       span.control-element {
+        margin: 0rem 1rem;
         display: flex;
         flex-direction: column;
         align-items: center;

@@ -15,10 +15,12 @@ import { defineComponent, computed, ref } from 'vue'
 import FormInput from './FormInput.vue'
 import { required, validate, Status, contiguous } from '../../utils/validators'
 import { ProjectStore } from '../../store/project/project.store'
-import { useStore, PROJECT_STORE_SYMBOL } from '../../store'
+import { useStore, PROJECT_STORE_SYMBOL, POST_STORE_SYMBOL } from '../../store'
 import { useModal } from '../../composables/useModal'
 import { colorLog } from '../../utils/colorLog'
 import { IProject } from '../../interfaces/IProject'
+import { PostStore } from '../../store/post/post.store'
+import { POSTS } from '../../store/post/constants'
 
 export default defineComponent({
   name: 'NewSection',
@@ -31,7 +33,8 @@ export default defineComponent({
       required: true
     }
   },
-  setup (props) {
+  emits: ['new-section'],
+  setup (props, ctx) {
     const sectionName = ref('')
     const debug = true;
     // derive validity of username in computed property
@@ -47,6 +50,7 @@ export default defineComponent({
     })
 
 
+    const postStore: PostStore = useStore<PostStore>(POST_STORE_SYMBOL) as PostStore
     const projectStore: ProjectStore = useStore<ProjectStore>(PROJECT_STORE_SYMBOL) as ProjectStore
     const sectionModal = useModal('new-section')
 
@@ -57,13 +61,11 @@ export default defineComponent({
         return 
       }
       colorLog('submit section', undefined, debug)
-      console.log(sectionName.value);
       const curProj = projectStore.getCurrentProject()
-      console.log(curProj);
-      
-      
       const section = await projectStore.createSection(sectionName.value, curProj);
+      ctx.emit('new-section')
       props.modal.hideModal();
+
       // can't chain modal calls unless they are registered and used with id bec app modal just acts on any modal
       // successModal.showModal();
     }

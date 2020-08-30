@@ -64,7 +64,7 @@ export const FETCH_POSTS_BY_PROJECT = (projectName: IProject['name']) => `
     }
   }
 `
-export const CREATE_POST = (createPost: ICreatePost) => `
+export const CREATE_POST = (createPost: string) => `
       mutation {
         createPost (post: {${createPost}}) {
           id

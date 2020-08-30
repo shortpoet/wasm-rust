@@ -58,5 +58,21 @@ export class ProjectsResolver {
     const project = await getRepository(Project).findOne(sectionInput.projectId);
     return project;
   }
+  
+  @Mutation(returns => Boolean)
+  async deleteSection(@Arg("id") id: string) {
+    chalkLog('greenBright' ,'#### delete section ####');
+    const repo = getRepository(Section);
+    // const result = await repo.remove(await repo.findOne(id))
+    // chalkLog('magenta', "result")
+    // chalkLog('magenta', result)
+    // return await repo.remove(await repo.findOne(id));
+    const result =  await repo.delete(id)
+    chalkLog('magenta', "result")
+    chalkLog('magenta', result)
+
+    return true;
+
+  }
 
 }

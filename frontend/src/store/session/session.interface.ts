@@ -6,7 +6,7 @@ import { ProjectStore } from '../project/project.store';
 
 const storage = useStorage()
 
-const debug = true
+const debug = false
 
 export interface ISession {
   created: Moment;
@@ -35,6 +35,7 @@ export class Session implements ISession {
     console.log(this.projectName);
     // set only first time created
     this.projectStore.setCurrentId(this.projectName)
+    this.projectStore.setCategoryName(this.categoryName)
     storage.setWExpiry(this.sessionKey, this)
     // colorLog(JSON.stringify(this), undefined, debug)
   }
@@ -67,6 +68,7 @@ export class Session implements ISession {
       this.sessionKey = session.sessionKey
       // must reset each time old session is reloaded
       this.projectStore.setCurrentId(this.projectName)
+      this.projectStore.setCategoryName(this.categoryName)
 
     }
     // console.log(this);

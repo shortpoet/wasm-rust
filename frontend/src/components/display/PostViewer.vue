@@ -2,7 +2,7 @@
   <div class="columns">
     <div class="column"/>
     <div class="column is-two-thirds">
-      <a data-test="can-edit" @click="toPost" class="button is-pulled-right is-rounded is-link">
+      <a data-test="can-edit" @click="editPost" class="button is-pulled-right is-rounded is-link">
         <i class="fas fa-edit" />
       </a>
       <h1>
@@ -37,6 +37,8 @@ export default defineComponent({
     const postStore: PostStore = useStore<PostStore>(POST_STORE_SYMBOL) as PostStore
     const router = useRouter()
     colorLog('post viewer')
+    console.log(route.params.name);
+    
     // on reload there is no pushed id or loaded posts param so must do 'expensive' search instead
 
     if (!postStore.getState().records.loaded) {
@@ -50,16 +52,16 @@ export default defineComponent({
     if (post.html) {
       html.value = update(post.html)
     }
-    const toPost = () => {
+    const editPost = () => {
       colorLog('#### to edit post ####')
-      postStore.setCurrentId(post.id)
-      router.push({ name: 'WaitEditPost', params: { id: post.id, title: post.title }})
+      postStore.setCurrentId(post.title)
+      router.push({ name: 'WaitEditPost', params: { id: post.id, title: post.title, section: post.sectionName }})
     }
 
 return {
       post,
       html,
-      toPost
+      editPost
     }
   }
 })

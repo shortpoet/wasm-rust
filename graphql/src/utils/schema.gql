@@ -36,6 +36,7 @@ type Mutation {
   createPost(post: CreatePostInput!): Post!
   createSection(section: CreateSectionInput!): Project!
   deletePost(id: String!): Boolean!
+  deleteSection(id: String!): Boolean!
   updatePost(post: UpdatePostInput!): Post!
 }
 

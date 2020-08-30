@@ -14,10 +14,10 @@
         <BaseSelector
           :itemType="'section'"
           :options="sections"
-          :name="'Category Options'"
+          :name="'Section Options'"
           :small="true"
           :modelValue="selectedSection"
-          :default-value="sections[0]"
+          :default-value="sectionComputed"
           @update:modelValue="onUpdateSection"
         />
       </div>
@@ -62,9 +62,9 @@ export default defineComponent({
     const selectedType = ref('')
     const project = await postStore.fetchPostsByProject(route.params.name as string)
     const sections = project.sections.map(s => s.name)
-    const selectedSection = ref(sections[0])
-    const title = computed(() => `${route.params.name}-${selectedType.value}`)
-    const sectionComputed = computed(() => selectedSection.value)
+    const selectedSection = ref('')
+    const sectionComputed = computed(() => selectedSection.value ? selectedSection.value : route.params.section as string)
+    const title = computed(() => `${route.params.name}-${sectionComputed.value}-${selectedType.value}`)
     
     const post: Ref<IPost> = computed(() => ({
       // set id to -1 to represent post that has not yet been created in db
@@ -76,7 +76,7 @@ export default defineComponent({
       type: selectedType.value,
       sectionName: sectionComputed.value,
       projectName: project.name,
-      categoryName: projectStore.categoryName as ICategoryName
+      categoryName: route.params.category as ICategoryName
     }))
 
     const save = async (post: ICreatePost) => {
@@ -93,6 +93,7 @@ export default defineComponent({
     }
     
     return {
+      sectionComputed,
       sections,
       post,
       save,

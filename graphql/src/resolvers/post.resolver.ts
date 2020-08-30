@@ -47,7 +47,17 @@ export class PostsResolver {
   async createPost(@Arg("post") postInput: CreatePostInput): Promise<Post> {
     console.log('#### create post ####');
     const repo = getRepository(Post);    
-    const results = await repo.save(postInput);
+    const category = await getRepository(Category).findOne({ name: postInput.categoryName as Category['name'] })
+    const section = await getRepository(Section).findOne({ name: postInput.sectionName as Section['name'] })
+    const project = await getRepository(Project).findOne({ name: postInput.projectName as Project['name'] })
+    const newPost = await repo.create(<Partial<Post>>{
+      ...postInput,
+      categoryId: category.id,
+      sectionId: section.id,
+      projectId: project.id
+    });
+    console.log(newPost);
+    const results = await repo.save(<Partial<Post>>newPost);
     return results;
 
     // below is for upsert

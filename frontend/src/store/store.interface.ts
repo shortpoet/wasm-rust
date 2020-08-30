@@ -5,7 +5,7 @@ import { IProject } from '@/interfaces/IProject'
 import { IPost } from '@/interfaces/IPost'
 import { colorLog } from '@/utils/colorLog'
 
-const debug = true;
+const debug = false;
 
 export interface StateMap<T> {
   ids: string[];
@@ -115,10 +115,10 @@ export class Store<T> extends BaseStore<T> {
 
   public getRecordById<T>(id: string | number): T;
   public getRecordById(id: string | number): any {
-    // console.log('get by id')
-    // console.log(id)
-    // console.log(this.state.records)
-    // console.log(this.state.records.all)
+    colorLog('get by id', undefined, debug)
+    colorLog(`${id}`, undefined, debug)
+    // colorLog(JSON.stringify(this.state.records), undefined, debug)
+    // colorLog(JSON.stringify(this.state.records.all), undefined, debug)
     if (this.state.records.all[id]) {
       // console.log(this.state.records.all);
       // console.log(this.state.records.all[id]);

@@ -30,25 +30,17 @@
         </span>
       </div>
     </nav>
-    <div class="project-section-container">
-      <ProjectSection
-        v-for="section in sections"
-        :key="section.id"
-        :section="section"
-        :project-name="project.name"
-        :category-name="categoryName"
-      />
-    </div>
+    <SectionViewer :sections="sections" :category-name="categoryName" :project-name="project.name" @delete-section="onUpdateSection"/>
   </div>
 
   <teleport to="#modal" v-if="sectionModal.visible">
-    <component :is="component" :modal="sectionModal"/>
+    <component :is="component" :modal="sectionModal" @new-section="onUpdateSection"/>
   </teleport>
 
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, markRaw } from 'vue'
+import { defineComponent, ref, computed, markRaw, Ref, watch } from 'vue'
 import { useStore, POST_STORE_SYMBOL, PROJECT_STORE_SYMBOL } from '../../store'
 // import { useMarkdown } from '../../composables/useMarkdown'
 
@@ -60,6 +52,7 @@ import { IProject } from '../../interfaces/IProject'
 import { colorLog } from '../../utils/colorLog'
 import { IPost } from '../../interfaces/IPost'
 import ProjectSection from './ProjectSection.vue'
+import SectionViewer from './SectionViewer.vue'
 import { PostStore } from '../../store/post/post.store'
 import { ISection } from '../../interfaces/ISection'
 import { useModal } from '../../composables/useModal'
@@ -67,10 +60,13 @@ import NewSection from '../input/NewSection.vue'
 import { ISession, Session } from '../../store/session/session.interface'
 import { ProjectStore } from '../../store/project/project.store'
 
+const debug = false;
+
 export default defineComponent({
   name: 'ProjectViewer',
   components: {
-    ProjectSection
+    ProjectSection,
+    SectionViewer
   },
   props: {
   },
@@ -83,36 +79,47 @@ export default defineComponent({
 
     const router = useRouter()
     const sectionModal = useModal('new-section')
+    // watch after await forbidden
 
     if (!postStore.getState().records.loaded) {
       await postStore.fetchRecords()
     }    
     const selectedSection = ref<ISection['name']>()
     // colorLog(JSON.stringify(route.params), 0)
-    const project: IProject = await postStore.fetchPostsByProject(route.params.name as string)
+    
+    // const projectRef: Ref<IProject> = ref({} as IProject)
+    // const projectProm = await postStore.fetchPostsByProject(route.params.name as string)
+    // projectRef.value = projectProm
+    // const project: IProject = projectRef.value
 
+    const project: IProject = await postStore.fetchPostsByProject(route.params.name as string)
+    
     // need to add this call else projectstore used by session is empty 
     // so no project to correlate to name
     await projectStore.fetchRecords()
+
     const session: ISession = new Session(project.name, project.categoryName, projectStore)
-    console.log(session);
-
-
-
     const categoryName = project.categoryName
     const sectionNames: ISection['name'][] = project.sections.map(p => p.name).concat(['all']);
-    const sections = computed(() => project.sections.filter(section => {
+    const sectionsComputed = computed(() => project.sections.filter(section => {
       return selectedSection.value ? section.name == selectedSection.value : true
     }))
     const setSection = (section: ISection['name']) => {
       selectedSection.value = section == 'all' ? '' : section
     }
     const newSection = () => {
-      console.log("on new section");
+      colorLog("on new section", undefined, debug);
       sectionModal.component.value = markRaw(NewSection)
       sectionModal.showModal()
-
     }
+    const sections = ref(sectionsComputed.value)
+
+    const onUpdateSection = async () => {
+      colorLog('on update section', undefined, debug)
+      const proj: IProject = await postStore.fetchPostsByProject(route.params.name as string)
+      sections.value = proj.sections
+    }
+    // watch after await forbidden
 
     return {
       showBody,
@@ -123,6 +130,7 @@ export default defineComponent({
       selectedSection,
       sections,
       newSection,
+      onUpdateSection,
       sectionModal,
       component: sectionModal.component
     }

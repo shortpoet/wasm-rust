@@ -41,6 +41,11 @@ export default defineComponent({
 
     const projectStore: ProjectStore = useStore<ProjectStore>(PROJECT_STORE_SYMBOL) as ProjectStore
 
+    // sometimes the inject doesn't work 
+    if(!projectStore) {
+      location.reload()
+    }
+
     if (!projectStore.getState().records.loaded) {
       await projectStore.fetchRecords()
     }

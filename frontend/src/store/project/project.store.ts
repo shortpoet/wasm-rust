@@ -1,6 +1,6 @@
 import { IProject } from '@/interfaces/IProject'
 import { reactive, readonly, DeepReadonly, UnwrapRef } from 'vue';
-import { FETCH_PROJECTS, PROJECTS_INIT, CREATE_SECTION } from './constants';
+import { FETCH_PROJECTS, PROJECTS_INIT, CREATE_SECTION, PROJECTS, DELETE_SECTION } from './constants';
 import { IProjectDTO } from '@/interfaces/IProjectDTO';
 import { graphAxios } from '@/ajax';
 // import moment from 'moment';
@@ -11,8 +11,9 @@ import { ISession } from '../session/session.interface';
 import moment from 'moment';
 import { ICreateSection } from '@/interfaces/ICreateSection';
 import { colorLog } from '@/utils/colorLog';
+import { ISection } from '@/interfaces/ISection';
 
-const debug = true;
+const debug = false;
 
 export class ProjectStore extends Store<IProject> implements IStore<IProject> {
   protected state: StoreState<IProject>
@@ -49,13 +50,11 @@ export class ProjectStore extends Store<IProject> implements IStore<IProject> {
     return this.state.records.all[this.state.records.currentId as string].name;
   }
   public getCurrentProject(): IProject {
-    colorLog('get current project', undefined, debug)
-    console.log(this.state.records.currentId);
-    console.log(this.state.records);
-    
+    colorLog('get current project', undefined, debug)    
     return this.state.records.all[this.state.records.currentId as string];
   }
   setCategoryName(categoryName: string): void {
+    colorLog(`set category name to: ${categoryName}`, undefined, debug)
     this.categoryName = categoryName;
   }
 
@@ -80,36 +79,36 @@ export class ProjectStore extends Store<IProject> implements IStore<IProject> {
     this.fetchRecords()
   }
   async createSection(sectionName: string, oldRecord: IProject) {
-    // super.editRecord(o, n)
-    // const newRecord: IProject = {
-    //   ...oldRecord
-    //   sections: oldRecord.sections.concat()
-    // }
     const createSection: ICreateSection = {
       name: sectionName,
       projectId: oldRecord.id
     }
-    console.log(createSection);
-    console.log(typeof createSection.projectId);
-    console.log(createSection.projectId);
-    // console.log(parseInt(createSection.projectId));
-    
     const query = CREATE_SECTION(parseQuery(createSection))
-    console.log(query);
-    
     const response = await graphAxios(query)
-    console.log(response);
-    
 
     this.fetchRecords()
+    this.updateRecords(PROJECTS)
   }
   async deleteRecord(record: IProject): Promise<string> {
-    console.log(record);
     
     throw new Error("Method not implemented.");
     // super.deleteRecord(task)
     // const response = await axios.delete<TaskDTO>(`http://localhost:3000/task/delete?task_id=${task._id}`)
     // return response.data.task._id
+  }
+  async deleteSection(record: ISection): Promise<string> {
+    colorLog(`delete section with name: ${record['name']}`, undefined, debug)
+    const query = DELETE_SECTION(record)
+    const res = await graphAxios(query);
+    const curProj = this.getCurrentProject()
+    const newProj: IProject = {
+      ...curProj,
+      sections: curProj.sections.filter(s => s.id != record.id)
+    }
+    if (res) {
+      super.editRecord(curProj, newProj);
+    }
+    return res;
   }
 
   

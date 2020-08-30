@@ -62,7 +62,7 @@ CREATE UNIQUE INDEX categories_name_idx ON "rust"."content_categories"(name);
 
 ALTER TABLE "rust"."content_projects" ADD FOREIGN KEY (category_id) REFERENCES "rust"."content_categories"(id) ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE "rust"."content_posts" ADD FOREIGN KEY (project_id) REFERENCES "rust"."content_projects"(id) ON DELETE NO ACTION ON UPDATE CASCADE;
-ALTER TABLE "rust"."content_posts" ADD FOREIGN KEY (section_id) REFERENCES "rust"."content_sections"(id) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE "rust"."content_posts" ADD FOREIGN KEY (section_id) REFERENCES "rust"."content_sections"(id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "rust"."content_posts" ADD FOREIGN KEY (category_id) REFERENCES "rust"."content_categories"(id) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 

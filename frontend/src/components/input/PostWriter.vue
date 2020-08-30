@@ -3,7 +3,7 @@
     <div class="columns">
       <div class="column is-three-fourths">
         <!-- <FormInput type="text" name="Project Section" v-model="section" :error="sectionStatus.message"/> -->
-        <FormInput type="text" name="Post Section" v-model="section" :error="sectionStatus.message"/>
+        <!-- <FormInput type="text" name="Post Section" v-model="section" :error="sectionStatus.message"/> -->
         <FormInput type="text" name="Post Title" v-model="title" :error="titleStatus.message"/>
       </div>
       <div class="column is-one-fourths">
@@ -59,7 +59,7 @@ export default defineComponent({
   
   setup(props, ctx) {
     const title = ref(props.post.title)
-    const section = ref(props.post.sectionName)
+    const section = ref(props.post.sectionName ? props.post.sectionName : '')
     colorLog('post writer')
     console.log(section.value);
     
@@ -100,7 +100,7 @@ export default defineComponent({
       { immediate: true }
     )
     watch(
-      () => props.post.section,
+      () => section.value,
       () => section.value = props.post.sectionName,
       { immediate: true }
     )
@@ -116,7 +116,7 @@ export default defineComponent({
 
     const submit = () => {
       const createPost: Ref<ICreatePost> = computed(() => ({
-        // set id to -1 to represent post that has not yet been created in db
+        
         ...props.post,
         title: title.value,
         markdown: markdown.value,
@@ -125,6 +125,9 @@ export default defineComponent({
         projectName: props.post.projectName,
         categoryName: props.post.categoryName
       }))
+      // id was set to -1 to represent post that has not yet been created in db
+      // now delete for expected DTO
+      delete createPost.value['id']
       ctx.emit(
         'save',
         createPost.value

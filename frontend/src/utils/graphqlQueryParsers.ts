@@ -6,8 +6,8 @@ import { ICreateSection } from '@/interfaces/ICreateSection'
 
 export const parseQuery = (input: IPost | IProject | ICreatePost | IUpdatePost | ICreateSection): string => {
   return Object.entries(input).reduce((cur, [k, v]) => {
-    console.log(typeof v);
-    console.log(v);
+    // console.log(typeof v);
+    // console.log(v);
     
     return typeof v != 'number'
       // eslint-disable-next-line

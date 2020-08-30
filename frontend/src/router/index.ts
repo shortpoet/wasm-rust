@@ -38,19 +38,19 @@ export const routes =  [
   },
   {
     name: 'WaitShowPost',
-    path: '/projects/:category/:name/posts/:title',
+    path: '/projects/:category/:name/posts/:section/:title',
     component: WaitShowPost
     // props: (route: any) => ({ id: route.query.q })
   },
   {
     name: 'WaitNewPost',
-    path: '/projects/:category/:name/posts/new',
+    path: '/projects/:category/:name/posts/:section/new',
     component: WaitNewPost,
     // beforeEnter: (to: any, from: any, next: any) => beforePosts(to, from, next)
   },
   {
     name: 'WaitEditPost',
-    path: '/projects/:category/:name/posts/edit/:title',
+    path: '/projects/:category/:name/posts/edit/:section/:title',
     component: WaitEditPost,
   },
   {

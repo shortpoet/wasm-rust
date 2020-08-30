@@ -69,7 +69,7 @@ export const graphAxios
     
 
     const url = `${process.env.VUE_APP_GRAPH_API}/graphql`
-    console.log(url);
+    // console.log(url);
     
     try {
       const res = await axios.post(
@@ -80,7 +80,7 @@ export const graphAxios
       // chalkLog('green', 'graphAxios')
       // chalkLog('blueBright', res)
       // chalkLog('green', res.status)
-      console.log(res);
+      // console.log(res);
       // console.log(res.status);
       
       if (res.status == 200) {

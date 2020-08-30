@@ -50,6 +50,8 @@ export default defineComponent({
     let post: IPost;
     if (postStore.getState().records.currentId) {
       colorLog('1')
+      console.log(postStore.getState().records.currentId);
+      
       post = postStore.getRecordById(postStore.getState().records.currentId as string)
       console.log(post);
       
@@ -68,7 +70,7 @@ export default defineComponent({
         }
       } else {
         colorLog('4')
-        post = postStore.getRecordById(route.params.id as string)
+        post = postStore.getRecordById(route.params.title as string)
       }
     }
     console.log(post);

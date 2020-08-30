@@ -61,9 +61,7 @@ export class PostStore extends Store<IPost> {
 
   public async createRecord(input: ICreatePost) {
     const createPost: string = parseQuery(input)
-    console.log(createPost);
-    
-    const query = CREATE_POST(input);
+    const query = CREATE_POST(createPost);
     const response = await graphAxios(query);
     const post: IPost = {
       ...response.createPost,
@@ -170,10 +168,10 @@ export class PostStore extends Store<IPost> {
       this.addRecords(project.sections.map(s => s.posts))
     }
     // console.log(project);    
-    colorLog('project posts loaded', 1)
+    // colorLog('project posts loaded', 1)
     this.loaded = true
     this.state.records.loaded = true
-    console.log(this.state.records.loaded);
+    // console.log(this.state.records.loaded);
     return project
   }
 
