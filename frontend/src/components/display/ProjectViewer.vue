@@ -1,15 +1,17 @@
 <template>
   <div class="project-viewer">
     <div class="message is-info is-marginless">
-      <div class="message-header">
-        <p><span class="has-text-primary">Project Name:</span> <span class="header-highlight">{{ project.name }}</span></p>
-        <p><span class="has-text-primary">Project Category:</span> <span class="header-highlight">{{ project.category }}</span></p>
+      <div class="message-header" >
+        <p><span class="header-text has-text-primary">Project Name:</span> <span class="header-text header-highlight">{{ project.name }}</span></p>
+        <button id="display-toggle" @click="showBody = !showBody" v-if="showBody" class="compress-icon button is-rounded"><i class="fas fa-compress-alt"></i></button>
+        <button id="display-toggle" @click="showBody = !showBody" v-else class="expand-icon button is-rounded"><i class="fas fa-expand-alt"></i></button>
+        <p class="header-right"><span class="header-text has-text-primary">Project Category:</span> <span class="header-text header-highlight">{{ project.categoryName }}</span></p>
       </div>
-      <div class="message-body">
+      <div class="message-body" v-if="showBody">
         <p>Project by section (default all)</p>
       </div>
     </div>
-    <nav class="control-panel is-primary panel">
+    <nav class="control-panel is-primary panel" v-if="showBody">
       <p class="panel-tabs">
         <!-- define a test specific selector so that future code changes to tag, class, or id, which don't nec change functionality, don't break test eg a => div -->
         <a v-for="section in sectionNames" :key="section" data-test="section"
@@ -28,13 +30,15 @@
         </span>
       </div>
     </nav>
-    <ProjectSection
-      v-for="section in sections"
-      :key="section.id"
-      :section="section"
-      :project-name="project.name"
-      :category-name="categoryName"
-    />
+    <div class="project-section-container">
+      <ProjectSection
+        v-for="section in sections"
+        :key="section.id"
+        :section="section"
+        :project-name="project.name"
+        :category-name="categoryName"
+      />
+    </div>
   </div>
 
   <teleport to="#modal" v-if="sectionModal.visible">
@@ -74,7 +78,8 @@ export default defineComponent({
     const route = useRoute()
     const postStore: PostStore = useStore<PostStore>(POST_STORE_SYMBOL) as PostStore
     const projectStore: ProjectStore = useStore<ProjectStore>(PROJECT_STORE_SYMBOL) as ProjectStore
-  
+
+    const showBody = ref(true)
 
     const router = useRouter()
     const sectionModal = useModal('new-section')
@@ -110,6 +115,7 @@ export default defineComponent({
     }
 
     return {
+      showBody,
       categoryName,
       project,
       setSection,

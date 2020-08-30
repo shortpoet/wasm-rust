@@ -40,8 +40,6 @@ export default defineComponent({
     const selectedCategory = ref<ICategoryName>('nodejs')
 
     const projectStore: ProjectStore = useStore<ProjectStore>(PROJECT_STORE_SYMBOL) as ProjectStore
-    console.log(projectStore);
-    
 
     if (!projectStore.getState().records.loaded) {
       await projectStore.fetchRecords()
@@ -56,7 +54,7 @@ export default defineComponent({
     const setCategory = (category: ICategoryName) => {
       selectedCategory.value = category
     }
-    colorLog('projects')
+    // colorLog('projects')
     // console.log(projects.value);
     // console.log(projectStore.getRecordById('hello-rust'));
     

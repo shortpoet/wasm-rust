@@ -1,14 +1,16 @@
 <template>
   <div class="project-section">
     <div class="message is-info is-marginless">
-      <div class="message-header">
-        <p><span class="has-text-primary">Section Name:</span> <span class="header-highlight">{{ section.name }}</span></p>
+      <div class="message-header" @click="showBody = !showBody">
+        <p><span class="header-text has-text-primary">Section Name:</span> <span class="header-text header-highlight">{{ section.name }}</span></p>
+        <button id="display-toggle" @click="showBody = !showBody" v-if="showBody" class="compress-icon button is-rounded"><i class="fas fa-compress-alt"></i></button>
+        <button id="display-toggle" @click="showBody = !showBody" v-else class="expand-icon button is-rounded"><i class="fas fa-expand-alt"></i></button>
       </div>
-      <div class="message-body">
+      <div class="message-body" v-if="showBody">
         <p>Posts by type (default all)</p>
       </div>
     </div>
-    <nav class="control-panel is-primary panel">
+    <nav class="control-panel is-primary panel" v-if="showBody">
       <p class="panel-tabs">
         <!-- define a test specific selector so that future code changes to tag, class, or id, which don't nec change functionality, don't break test eg a => div -->
         <a
@@ -62,6 +64,7 @@ export default defineComponent({
   setup(props) {
     colorLog('project section')
     console.log(props.categoryName);
+    const showBody = ref(true)
     
     const typeNames: IPost["type"][] = props.section.posts.map(p => p.type).concat(['all']);
 
@@ -95,6 +98,7 @@ export default defineComponent({
     }
 
     return {
+      showBody,
       onRust,
       message,
       toPost,

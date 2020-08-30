@@ -1,5 +1,48 @@
+
+.item.featured {
+  grid-area: featured;
+}
+
+.item-2 {
+  grid-area: item-1;
+}
+
+.item-3 {
+  grid-area: item-2;
+}
+
+
 div.project-section,
 div.project-viewer {
+  .message-header {
+    // display: flex;
+    // // align-items: auto;
+    // justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 3.5em 1fr;
+    // grid-template-rows: 1fr 3.5em 1fr;
+    grid-template-areas: "tex but tex";
+    grid-gap: 1.25rem;
+  
+    button#display-toggle.button.compress-icon,
+    button#display-toggle.button.expand-icon {
+      grid-column: 2 / 3;
+      // display: flex;
+      // grid-area: but;
+      font-size: 1.05em;
+      background-color: $cyan-highlight;
+      // align-self: center;
+      // justify-self: center;
+      // margin-right: auto;
+      // margin-left: auto;
+    }
+    .header-text {
+      // grid-area: tex;
+    }
+    .header-right {
+      margin-left: auto;
+    }
+  }
   display: flex;
   flex-direction: column;
   .control-panel {
