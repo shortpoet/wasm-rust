@@ -34,7 +34,7 @@ scalar DateTime
 
 type Mutation {
   createPost(post: CreatePostInput!): Post!
-  createSection(section: CreateSectionInput!): Section!
+  createSection(section: CreateSectionInput!): Project!
   deletePost(id: String!): Boolean!
   updatePost(post: UpdatePostInput!): Post!
 }

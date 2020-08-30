@@ -36,11 +36,16 @@
       :category-name="categoryName"
     />
   </div>
+
+  <teleport to="#modal" v-if="sectionModal.visible">
+    <component :is="component" :modal="sectionModal"/>
+  </teleport>
+
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
-import { useStore, POST_STORE_SYMBOL } from '../../store'
+import { defineComponent, ref, computed, markRaw } from 'vue'
+import { useStore, POST_STORE_SYMBOL, PROJECT_STORE_SYMBOL } from '../../store'
 // import { useMarkdown } from '../../composables/useMarkdown'
 
 // import marked from "marked"
@@ -53,6 +58,10 @@ import { IPost } from '../../interfaces/IPost'
 import ProjectSection from './ProjectSection.vue'
 import { PostStore } from '../../store/post/post.store'
 import { ISection } from '../../interfaces/ISection'
+import { useModal } from '../../composables/useModal'
+import NewSection from '../input/NewSection.vue'
+import { ISession, Session } from '../../store/session/session.interface'
+import { ProjectStore } from '../../store/project/project.store'
 
 export default defineComponent({
   name: 'ProjectViewer',
@@ -64,7 +73,11 @@ export default defineComponent({
   async setup() {
     const route = useRoute()
     const postStore: PostStore = useStore<PostStore>(POST_STORE_SYMBOL) as PostStore
+    const projectStore: ProjectStore = useStore<ProjectStore>(PROJECT_STORE_SYMBOL) as ProjectStore
+  
+
     const router = useRouter()
+    const sectionModal = useModal('new-section')
 
     if (!postStore.getState().records.loaded) {
       await postStore.fetchRecords()
@@ -72,6 +85,15 @@ export default defineComponent({
     const selectedSection = ref<ISection['name']>()
     // colorLog(JSON.stringify(route.params), 0)
     const project: IProject = await postStore.fetchPostsByProject(route.params.name as string)
+
+    // need to add this call else projectstore used by session is empty 
+    // so no project to correlate to name
+    await projectStore.fetchRecords()
+    const session: ISession = new Session(project.name, project.categoryName, projectStore)
+    console.log(session);
+
+
+
     const categoryName = project.categoryName
     const sectionNames: ISection['name'][] = project.sections.map(p => p.name).concat(['all']);
     const sections = computed(() => project.sections.filter(section => {
@@ -81,8 +103,12 @@ export default defineComponent({
       selectedSection.value = section == 'all' ? '' : section
     }
     const newSection = () => {
-      // router.push({ name: 'NewPost', params: {id: project.id, name: project.name, category: project.category, categoryId: project.categoryId}})
+      console.log("on new section");
+      sectionModal.component.value = markRaw(NewSection)
+      sectionModal.showModal()
+
     }
+
     return {
       categoryName,
       project,
@@ -90,7 +116,9 @@ export default defineComponent({
       sectionNames,
       selectedSection,
       sections,
-      newSection
+      newSection,
+      sectionModal,
+      component: sectionModal.component
     }
   }
 })

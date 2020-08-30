@@ -5,7 +5,7 @@ import { ISection } from './ISection';
 import { IProject } from './IProject';
 
 export interface IPostDTO {
-  id: number;
+  id: string;
   title: string;
   markdown?: string;
   html?: string;

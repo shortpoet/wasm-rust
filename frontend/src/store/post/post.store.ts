@@ -102,7 +102,7 @@ export class PostStore extends Store<IPost> {
     const query = FETCH_POSTS
     const response = await graphAxios(query, POSTS_INIT)
     const posts: IPost[] = response.posts.map((p: IPostDTO) => ({
-      id: p.id,
+      id: parseInt(p.id),
       title: p.title,
       type: p.type,
       markdown: p.markdown,
@@ -143,7 +143,7 @@ export class PostStore extends Store<IPost> {
     const response = await graphAxios(query, POSTS_BY_PROJECT)
     const dto: IProjectDTO = response.project
     const project: IProject = {
-      id: dto.id,
+      id: parseInt(dto.id),
       name: dto.name,
       categoryName: dto.category.name,
       sections: dto.sections.map(s => ({
@@ -169,10 +169,7 @@ export class PostStore extends Store<IPost> {
       // this.state.project.currentId = project.id.toString()
       this.addRecords(project.sections.map(s => s.posts))
     }
-    // console.log(project);
-    const session: ISession = new Session(project.name, project.categoryName)
-    console.log(session);
-    
+    // console.log(project);    
     colorLog('project posts loaded', 1)
     this.loaded = true
     this.state.records.loaded = true

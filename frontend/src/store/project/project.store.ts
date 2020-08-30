@@ -1,14 +1,18 @@
 import { IProject } from '@/interfaces/IProject'
 import { reactive, readonly, DeepReadonly, UnwrapRef } from 'vue';
-import { FETCH_PROJECTS, PROJECTS_INIT } from './constants';
+import { FETCH_PROJECTS, PROJECTS_INIT, CREATE_SECTION } from './constants';
 import { IProjectDTO } from '@/interfaces/IProjectDTO';
 import { graphAxios } from '@/ajax';
 // import moment from 'moment';
-import { unParseQuery } from '@/utils/graphqlQueryParsers';
+import { unParseQuery, parseQuery } from '@/utils/graphqlQueryParsers';
 import { Store, IStore, StoreState } from '../store.interface';
 import { useStorage } from '@/composables/useStorage';
 import { ISession } from '../session/session.interface';
 import moment from 'moment';
+import { ICreateSection } from '@/interfaces/ICreateSection';
+import { colorLog } from '@/utils/colorLog';
+
+const debug = true;
 
 export class ProjectStore extends Store<IProject> implements IStore<IProject> {
   protected state: StoreState<IProject>
@@ -31,7 +35,25 @@ export class ProjectStore extends Store<IProject> implements IStore<IProject> {
     return super.getRecordById(id);
   }
   public setCurrentId(id: string | number): void {
+    colorLog(`set current id to: ${id}`, undefined, debug)
     super.setCurrentId(id);
+  }
+  public removeCurrentId(): void {
+    colorLog('remove current id', undefined, debug)
+    super.removeCurrentId();
+  }
+  public getCurrentKey(key: string): IProject[keyof IProject] {
+    return this.state.records.all[this.state.records.currentId as string][key];
+  }
+  public getCurrentId(): IProject['name'] {
+    return this.state.records.all[this.state.records.currentId as string].name;
+  }
+  public getCurrentProject(): IProject {
+    colorLog('get current project', undefined, debug)
+    console.log(this.state.records.currentId);
+    console.log(this.state.records);
+    
+    return this.state.records.all[this.state.records.currentId as string];
   }
   setCategoryName(categoryName: string): void {
     this.categoryName = categoryName;
@@ -55,6 +77,30 @@ export class ProjectStore extends Store<IProject> implements IStore<IProject> {
   createRecord(record: IProject) {
     super.createRecord(record)
     // const response = await axios.post<TaskDTO>('http://localhost:3000/task/create', task)
+    this.fetchRecords()
+  }
+  async createSection(sectionName: string, oldRecord: IProject) {
+    // super.editRecord(o, n)
+    // const newRecord: IProject = {
+    //   ...oldRecord
+    //   sections: oldRecord.sections.concat()
+    // }
+    const createSection: ICreateSection = {
+      name: sectionName,
+      projectId: oldRecord.id
+    }
+    console.log(createSection);
+    console.log(typeof createSection.projectId);
+    console.log(createSection.projectId);
+    // console.log(parseInt(createSection.projectId));
+    
+    const query = CREATE_SECTION(parseQuery(createSection))
+    console.log(query);
+    
+    const response = await graphAxios(query)
+    console.log(response);
+    
+
     this.fetchRecords()
   }
   async deleteRecord(record: IProject): Promise<string> {
@@ -81,6 +127,7 @@ export class ProjectStore extends Store<IProject> implements IStore<IProject> {
     const response = await graphAxios(query, PROJECTS_INIT)
     const projects: IProject[] = response.projects.map((p: IProjectDTO) => ({
       ...p,
+      id: parseInt(p.id),
       categoryName: p.category.name
     }))
     const records = projects;

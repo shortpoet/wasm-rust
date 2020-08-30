@@ -4,7 +4,7 @@ import { ISection } from './ISection';
 import { IPostDTO } from './IPostDTO';
 
 export interface IProjectDTO {
-  id: number;
+  id: string;
   name: string;
   categoryId: number;
   category: ICategory;

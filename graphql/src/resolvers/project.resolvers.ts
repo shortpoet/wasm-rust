@@ -7,6 +7,7 @@ import { GraphQLResolveInfo } from 'graphql';
 import { report } from 'process';
 import { Section } from '../entity/Section';
 import { CreateSectionInput } from '../inputs/section.input';
+import { chalkLog } from '../utils/chalkLog';
 // import { IProjectDTO } from '../interfaces/IProjectDTO';
 // import { ICategoryDTO } from '../interfaces/ICategoryDTO';
 // import { ITaskDTO } from '../interfaces/ITaskDTO';
@@ -48,12 +49,14 @@ export class ProjectsResolver {
     return getRepository(Project).find();
   }
 
-  @Mutation(returns => Section)
-  async createSection(@Arg("section") sectionInput: CreateSectionInput): Promise<Section> {
-    console.log('#### create post ####');
+  @Mutation(returns => Project)
+  async createSection(@Arg("section") sectionInput: CreateSectionInput): Promise<Project> {
+    chalkLog('green', '#### create section ####');
     const repo = getRepository(Section);    
     const results = await repo.save(sectionInput);
-    return results;
+    chalkLog("magenta", results);
+    const project = await getRepository(Project).findOne(sectionInput.projectId);
+    return project;
   }
 
 }

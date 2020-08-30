@@ -2,9 +2,13 @@ import { IPost } from "@/interfaces/IPost"
 import { IProject } from "@/interfaces/IProject"
 import { ICreatePost } from "@/interfaces/ICreatePost"
 import { IUpdatePost } from "@/interfaces/IUpdatePost"
+import { ICreateSection } from '@/interfaces/ICreateSection'
 
-export const parseQuery = (input: IPost | IProject | ICreatePost | IUpdatePost): string => {
+export const parseQuery = (input: IPost | IProject | ICreatePost | IUpdatePost | ICreateSection): string => {
   return Object.entries(input).reduce((cur, [k, v]) => {
+    console.log(typeof v);
+    console.log(v);
+    
     return typeof v != 'number'
       // eslint-disable-next-line
       ? cur += `${k}: """${v!.toString().replace(/"/g, '\\"')}""", `

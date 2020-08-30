@@ -3,6 +3,9 @@ import { PROJECT_STORE_SYMBOL } from './index'
 import { ProjectStore } from './project/project.store'
 import { IProject } from '@/interfaces/IProject'
 import { IPost } from '@/interfaces/IPost'
+import { colorLog } from '@/utils/colorLog'
+
+const debug = true;
 
 export interface StateMap<T> {
   ids: string[];
@@ -53,6 +56,7 @@ export interface IStore<T> {
   getRecordById(id: string | number): any;
   setCurrentId(id: string | number, categoryId: number): void;
   setCurrentId(id: string | number): void;
+  removeCurrentId(): void;
   getLast<T>(): T;
   createRecord(record: any, pushToDb: boolean): void;
   createRecord(record: any): void;
@@ -82,6 +86,7 @@ abstract class BaseStore<T> implements IStore<T> {
   abstract getRecordById(id: string | number): any;
   abstract setCurrentId(id: string | number, categoryId: number): void;
   abstract setCurrentId(id: string | number): void;
+  abstract removeCurrentId(): void;
   abstract getLast<T>(): T; 
   abstract getLast(): any; 
   abstract createRecord(record: any, pushToDb: boolean): void;
@@ -125,7 +130,13 @@ export class Store<T> extends BaseStore<T> {
   }
 
   public setCurrentId(id: string | number): void {
+    colorLog(`set current id to: ${id}`, undefined, debug)
+
     this.state.records.currentId = id.toString();
+    colorLog(this.state.records.currentId, 1, debug)
+  }
+  public removeCurrentId(): void {
+    this.state.records.currentId = undefined;
   }
 
   public getLast<T>(): any {
