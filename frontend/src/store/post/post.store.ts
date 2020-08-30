@@ -12,8 +12,7 @@ import { colorLog } from '@/utils/colorLog';
 import {  FETCH_POSTS_BY_PROJECT, POSTS_BY_PROJECT, POSTS_INIT, FETCH_POSTS, CREATE_POST, UPDATE_POST, DELETE_POST } from './constants';
 import { Store, IStore, StoreState, initStoreState } from '../store.interface';
 import { ISection } from '@/interfaces/ISection';
-import { useStorage } from '@/composables/useStorage';
-import { ISession } from '../session/session.interface';
+import { ISession, Session } from '../session/session.interface';
 
 
 
@@ -171,15 +170,10 @@ export class PostStore extends Store<IPost> {
       this.addRecords(project.sections.map(s => s.posts))
     }
     // console.log(project);
-    const storage = useStorage()
-    const session: ISession = {
-      created: moment(),
-      projectName: project.name,
-      categoryName: project.categoryName
-    }
-    storage.setWExpiry(`rust-session` , session)
+    const session: ISession = new Session(project.name, project.categoryName)
+    console.log(session);
+    
     colorLog('project posts loaded', 1)
-    colorLog(JSON.stringify(session))
     this.loaded = true
     this.state.records.loaded = true
     console.log(this.state.records.loaded);

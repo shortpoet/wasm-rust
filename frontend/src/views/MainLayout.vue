@@ -28,12 +28,15 @@ import { ICategoryName } from '../interfaces/ICategory'
 import { IProject } from '../interfaces/IProject'
 import { ProjectStore } from '../store/project/project.store'
 import { PROJECTS } from '../store/project/constants'
+import { Session } from '../store/session/session.interface'
 
 export default defineComponent({
   components: {
     CategoryProject
   },
   async setup() {
+    const session = new Session('a', 'b')
+    session.endSession()
     const categories: ICategoryName[] = ['browser', 'deno', 'faas', 'nodejs', 'rust', 'ssvm', 'tencentcloud']
 
     const selectedCategory = ref<ICategoryName>('nodejs')

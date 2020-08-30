@@ -7,12 +7,14 @@ type Options = {
 
 // https://www.w3schools.com/colors/colors_names.asp
 
-export function colorLog(message: string, options?: number): void;
-export function colorLog(message: string, options?: (number | Options)): void {
-  
+export function colorLog(message: string, options?: number, debug?: boolean): void;
+export function colorLog(message: string, options?: (number | Options), debug?: boolean): void {
   let color;
   let background;
   const _options: Options = {} as Options
+  if (debug == false) {
+    return
+  }
   // use strict null check double bang to account for !0 being true
   // but then !!1 is true
   if (options == null) {
