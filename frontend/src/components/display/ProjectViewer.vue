@@ -30,11 +30,11 @@
         </span>
       </div>
     </nav>
-    <SectionViewer :sections="sections" :category-name="categoryName" :project-name="project.name" @delete-section="onUpdateSection"/>
+    <SectionViewer :sections="sections" :category-name="categoryName" :project-name="project.name" @update-posts="onUpdatePosts"/>
   </div>
 
   <teleport to="#modal" v-if="sectionModal.visible">
-    <component :is="component" :modal="sectionModal" @new-section="onUpdateSection"/>
+    <component :is="component" :modal="sectionModal" @new-section="onUpdatePosts"/>
   </teleport>
 
 </template>
@@ -114,8 +114,8 @@ export default defineComponent({
     }
     const sections = ref(sectionsComputed.value)
 
-    const onUpdateSection = async () => {
-      colorLog('on update section', undefined, debug)
+    const onUpdatePosts = async () => {
+      colorLog('on update posts', undefined, debug)
       const proj: IProject = await postStore.fetchPostsByProject(route.params.name as string)
       sections.value = proj.sections
     }
@@ -130,7 +130,7 @@ export default defineComponent({
       selectedSection,
       sections,
       newSection,
-      onUpdateSection,
+      onUpdatePosts,
       sectionModal,
       component: sectionModal.component
     }

@@ -50,13 +50,13 @@ INSERT INTO "rust"."content_projects"
 )
 VALUES
 ( 
- 'hello-rust', 4
+ 'hello-wasm', 4
 ),
 ( 
- 'quadratic', 4
+ 'quadratic-solve', 4
 ),
 ( 
- 'functions', 4
+ 'functions-say', 4
 );
 
 
@@ -67,13 +67,13 @@ INSERT INTO "rust"."content_posts"
 )
 VALUES
 ( 
- 'hello-rust', 'intro', '# Hello Rust', '<h1>Hello Rust</h1>', 1, 1, 4, NOW()
+ 'hello-wasm-say-intro', 'intro', '# Hello Rust', '<h1>Hello Rust</h1>', 1, 1, 4, NOW()
 ),
 ( 
- 'quadratic', 'intro', '# Quadratic', '<h1>Quadratic</h1>', 2, 2, 4, CURRENT_DATE - integer '6'
+ 'quadratic-solve-intro', 'intro', '# Quadratic', '<h1>Quadratic</h1>', 2, 2, 4, CURRENT_DATE - integer '6'
 ),
 ( 
- 'functions', 'intro', '# Functions', '<h1>Functions</h1>', 3, 3, 4, CURRENT_DATE - integer '13'
+ 'functions-say-intro', 'intro', '# Functions', '<h1>Functions</h1>', 3, 3, 4, CURRENT_DATE - integer '13'
 );
 
 

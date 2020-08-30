@@ -125,9 +125,6 @@ export default defineComponent({
         projectName: props.post.projectName,
         categoryName: props.post.categoryName
       }))
-      // id was set to -1 to represent post that has not yet been created in db
-      // now delete for expected DTO
-      delete createPost.value['id']
       ctx.emit(
         'save',
         createPost.value

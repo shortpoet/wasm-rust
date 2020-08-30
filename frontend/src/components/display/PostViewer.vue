@@ -40,13 +40,11 @@ export default defineComponent({
     console.log(route.params.name);
     
     // on reload there is no pushed id or loaded posts param so must do 'expensive' search instead
-
     if (!postStore.getState().records.loaded) {
       await postStore.fetchRecords()
     }
-
-    const post: IPost = postStore.getRecordById(route.params.name as string)
-
+    
+    const post: IPost = postStore.getRecordById(route.params.title as string)
     const update = useMarkdown().update
     const html = ref()
     if (post.html) {

@@ -60,6 +60,10 @@ export class PostStore extends Store<IPost> {
   }
 
   public async createRecord(input: ICreatePost) {
+    // id was set to -1 to represent post that has not yet been created in db
+    // now delete for expected DTO
+    delete input['id']
+
     const createPost: string = parseQuery(input)
     const query = CREATE_POST(createPost);
     const response = await graphAxios(query);
@@ -164,6 +168,10 @@ export class PostStore extends Store<IPost> {
     }
     if (project) {
       unParseQuery(project)
+      project.sections.forEach(s => {
+        unParseQuery(s)
+        s.posts.forEach(p => unParseQuery(p))
+      })
       // this.state.project.currentId = project.id.toString()
       this.addRecords(project.sections.map(s => s.posts))
     }

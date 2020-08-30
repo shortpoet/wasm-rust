@@ -1,15 +1,21 @@
 <template>
   <div class="panel">
     <div class="panel-block">
-      <p class="control">
-        <span>Click to activate rust function</span>
-        <button class="button is-pulled-right is-rounded" @click.prevent="onRust" style>
-          <i class="fa fa-cog"></i>
-        </button>
-      </p>
+        <p :v-html="postHtml"></p>
+      <div class="control">
+        <div class="input-panel">
+          <FormInput type="text" name="parameter" v-model="parameter" :error="parameterStatus.message"/>
+        </div>
+        <div class="activate-panel">
+          <span>Click to activate rust function</span>
+          <button class="button is-pulled-right is-rounded" @click.prevent="onRust" style>
+            <i class="fa fa-cog"></i>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="post-code-body" v-html="code" />
+  <!-- <div class="post-code-body" v-html="code" /> -->
   <div class="post-code-output">
     <h1 class="subtitle">Rust Message</h1>
     <p>{{ message }}</p>
@@ -17,26 +23,43 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import { colorLog } from '../../utils/colorLog';
 import { rustAxios } from '../../ajax';
+import FormInput from '../input/FormInput.vue'
+import { Status, validate, required } from '../../utils/validators';
 
 export default defineComponent({
+  components: {
+    FormInput
+  },
   props: {
-    code: {
+    postHtml: {
       type: String,
       required: true
     }
   },
   setup () {
     const message = ref();
+    const parameter = ref('');
+    const parameterStatus = computed<Status>(() => {
+      return validate(
+        parameter.value, 
+        [
+          required()
+        ]
+      )
+    })
+
     const onRust = async () => {
       colorLog("rust message", 1);
       message.value = await rustAxios("get", "say", { name: "shortpoet" });
     };
     return {
       onRust,
-      message
+      message,
+      parameter,
+      parameterStatus
     }
   }
 })

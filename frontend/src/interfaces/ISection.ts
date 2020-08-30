@@ -6,4 +6,6 @@ export interface ISection {
   name: string;
   projectName: string;
   posts: IPost[];
+  [key: string]: number | string | IPost[]
+
 }

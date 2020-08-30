@@ -29,14 +29,14 @@
           <p>New Post</p>
         </span>
         <span class="control-element">
-          <button class="button  is-rounded" @click.prevent="deleteSection" style>
+          <button class="button  is-rounded" @click.prevent="updatePosts" style>
             <i class="fa fa-trash"></i>
           </button>
           <p>Delete Section</p>
         </span>
       </div>
     </nav>
-    <SectionPost v-for="post in posts" :key="post.id" :post="post" />
+    <SectionPost v-for="post in posts" :key="post.id" :post="post" @delete-post="updatePosts"/>
   </div>
 </template>
 
@@ -69,7 +69,7 @@ export default defineComponent({
       required: true
     }
   },
-  emits: ['delete-section'],
+  emits: ['update-posts'],
   setup(props, ctx) {
     // colorLog('project section')
     // console.log(props.categoryName);
@@ -107,10 +107,10 @@ export default defineComponent({
     }
     const projectStore: ProjectStore = useStore<ProjectStore>(PROJECT_STORE_SYMBOL) as ProjectStore
 
-    const deleteSection = async () => {
-      colorLog('delete section')
+    const updatePosts = async () => {
+      colorLog('update posts')
       await projectStore.deleteSection(props.section)
-      ctx.emit('delete-section')
+      ctx.emit('update-posts')
     }
 
     return {
@@ -123,7 +123,7 @@ export default defineComponent({
       selectedType,
       posts,
       newPost,
-      deleteSection
+      updatePosts
     };
   },
 });
