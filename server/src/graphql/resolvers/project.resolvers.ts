@@ -7,7 +7,7 @@ import { GraphQLResolveInfo } from 'graphql';
 import { report } from 'process';
 import { Section } from '../entity/Section';
 import { CreateSectionInput } from '../inputs/section.input';
-import { chalkLog } from '../utils/chalkLog';
+import { chalkLog } from '../../utils/chalkLog';
 // import { IProjectDTO } from '../interfaces/IProjectDTO';
 // import { ICategoryDTO } from '../interfaces/ICategoryDTO';
 // import { ITaskDTO } from '../interfaces/ITaskDTO';

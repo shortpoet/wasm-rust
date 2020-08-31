@@ -64,17 +64,17 @@ const config = process.env.PROVIDER === 'postgres'
 module.exports = {
     ...config,
   "entities": [
-      "src/entity/**/*.ts"
+      "src/graphql/entity/**/*.ts"
    ],
    "migrations": [
-      "src/migration/**/*.ts"
+      "src/graphql/migration/**/*.ts"
    ],
    "subscribers": [
-      "src/subscriber/**/*.ts"
+      "src/graphql/subscriber/**/*.ts"
    ],
    "cli": {
-      "entitiesDir": "src/entity",
-      "migrationsDir": "src/migration",
-      "subscribersDir": "src/subscriber"
+      "entitiesDir": "src/graphql/entity",
+      "migrationsDir": "src/graphql/migration",
+      "subscribersDir": "src/grapqhql/subscriber"
    }
 };

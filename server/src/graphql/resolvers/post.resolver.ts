@@ -4,7 +4,7 @@ import { getRepository, DeleteResult, Any, SaveOptions, DeepPartial } from "type
 import { GraphQLResolveInfo } from "graphql";
 import { IPost } from "../interfaces/IPost";
 import { CreatePostInput, UpdatePostInput } from "../inputs/post.input";
-import { chalkLog } from "../utils/chalkLog";
+import { chalkLog } from "../../utils/chalkLog";
 import { Category } from "../entity/Category";
 import { Project } from "../entity/Project";
 import { Section } from "../entity/Section";

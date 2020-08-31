@@ -1,0 +1,47 @@
+{
+  "name": "rust",
+  "version": "1.0.0",
+  "main": "server/app.js",
+  "scripts": {
+    "start": "ts-node ./bin/start.js",
+    "stop": "ts-node ./bin/stop.js",
+    "dev": "ts-node-dev ./src/index.ts"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.2.0",
+    "ssvm": "^0.4.12",
+    "typescript": "^4.0.2",
+    "moment": "^2.27.0",
+    "mssql": "^6.2.1",
+    "pg": "^8.3.2",
+    "redis": "^3.0.2",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.2.25"
+  },
+  "devDependencies": {
+    "@types/node": "^14.6.1",
+    "chalk": "^4.1.0",
+    "ts-node": "^9.0.0",
+    "ts-node-dev": "^1.0.0-pre.61",
+    "util": "^0.12.3",
+    "@types/cors": "^2.8.7",
+    "@types/express": "^4.17.7",
+    "@types/jest": "^26.0.9",
+    "class-validator": "^0.12.2",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-graphql": "^0.11.0",
+    "graphql": "^15.3.0",
+    "jest": "^26.2.2",
+    "reflect-metadata": "^0.1.13",
+    "ts-jest": "^26.1.4",
+    "type-graphql": "^1.0.0-rc.3",
+    "typeorm": "^0.2.25",
+    "typescript": "^3.9.7"
+
+  }
+}

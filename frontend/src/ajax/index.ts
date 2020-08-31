@@ -25,7 +25,7 @@ export const rustAxios
     try {
       const res = await axios({
         method: method,
-        baseURL: process.env.VUE_APP_RUST_API,
+        baseURL: process.env.VUE_APP_GRAPH_API,
         url: rustFunc,
         params: query, 
         validateStatus: (status) => status < 500

@@ -1,6 +1,6 @@
 import { router } from ".";
 
-const { solve } = require('../../quadratic/pkg/quadratic_lib.js');
+const { solve } = require('../../wasm/quadratic/pkg/quadratic_lib.js');
 
 router.post('/', async (request, response) => {
   let a, b, c;
