@@ -1,3 +1,4 @@
+
 <template>
   <div class="panel">
     <div class="panel-block">
@@ -23,12 +24,27 @@
 </template>
 
 <script lang="ts">
+/* tslint:disable */
+/* eslint-disable */
+
 import { defineComponent, ref, computed } from 'vue'
 import { colorLog } from '../../utils/colorLog';
 import { rustAxios } from '../../ajax';
 import FormInput from '../input/FormInput.vue'
 import { Status, validate, required } from '../../utils/validators';
+import * as say from "wasm-hello-world"
 
+// const runWasm = async () => {
+//   // Instantiate our wasm module
+//   const helloWorld = await init("./pkg/hello_world_bg.wasm");
+
+//   // Call the Add function export from wasm, save the result
+//   const addResult = helloWorld.add(24, 24);
+
+//   // Set the result onto the body
+//   document.body.textContent = `Hello World! addResult: ${addResult}`;
+// };
+// runWasm();
 export default defineComponent({
   components: {
     FormInput
@@ -53,7 +69,9 @@ export default defineComponent({
 
     const onRust = async () => {
       colorLog("rust message", 1);
-      message.value = await rustAxios("get", "say", { name: "shortpoet" });
+      // message.value = await rustAxios("get", "say", { name: "shortpoet" });
+      message.value = await say("shortpoe");
+
     };
     return {
       onRust,

@@ -3,7 +3,8 @@ const path = require('path')
 const express = require('express');
 import { Request, Response } from 'express';
 import { router } from ".";
-const { say } = require('../../hello-world/pkg/ssvm_nodejs_starter_lib.js');
+// const { say } = require('../../hello-world/pkg/ssvm_nodejs_starter_lib.js');
+import { say } from '../../hello-world/pkg/ssvm_nodejs_starter_lib.js';
 
 const http = require('http');
 const url = require('url');
