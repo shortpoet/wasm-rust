@@ -2,7 +2,7 @@
   <div class="columns">
     <div class="column"/>
     <div class="column is-two-thirds">
-      <a data-test="can-edit" @click="editPost" class="button is-pulled-right is-rounded is-link" v-if="devEnv">
+      <a data-test="can-edit" @click="editPost" class="button is-pulled-right is-rounded is-link">
         <i class="fas fa-edit" />
       </a>
       <h1>
@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, computed } from 'vue'
+import { ref, defineComponent } from 'vue'
 import { useStore, POST_STORE_SYMBOL } from '../../store'
 import { useMarkdown } from '../../composables/useMarkdown'
 
@@ -34,8 +34,6 @@ export default defineComponent({
   },
   async setup(props) {
     const route = useRoute()
-    const devEnv = computed(() => process.env.NODE_ENV != 'production')
-
     const postStore: PostStore = useStore<PostStore>(POST_STORE_SYMBOL) as PostStore
     const router = useRouter()
     colorLog('post viewer')
@@ -61,8 +59,7 @@ export default defineComponent({
 return {
       post,
       html,
-      editPost,
-      devEnv
+      editPost
     }
   }
 })

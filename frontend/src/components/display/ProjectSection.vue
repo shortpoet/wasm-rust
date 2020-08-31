@@ -21,7 +21,7 @@
           @click="setType(type)"
         >{{ type }}</a>
       </p>
-      <div class="panel-block" v-if="devEnv">
+      <div class="panel-block">
         <span class="control-element">
           <button class="button  is-rounded" @click.prevent="newPost" style>
             <i class="fa fa-edit"></i>
@@ -74,8 +74,7 @@ export default defineComponent({
     // colorLog('project section')
     // console.log(props.categoryName);
     const showBody = ref(true)
-    const devEnv = computed(() => process.env.NODE_ENV != 'production')
-
+    
     const typeNames: IPost["type"][] = props.section.posts.map(p => p.type).concat(['all']);
 
     const selectedType = ref<IPost["type"]>();
@@ -115,7 +114,6 @@ export default defineComponent({
     }
 
     return {
-      devEnv,
       showBody,
       onRust,
       message,
