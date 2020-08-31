@@ -7,6 +7,16 @@ import { Category } from "./Category";
 import { Project } from "./Project";
 import { Section } from "./Section";
 
+require("dotenv").config();
+console.log("$# Entity Config @7");
+
+
+console.log("$# PROVIDER @7");
+console.log(process.env.PROVIDER);
+const dateType = process.env.PROVIDER == 'postgres' ? 'timestamp' : 'datetime'
+console.log(dateType);
+
+
 @ObjectType()
 @Entity({ name: `content_posts`, schema: 'rust' })
 export class Post implements IPost {
@@ -32,7 +42,7 @@ export class Post implements IPost {
   html?: string;
   
   @Field(type => GraphQLISODateTime)
-  @Column({ type: 'timestamp', default: moment() })
+  @Column({ type: dateType, default: moment() })
   created: Moment;
 
   @Field(type => Int)

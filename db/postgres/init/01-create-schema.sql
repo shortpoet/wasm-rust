@@ -63,7 +63,7 @@ CREATE UNIQUE INDEX categories_name_idx ON "rust"."content_categories"(name);
 ALTER TABLE "rust"."content_projects" ADD FOREIGN KEY (category_id) REFERENCES "rust"."content_categories"(id) ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE "rust"."content_posts" ADD FOREIGN KEY (project_id) REFERENCES "rust"."content_projects"(id) ON DELETE NO ACTION ON UPDATE CASCADE;
 ALTER TABLE "rust"."content_posts" ADD FOREIGN KEY (section_id) REFERENCES "rust"."content_sections"(id) ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE "rust"."content_posts" ADD FOREIGN KEY (category_id) REFERENCES "rust"."content_categories"(id) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE "rust"."content_posts" ADD FOREIGN KEY (category_id) REFERENCES "rust"."content_categories"(id) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 
 COMMENT ON TABLE "rust"."content_categories" IS
@@ -92,6 +92,8 @@ ALTER TABLE "rust"."content_posts_tags" ADD FOREIGN KEY (tag_id) REFERENCES "rus
 
 COMMENT ON TABLE "rust"."content_categories" IS
 'This is a join table for the posts and tags';
+
+
 
 -- ##
 -- test database
