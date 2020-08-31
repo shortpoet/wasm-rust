@@ -2,7 +2,13 @@ import { Request, Response } from 'express';
 import { chalkLog } from '../utils/chalkLog';
 
 export const loggingMiddleware = (req: Request, res: Response, next) => {
-  chalkLog('yellow', '#### logging middleware ####')
+  if (process.env.PROVIDER == 'azure') {
+    chalkLog('yellow', '#### **NOTICE** ####')
+    chalkLog('red', '#### PRODUCTION ####')
+    chalkLog('yellow', '#### **NOTICE** ####')
+  } else {
+    chalkLog('yellow', '#### logging middleware ####')
+  }
 
   // console.log(req);
   // console.log(res);

@@ -184,15 +184,6 @@ EXEC sys.sp_addextendedproperty @name=N'Comment',
 @value=N'This is a join table for the posts and tags' , @level0type=N'SCHEMA',@level0name=N'RUST', 
 @level1type=N'TABLE',@level1name=N'content_posts_tags'
 
-GO
-
-USE rust_test;
-
-GO
-
-USE rust_test
-
-GO
 
 
 INSERT INTO [RUST].[content_categories]

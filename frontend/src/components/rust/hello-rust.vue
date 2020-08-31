@@ -25,9 +25,10 @@
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue'
 import { colorLog } from '../../utils/colorLog';
-import { rustAxios } from '../../ajax';
+// import { rustAxios } from '../../ajax';
 import FormInput from '../input/FormInput.vue'
 import { Status, validate, required } from '../../utils/validators';
+// import { say } from './pkg/ssvm_nodejs_starter_lib.js';
 
 export default defineComponent({
   components: {
@@ -53,7 +54,8 @@ export default defineComponent({
 
     const onRust = async () => {
       colorLog("rust message", 1);
-      message.value = await rustAxios("get", "say", { name: "shortpoet" });
+      // message.value = await rustAxios("get", "say", { name: "shortpoet" });
+      // message.value = say('shortpoet')
     };
     return {
       onRust,
