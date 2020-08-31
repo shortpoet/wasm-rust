@@ -22,7 +22,7 @@
         </a>
       </p>
       <div class="panel-block">
-        <span class="control-element">
+        <span class="control-element" v-if="devEnv">
           <button class="button is-rounded" @click.prevent="newSection" style="">
             <i class="fa fa-edit"></i>
           </button>
@@ -74,7 +74,7 @@ export default defineComponent({
     const route = useRoute()
     const postStore: PostStore = useStore<PostStore>(POST_STORE_SYMBOL) as PostStore
     const projectStore: ProjectStore = useStore<ProjectStore>(PROJECT_STORE_SYMBOL) as ProjectStore
-
+    const devEnv = computed(() => process.env.NODE_ENV != 'production')
     const showBody = ref(true)
 
     const router = useRouter()
@@ -122,6 +122,7 @@ export default defineComponent({
     // watch after await forbidden
 
     return {
+      devEnv,
       showBody,
       categoryName,
       project,

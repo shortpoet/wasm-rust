@@ -11,7 +11,7 @@
           <i class="fa fa-external-link-alt"></i>
         </button>
 
-        <button class="header-highlight-button button is-rounded" @click.prevent="deletePost">
+        <button v-if="devEnv" class="header-highlight-button button is-rounded" @click.prevent="deletePost">
           <i class="fa fa-trash"></i>
         </button>
 
@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, computed } from "vue";
 import { IPost } from "../../interfaces/IPost";
 import { useRouter } from "vue-router";
 import { colorLog } from "../../utils/colorLog";
@@ -50,6 +50,8 @@ export default defineComponent({
   emits: ['delete-post'],
   setup(props, ctx) {
     const router = useRouter();
+    const devEnv = computed(() => process.env.NODE_ENV != 'production')
+
     const showBody = ref(true)
     const update = useMarkdown().update
     const html = ref()
@@ -76,7 +78,8 @@ export default defineComponent({
       toPost,
       html,
       showBody,
-      deletePost
+      deletePost,
+      devEnv
     };
   },
 });
