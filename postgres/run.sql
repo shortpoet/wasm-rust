@@ -4,12 +4,12 @@
 
 -- -- https://dba.stackexchange.com/questions/11893/force-drop-db-while-others-may-be-connected
 \c postgres postgres
--- UPDATE pg_database SET datallowconn = 'false' WHERE datname = 'shortpoetdb';
+-- UPDATE pg_database SET datallowconn = 'false' WHERE datname = 'postgres';
 -- SELECT pg_terminate_backend(pid)
 -- FROM pg_stat_activity
--- WHERE datname = 'shortpoetdb';
+-- WHERE datname = 'rust_test';
 -- DROP DATABASE shortpoetdb;
-DROP DATABASE rust_test;
+-- DROP DATABASE rust_test;
 
 -- env vars create primary db
 -- must do this before creating schema with that USER
