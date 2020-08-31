@@ -13,10 +13,7 @@
     "baseUrl": ".",
     "types": [
       "webpack-env",
-      "jest",
-      "moment",
-      "node",
-      "vite"
+      "jest"
     ],
     "paths": {
       "@/*": [
