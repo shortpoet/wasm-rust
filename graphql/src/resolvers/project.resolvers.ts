@@ -20,19 +20,19 @@ export class ProjectsResolver {
   async project(@Arg('name') name: string, @Info() info: GraphQLResolveInfo): Promise<Project> {
     // console.log(info.fieldNodes[0].selectionSet.selections);
     // https://github.com/typeorm/typeorm/blob/master/docs/select-query-builder.md#getting-values-using-querybuilder
-    // const project = await getRepository(Project)
-    //   .createQueryBuilder('project')
-    //   .innerJoinAndSelect('project.tasks', 'tasks')
-    //   .innerJoinAndSelect('tasks.categories', 'taskcategories')
-    //   .innerJoinAndSelect('project.categories', 'categories')
-    //   .innerJoinAndSelect('categories.tasks', 'categorytasks')
-    //   .where('project.id = :id', { id: id })
-    //   .getOne();
-    // console.log(project);
-    const project = await getRepository(Project).findOne({ name: name });
-    if (!project) {
-      throw Error(`Project with name ${name} not found`);
-    }
+    const project = await getRepository(Project)
+      .createQueryBuilder('project')
+      .innerJoinAndSelect('project.category', 'categories')
+      .innerJoinAndSelect('project.sections', 'sections')
+      .innerJoinAndSelect('sections.posts', 'posts')
+      .innerJoinAndSelect('posts.tags', 'tags')
+      .where('project.name = :name', { name: name })
+      .getOne();
+    console.log(project);
+    // const project = await getRepository(Project).findOne({ name: name });
+    // if (!project) {
+    //   throw Error(`Project with name ${name} not found`);
+    // }
     // const out: IProjectDTO = {
     //   id: project.id,
     //   name: project.name,
