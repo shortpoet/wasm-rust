@@ -1,0 +1,104 @@
+version: "3.5"
+
+networks:
+  rustnet:
+    name: ${COMPOSE_PROJECT_NAME}net
+    # driver: bridge
+
+volumes:
+  notused:
+  postgres-data:
+  redis: {} # or :ro ; :rw
+
+services:
+
+  redis:
+    image: 'redis:3.2-alpine'
+    ports: 
+      - '${REDIS_PORT}:${REDIS_PORT}'
+    volumes:
+      - 'redis:/data'
+    networks:
+      - ${COMPOSE_PROJECT_NAME}net
+
+  db.postgres:
+    image: postgres:12
+    restart: unless-stopped
+    volumes:
+      - ../db/postgres/init:/docker-entrypoint-initdb.d/:ro
+      - ../db/postgres/postgres-data:${PGVOLUME}
+    env_file:
+      - ".env"
+    ports:
+      - 5432:5432
+    networks:
+      - ${COMPOSE_PROJECT_NAME}net
+  
+  db.mssql:
+    image: ${COMPOSE_PROJECT_NAME}.db.mssql
+    restart: on-failure
+    # volumes:
+    #   - ../db/postgres/init:/docker-entrypoint-initdb.d/:ro
+    #   - ../db/postgres/postgres-data:${PGVOLUME}
+    build:
+      context: ../
+      dockerfile: docker/mssql/Dockerfile.db.mssql
+    env_file:
+      - ".env"
+    ports:
+      - 1433:1433
+    networks:
+      - ${COMPOSE_PROJECT_NAME}net
+    command: ['/bin/bash', './usr/src/app/mssql-entrypoint.sh']
+  
+  rust.server.prod:
+    # image: ${COMPOSE_PROJECT_NAME}.server:alpine
+    image: ${COMPOSE_PROJECT_NAME}.server:ubuntu
+    depends_on:
+      - db.${PROVIDER}
+      - redis
+    build:
+      context: ../
+      # dockerfile: docker/server/Dockerfile.server.alpine
+      dockerfile: docker/server/Dockerfile.server.ubuntu
+    tty: true
+    stdin_open: true
+    working_dir: /usr/src/app
+    env_file:
+      - ".env"
+    ports:
+      - 5000:5000
+    volumes:
+      - ../server:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - ${COMPOSE_PROJECT_NAME}net
+    # command: ["docker-entrypoint-server-a.sh", "db.${PROVIDER}", "yarn", "start"]
+    command: ["docker-entrypoint-server-u.sh", "db.${PROVIDER}", "yarn", "start"]
+    # command: ["docker-entrypoint-server-u.sh", "db.${PROVIDER}"]
+    # entrypoint: /usr/local/bin/docker-entrypoint-server-a.sh
+
+  rust.client.prod:
+    image: ${COMPOSE_PROJECT_NAME}.client.prod
+    depends_on:
+      - db.${PROVIDER}
+    build:
+      context: ../
+      dockerfile: docker/client-prod/Dockerfile.client.prod.nginx
+    tty: true
+    env_file:
+      - ".env"
+    # environment:
+    #   NODE_ENV: production
+    ports:
+      - 80:80
+    volumes:
+      # - ./client:/usr/src/app
+      # - notused:/usr/src/app/node_modules
+      # - ../docker/client-prod/templates/default.conf.template:/etc/nginx/templates/default.conf.template
+      - ../docker/client-prod/templates/default.conf.template:/etc/nginx/templates/default.conf.template
+      # - ../docker/client-prod/default.conf:/etc/nginx/conf.d/default.conf
+
+    networks:
+      - ${COMPOSE_PROJECT_NAME}net
+    # command: ["/bin/bash", "-c", "/usr/local/bin/nginx-entrypoint.sh && nginx -g 'daemon off;'"]

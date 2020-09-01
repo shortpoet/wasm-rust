@@ -1,0 +1,55 @@
+version: "3.5"
+
+volumes:
+  redis: {} # or :ro ; :rw
+
+networks:
+  rustnet:
+
+services:
+
+  redis:
+    image: 'redis:3.2-alpine'
+    ports: 
+      - '${REDIS_PORT}:${REDIS_PORT}'
+    volumes:
+      - 'redis:/data'
+    networks:
+      - ${COMPOSE_PROJECT_NAME}net
+  
+  rust.server.prod.azure:
+    # image: ${COMPOSE_PROJECT_NAME}.server:alpine
+    image: ${COMPOSE_PROJECT_NAME}.server.prod.azure:ubuntu
+    depends_on:
+      - redis
+    tty: true
+    stdin_open: true
+    working_dir: /usr/src/app
+    env_file:
+      - ".env"
+    ports:
+      - 5000:5000
+    volumes:
+      - ../server:/usr/src/app
+      - /usr/src/app/node_modules
+    command: ["docker-entrypoint-server-u.sh", "yarn", "start"]
+    # entrypoint: /usr/local/bin/docker-entrypoint-server-a.sh
+    networks:
+      - ${COMPOSE_PROJECT_NAME}net
+
+  rust.client.prod.azure:
+    image: ${COMPOSE_PROJECT_NAME}.client.prod.azure
+    depends_on:
+      - rust.server.prod.azure
+    tty: true
+    env_file:
+      - ".env"
+    # environment:
+    #   NODE_ENV: production
+    ports:
+      - 80:80
+    volumes:
+      - ../docker/client-prod/templates/default.conf.template:/etc/nginx/templates/default.conf.template
+    # command: ["/bin/bash", "-c", "/usr/local/bin/nginx-entrypoint.sh && nginx -g 'daemon off;'"]
+    networks:
+      - ${COMPOSE_PROJECT_NAME}net

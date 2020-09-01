@@ -112,6 +112,14 @@ VALUES
 -- update content_posts set created = (select current_date - integer '6') where id = 2;
 
 SELECT setval(
+    pg_get_serial_sequence('"rust"."content_projects"', 'id'),
+    (SELECT MAX("id") FROM "rust"."content_projects") + 1
+);
+SELECT setval(
+    pg_get_serial_sequence('"rust"."content_sections"', 'id'),
+    (SELECT MAX("id") FROM "rust"."content_sections") + 1
+);
+SELECT setval(
     pg_get_serial_sequence('"rust"."content_categories"', 'id'),
     (SELECT MAX("id") FROM "rust"."content_categories") + 1
 );

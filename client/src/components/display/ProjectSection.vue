@@ -84,7 +84,8 @@ export default defineComponent({
         return selectedType.value ? post.type == selectedType.value : true;
       })
     );
-
+    console.log(posts);
+    
     const setType = (type: IPost["type"]) => {
       selectedType.value = type == "all" ? "" : type;
     };

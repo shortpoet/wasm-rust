@@ -9,14 +9,15 @@
 -- FROM pg_stat_activity
 -- WHERE datname = 'postgres';
 -- DROP DATABASE shortpoetdb;
-DROP DATABASE rust_test;
+-- DROP DATABASE rust_test;
 
+-- IMPORTANT
 -- env vars create primary db
--- must do this before creating schema with that USER
+-- must COMMENT CREATE DB before creating schema with that USER
 -- on docker we are logged in as test from beginning
 -- CREATE DATABASE shortpoetdb;
 -- GRANT ALL ON DATABASE shortpoetdb TO test;
-CREATE DATABASE rust_test;
+-- CREATE DATABASE rust_test;
 GRANT ALL ON DATABASE rust_test TO rust_user;
 
 -- ####
