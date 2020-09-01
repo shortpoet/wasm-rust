@@ -5,5 +5,6 @@ export type ICategoryName = 'browser' | 'deno' | 'faas' | 'nodejs' | 'rust' | 's
 export interface ICategory {
   id: number;
   name: ICategoryName;
+  // projects: IProject[];
   posts: IPost[];
 }

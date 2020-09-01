@@ -17,3 +17,25 @@ docker run -p 3000:3000 --rm -it -v $(pwd):/app secondstate/ssvm-nodejs-starter:
 ## docs branch
 
 - trigger gh deploy
+
+## usage
+
+- run docker container 
+
+```bash
+cd docker
+./dev/build.sh
+./dev/run.sh
+```
+
+- don't forget to bring down the container properly after
+
+```bash
+./dev/down.sh
+```
+
+- to start with fresh image wipe then build again
+
+```bash
+./dev/wipe.sh
+```

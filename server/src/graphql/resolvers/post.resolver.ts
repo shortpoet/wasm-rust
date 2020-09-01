@@ -45,11 +45,27 @@ export class PostsResolver {
 
   @Mutation(returns => Post)
   async createPost(@Arg("post") postInput: CreatePostInput): Promise<Post> {
-    console.log('#### create post ####');
+    chalkLog('yellow', '#### create post ####');
+    console.log(postInput);
+    
     const repo = getRepository(Post);    
-    const category = await getRepository(Category).findOne({ name: postInput.categoryName as Category['name'] })
-    const section = await getRepository(Section).findOne({ name: postInput.sectionName as Section['name'] })
-    const project = await getRepository(Project).findOne({ name: postInput.projectName as Project['name'] })
+    const category = await getRepository(Category)
+      .createQueryBuilder('category')
+      .where('category.name = :name', { name: postInput.categoryName })
+      .getOne();
+    console.log(category);
+    
+    const section = await getRepository(Section)
+    .createQueryBuilder('section')
+    .where('section.name = :name', { name: postInput.sectionName })
+    .getOne();
+    console.log(section);
+    const project = await getRepository(Project)
+    .createQueryBuilder('project')
+    .where('project.name = :name', { name: postInput.projectName })
+    .getOne();
+    console.log(project);
+
     const newPost = await repo.create(<Partial<Post>>{
       ...postInput,
       categoryId: category.id,
