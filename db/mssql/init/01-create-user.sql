@@ -21,7 +21,7 @@ SET @authorization = 'dbo';
 DECLARE @cmd nvarchar(max);
 SET @cmd = 
 'BEGIN
-	CREATE LOGIN '+ @user + ' WITH PASSWORD=N''test''
+	CREATE LOGIN '+ @user + ' WITH PASSWORD=N''''
 	
 	CREATE USER ' + @user + ' FOR LOGIN ' + @user + ' WITH DEFAULT_SCHEMA=' + @defaultSchema + '
 	

@@ -1,17 +1,17 @@
 import { reactive, readonly, UnwrapRef, DeepReadonly } from 'vue';
 import moment from 'moment';
-import { IPost } from '@/interfaces/IPost'
-import { IPostDTO } from '@/interfaces/IPostDTO';
-import { IProject } from '@/interfaces/IProject';
-import { IProjectDTO } from '@/interfaces/IProjectDTO';
-import { ICreatePost } from '@/interfaces/ICreatePost';
-import { IUpdatePost } from '@/interfaces/IUpdatePost';
-import { unParseQuery, parseQuery } from '@/utils/graphqlQueryParsers';
-import { graphAxios } from '@/ajax';
-import { colorLog } from '@/utils/colorLog';
+import { IPost } from '../../interfaces/IPost'
+import { IPostDTO } from '../../interfaces/IPostDTO';
+import { IProject } from '../../interfaces/IProject';
+import { IProjectDTO } from '../../interfaces/IProjectDTO';
+import { ICreatePost } from '../../interfaces/ICreatePost';
+import { IUpdatePost } from '../../interfaces/IUpdatePost';
+import { unParseQuery, parseQuery } from '../../utils/graphqlQueryParsers';
+import { graphAxios } from '../../ajax';
+import { colorLog } from '../../utils/colorLog';
 import {  FETCH_POSTS_BY_PROJECT, POSTS_BY_PROJECT, POSTS_INIT, FETCH_POSTS, CREATE_POST, UPDATE_POST, DELETE_POST } from './constants';
 import { Store, IStore, StoreState, initStoreState } from '../store.interface';
-import { ISection } from '@/interfaces/ISection';
+import { ISection } from '../../interfaces/ISection';
 import { ISession, Session } from '../session/session.interface';
 
 
@@ -175,7 +175,7 @@ export class PostStore extends Store<IPost> {
       // this.state.project.currentId = project.id.toString()
       this.addRecords(project.sections.map(s => s.posts))
     }
-    // console.log(project);    
+    console.log(project);    
     // colorLog('project posts loaded', 1)
     this.loaded = true
     this.state.records.loaded = true

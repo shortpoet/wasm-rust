@@ -1,7 +1,7 @@
 import { Moment } from 'moment';
 import moment from 'moment';
-import { useStorage } from '@/composables/useStorage';
-import { colorLog } from '@/utils/colorLog';
+import { useStorage } from '../../composables/useStorage';
+import { colorLog } from '../../utils/colorLog';
 import { ProjectStore } from '../project/project.store';
 
 const storage = useStorage()

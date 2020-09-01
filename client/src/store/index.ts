@@ -1,9 +1,9 @@
 import { initStoreState, Store, IStore} from './store.interface'
 import { ProjectStore } from './project/project.store';
 import { PostStore } from './post/post.store';
-import { IProject } from '@/interfaces/IProject';
+import { IProject } from '../interfaces/IProject';
 import { provide, inject } from 'vue';
-import { IPost } from '@/interfaces/IPost';
+import { IPost } from '../interfaces/IPost';
 
 export const PROJECT_ID_SYMBOL = 'name';
 export const POST_ID_SYMBOL = 'title';

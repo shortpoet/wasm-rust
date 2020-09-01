@@ -81,9 +81,9 @@ export default defineComponent({
     const sectionModal = useModal('new-section')
     // watch after await forbidden
 
-    if (!postStore.getState().records.loaded) {
-      await postStore.fetchRecords()
-    }    
+    // if (!postStore.getState().records.loaded) {
+    //   await postStore.fetchRecords()
+    // }    
     const selectedSection = ref<ISection['name']>()
     // colorLog(JSON.stringify(route.params), 0)
     
@@ -95,8 +95,9 @@ export default defineComponent({
     const project: IProject = await postStore.fetchPostsByProject(route.params.name as string)
     
     // need to add this call else projectstore used by session is empty 
+    // NOTE commenting for now to test
     // so no project to correlate to name
-    await projectStore.fetchRecords()
+    // await projectStore.fetchRecords()
 
     const session: ISession = new Session(project.name, project.categoryName, projectStore)
     const categoryName = project.categoryName

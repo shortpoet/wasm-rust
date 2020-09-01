@@ -1,17 +1,17 @@
-import { IProject } from '@/interfaces/IProject'
+import { IProject } from '../../interfaces/IProject'
 import { reactive, readonly, DeepReadonly, UnwrapRef } from 'vue';
 import { FETCH_PROJECTS, PROJECTS_INIT, CREATE_SECTION, PROJECTS, DELETE_SECTION } from './constants';
-import { IProjectDTO } from '@/interfaces/IProjectDTO';
-import { graphAxios } from '@/ajax';
+import { IProjectDTO } from '../../interfaces/IProjectDTO';
+import { graphAxios } from '../../ajax';
 // import moment from 'moment';
-import { unParseQuery, parseQuery } from '@/utils/graphqlQueryParsers';
+import { unParseQuery, parseQuery } from '../../utils/graphqlQueryParsers';
 import { Store, IStore, StoreState } from '../store.interface';
-import { useStorage } from '@/composables/useStorage';
+import { useStorage } from '../../composables/useStorage';
 import { ISession } from '../session/session.interface';
 import moment from 'moment';
-import { ICreateSection } from '@/interfaces/ICreateSection';
-import { colorLog } from '@/utils/colorLog';
-import { ISection } from '@/interfaces/ISection';
+import { ICreateSection } from '../../interfaces/ICreateSection';
+import { colorLog } from '../../utils/colorLog';
+import { ISection } from '../../interfaces/ISection';
 
 const debug = false;
 

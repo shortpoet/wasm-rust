@@ -46,9 +46,9 @@ export default defineComponent({
       location.reload()
     }
 
-    if (!projectStore.getState().records.loaded) {
-      await projectStore.fetchRecords()
-    }
+    // if (!projectStore.getState().records.loaded) {
+    //   await projectStore.fetchRecords()
+    // }
     
     const allProjects: IProject[] = await projectStore.loadRecords(PROJECTS)
 

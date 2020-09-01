@@ -5,9 +5,9 @@ import WaitShowProject from '../components/display/WaitShowProject.vue'
 import WaitShowPost from '../components/display/WaitShowPost.vue'
 import WaitNewPost from '../components/display/WaitNewPost.vue'
 import { projectStore, postStore } from '../store'
-import { PROJECTS } from '@/store/project/constants'
-import { ProjectStore } from '@/store/project/project.store'
-import { colorLog } from '@/utils/colorLog'
+import { PROJECTS } from '../store/project/constants'
+import { ProjectStore } from '../store/project/project.store'
+import { colorLog } from '../utils/colorLog'
 
 // const beforeProjects = async (to: any, from: any, next: any) => {
 //   if (!projectStore.getState().projects.loaded) {

@@ -1,9 +1,9 @@
 import { readonly, reactive, DeepReadonly, UnwrapRef, provide, inject } from "vue"
 import { PROJECT_STORE_SYMBOL } from './index'
 import { ProjectStore } from './project/project.store'
-import { IProject } from '@/interfaces/IProject'
-import { IPost } from '@/interfaces/IPost'
-import { colorLog } from '@/utils/colorLog'
+import { IProject } from '../interfaces/IProject'
+import { IPost } from '../interfaces/IPost'
+import { colorLog } from '../utils/colorLog'
 
 const debug = false;
 

@@ -35,8 +35,9 @@ const util = require('util');
   // if need to read from.env to have node modules up a directory 
   const connection = await createConnection();
   // console.log(Object.keys(connection));
-  const context = await getConnection().getRepository(Post).find()
-  console.log(context);
+  
+  // const context = await getConnection().getRepository(Post).find()
+  // console.log(context);
 
   // console.log(`name ${connection.name}`);
   if (connection) {

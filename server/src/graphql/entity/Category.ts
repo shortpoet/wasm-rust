@@ -15,13 +15,15 @@ export class Category implements ICategory {
   @Column()
   name: ICategoryName
 
-  @Field(type => Post)
-  @OneToMany(type => Post, post => post.categoryId)
+  @Field(type => [Post])
+  @OneToMany(type => Post, post => post.category, {
+    eager: true
+  })
   @JoinColumn({ name: 'post_id' })
   posts: Post[]
 
-  @Field(type => Project)
-  @OneToMany(type => Project, project => project.categoryId)
+  @Field(type => [Project])
+  @OneToMany(type => Project, project => project.category)
   @JoinColumn({ name: 'project_id' })
   projects: Project[]
 

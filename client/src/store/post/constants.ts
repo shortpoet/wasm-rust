@@ -1,7 +1,7 @@
-import { IPost } from '@/interfaces/IPost'
-import { IProject } from '@/interfaces/IProject'
-import { ICreatePost } from '@/interfaces/ICreatePost'
-import { IUpdatePost } from '@/interfaces/IUpdatePost'
+import { IPost } from '../../interfaces/IPost'
+import { IProject } from '../../interfaces/IProject'
+import { ICreatePost } from '../../interfaces/ICreatePost'
+import { IUpdatePost } from '../../interfaces/IUpdatePost'
 
 export const POSTS = 'posts'
 export const POSTS_INIT = 'posts_init'

@@ -52,7 +52,7 @@ export class Post implements IPost {
   @ManyToOne(type => Section, section => section.posts, {
     // can't do both sides
     // choose one or do manually
-    // eager: true
+    eager: true
   })
   @JoinColumn({ name: 'section_id' })
   section: Section;
@@ -72,7 +72,7 @@ export class Post implements IPost {
   categoryId: number;
   @Field(type => Category)
   @ManyToOne(type => Category, category => category.posts, {
-    eager: true
+    // eager: true
   })
   @JoinColumn({ name: 'category_id' })
   category: Category;

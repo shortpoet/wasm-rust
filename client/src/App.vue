@@ -65,5 +65,5 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
-@import "~bulma/bulma";
+@import "../node_modules/bulma/bulma";
 </style>

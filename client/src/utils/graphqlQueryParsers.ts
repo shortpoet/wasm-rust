@@ -1,9 +1,9 @@
-import { IPost } from "@/interfaces/IPost"
-import { IProject } from "@/interfaces/IProject"
-import { ICreatePost } from "@/interfaces/ICreatePost"
-import { IUpdatePost } from "@/interfaces/IUpdatePost"
-import { ICreateSection } from '@/interfaces/ICreateSection'
-import { ISection } from '@/interfaces/ISection'
+import { IPost } from "../interfaces/IPost"
+import { IProject } from "../interfaces/IProject"
+import { ICreatePost } from "../interfaces/ICreatePost"
+import { IUpdatePost } from "../interfaces/IUpdatePost"
+import { ICreateSection } from '../interfaces/ICreateSection'
+import { ISection } from '../interfaces/ISection'
 
 export const parseQuery = (input: IPost | IProject | ICreatePost | IUpdatePost | ICreateSection ): string => {
   return Object.entries(input).reduce((cur, [k, v]) => {

@@ -8,6 +8,7 @@ import { report } from 'process';
 import { Section } from '../entity/Section';
 import { CreateSectionInput } from '../inputs/section.input';
 import { chalkLog } from '../../utils/chalkLog';
+import { Post } from '../entity/Post';
 // import { IProjectDTO } from '../interfaces/IProjectDTO';
 // import { ICategoryDTO } from '../interfaces/ICategoryDTO';
 // import { ITaskDTO } from '../interfaces/ITaskDTO';
@@ -24,12 +25,18 @@ export class ProjectsResolver {
       .createQueryBuilder('project')
       .innerJoinAndSelect('project.category', 'categories')
       .innerJoinAndSelect('project.sections', 'sections')
-      .innerJoinAndSelect('sections.posts', 'posts')
-      .innerJoinAndSelect('posts.tags', 'tags')
+      .leftJoinAndSelect('sections.posts', 'posts')
+      // was only one post before using left join
+      .leftJoinAndSelect('posts.tags', 'tags')
       .where('project.name = :name', { name: name })
       .getOne();
-    console.log(project);
-    // const project = await getRepository(Project).findOne({ name: name });
+      // console.log(project);
+      // project.sections.forEach(s => console.log(s.posts));
+      // console.log(await getRepository(Post).find())
+      // const _project = await getRepository(Project).findOne({ name: name });
+      // console.log(_project);
+      // _project.sections.forEach(s => console.log(s.posts));
+    
     // if (!project) {
     //   throw Error(`Project with name ${name} not found`);
     // }

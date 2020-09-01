@@ -6,8 +6,8 @@
 type Category {
   id: ID!
   name: String!
-  posts: Post!
-  projects: Project!
+  posts: [Post!]!
+  projects: [Project!]!
 }
 
 input CreatePostInput {

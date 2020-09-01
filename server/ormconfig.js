@@ -30,7 +30,7 @@ const postgresConfig = {
   "password": process.env.POSTGRES_PASSWORD,
   "database": process.env.POSTGRES_DB,
   "synchronize": false,
-  "logging": true
+  "logging": false
 }
 
 const mssqlConfig = {

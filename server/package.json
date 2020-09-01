@@ -41,7 +41,6 @@
     "ts-jest": "^26.1.4",
     "type-graphql": "^1.0.0-rc.3",
     "typeorm": "^0.2.25",
-    "typescript": "^3.9.7"
-
+    "typescript": "^4.0.2"
   }
 }

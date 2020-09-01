@@ -1,3 +1,7 @@
+USE rust_test;
+
+GO
+
 CREATE TABLE [RUST].[content_projects] (
   id INT PRIMARY KEY CLUSTERED IDENTITY(1,1),
   name VARCHAR(100) CHECK(name not like '%[ ]%') NOT NULL,
@@ -22,10 +26,6 @@ EXEC sys.sp_addextendedproperty @name=N'Comment',
 @value=N'This holds sections for the posts on rust.' , @level0type=N'SCHEMA',@level0name=N'RUST', 
 @level1type=N'TABLE',@level1name=N'content_sections'
 
-ALTER TABLE [RUST].[content_projects] ADD FOREIGN KEY (category_id) REFERENCES [RUST].[content_categories](id) ON DELETE NO ACTION ON UPDATE CASCADE;
-ALTER TABLE [RUST].[content_posts] ADD FOREIGN KEY (project_id) REFERENCES [RUST].[content_projects](id) ON DELETE NO ACTION ON UPDATE CASCADE;
-ALTER TABLE [RUST].[content_posts] ADD FOREIGN KEY (section_id) REFERENCES [RUST].[content_sections](id) ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE [RUST].[content_posts] ADD FOREIGN KEY (category_id) REFERENCES [RUST].[content_categories](id) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 CREATE TABLE [RUST].[content_posts] (
   id INT PRIMARY KEY CLUSTERED IDENTITY(1,1),
@@ -46,6 +46,7 @@ EXEC sys.sp_addextendedproperty @name=N'Comment',
 @level1type=N'TABLE',@level1name=N'content_posts'
 
 
+
 CREATE TABLE [RUST].[content_categories] (
   id INT PRIMARY KEY CLUSTERED IDENTITY(1,1),
   name VARCHAR(100) NOT NULL
@@ -56,6 +57,12 @@ CREATE UNIQUE INDEX categories_name_idx ON  [RUST].[content_categories](name);
 EXEC sys.sp_addextendedproperty @name=N'Comment', 
 @value=N'This holds categories for the posts' , @level0type=N'SCHEMA',@level0name=N'RUST', 
 @level1type=N'TABLE',@level1name=N'content_categories'
+
+ALTER TABLE [RUST].[content_projects] ADD FOREIGN KEY (category_id) REFERENCES [RUST].[content_categories](id) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE [RUST].[content_posts] ADD FOREIGN KEY (project_id) REFERENCES [RUST].[content_projects](id) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE [RUST].[content_posts] ADD FOREIGN KEY (section_id) REFERENCES [RUST].[content_sections](id) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE [RUST].[content_posts] ADD FOREIGN KEY (category_id) REFERENCES [RUST].[content_categories](id) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
 
 CREATE TABLE [RUST].[content_tags] (
   id INT PRIMARY KEY CLUSTERED IDENTITY(1,1),
@@ -80,6 +87,8 @@ ALTER TABLE [RUST].[content_posts_tags] ADD FOREIGN KEY (tag_id) REFERENCES [RUS
 EXEC sys.sp_addextendedproperty @name=N'Comment', 
 @value=N'This is a join table for the posts and tags' , @level0type=N'SCHEMA',@level0name=N'RUST', 
 @level1type=N'TABLE',@level1name=N'content_posts_tags'
+
+
 
 -- check COMMENT
 -- https://stackoverflow.com/questions/378700/is-it-possible-to-add-a-description-comment-to-a-table-in-microsoft-sql-2000
