@@ -12,7 +12,7 @@ docker run -p 3000:3000 --rm -it -v $(pwd):/app secondstate/ssvm-nodejs-starter:
 
 ## vercel
 
-- triggering vercel deployment
+- triggering vercel deployment again
 
 ## docs branch
 
