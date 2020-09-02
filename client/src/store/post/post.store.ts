@@ -87,7 +87,10 @@ export class PostStore extends Store<IPost> {
   }
   
   async editRecord(oldPost: IPost, newPost: IUpdatePost) {
+    console.log(newPost);
+    
     const updatePost: string = parseQuery(newPost);
+    
     const query = UPDATE_POST(updatePost);
     console.log('writing to db')
     const response = await graphAxios(query);

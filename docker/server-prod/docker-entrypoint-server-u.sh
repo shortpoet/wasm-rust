@@ -18,7 +18,7 @@ fi
 
 echo -e "${CY}The ${YL}${COMPOSE_PROJECT_NAME} ${filename} ${CY}script has been executed"
 
-yarn start
+npm run dev
 
 # cmd="$@"
 

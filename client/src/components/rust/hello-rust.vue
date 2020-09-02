@@ -9,7 +9,7 @@
         </div>
         <div class="activate-panel">
           <span>Click to activate rust function</span>
-          <button class="button is-pulled-right is-rounded" @click.prevent="onRust" style>
+          <button class="function-button button is-pulled-right is-rounded" @click.prevent="onRust" style>
             <i class="fa fa-cog"></i>
           </button>
         </div>
@@ -57,7 +57,12 @@ export default defineComponent({
 
     const onRust = async () => {
       colorLog("rust message", 1);
-      message.value = await rustAxios("get", "say", { name: "shortpoet" });
+      const res = await rustAxios("get", "say", { name: parameter.value });
+      if (res == 'Please use command curl http://127.0.0.1:8080/say/?name=MyName \n') {
+        message.value = 'Please supply a value before activating function'
+      } else {
+        message.value = res
+      }
 
     };
     return {

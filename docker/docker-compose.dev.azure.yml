@@ -20,7 +20,7 @@ services:
   rust.server.dev.azure:
     # image: ${COMPOSE_PROJECT_NAME}.server:alpine
     # image is different from service because azure doesn't use build step
-    image: ${COMPOSE_PROJECT_NAME}.server.prod.azure:ubuntu
+    image: ${COMPOSE_PROJECT_NAME}.server.dev.azure:ubuntu
     depends_on:
       - redis
     build:
@@ -37,13 +37,13 @@ services:
     volumes:
       - ../server:/usr/src/app
       - /usr/src/app/node_modules
-    command: ["docker-entrypoint-server-u.sh", "yarn", "start"]
-    # entrypoint: /usr/local/bin/docker-entrypoint-server-a.sh
+      command: ["docker-entrypoint-server-u.sh", "yarn", "run", "dev"]
+      # entrypoint: /usr/local/bin/docker-entrypoint-server-a.sh
     networks:
       - ${COMPOSE_PROJECT_NAME}net
 
   rust.client.dev.azure:
-    image: ${COMPOSE_PROJECT_NAME}.client.prod.azure
+    image: ${COMPOSE_PROJECT_NAME}.client.dev.azure
     depends_on:
       - rust.server.dev.azure
     build:

@@ -10,7 +10,7 @@ echo -e "${CY}The ${YL}${COMPOSE_PROJECT_NAME} ${filename} ${CY}script has been 
 
 if [ ! -d "/app/dist" ] 
 then
-  npm run build:docker
+  npm run build
 
   echo -e "${LC}Build finished...";
 

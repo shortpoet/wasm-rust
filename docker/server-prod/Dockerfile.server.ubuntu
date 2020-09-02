@@ -1,29 +1,32 @@
-FROM node:latest
+FROM ubuntu:20.04
 
-USER root
+# USER root
+
+ARG DEBIAN_FRONTEND=noninteractive
+ENV RUSTUP_HOME=/usr/local/rustup \
+    CARGO_HOME=/usr/local/cargo \
+    PATH=/usr/local/cargo/bin:$PATH
+    
+RUN apt-get update \
+    && apt-get install -y tzdata \
+    && apt-get -y upgrade && apt-get install -y build-essential curl wget git vim libboost-all-dev
+RUN curl -sL https://deb.nodesource.com/setup_14.x |  bash \
+    && apt-get install -y nodejs 
+
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 # https://stackoverflow.com/a/38004106/12658653
 RUN apt-get -y update && apt-get install -y apt-transport-https
 
 RUN apt-get -y update  && \
-    apt-get install -y curl && \
     apt-get install -y nmap && \
-    apt-get install -y postgresql-client && \
-    curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
-    apt-get install -y nodejs
-
-# RUN apt-get update -y && apt-get upgrade -y
+    apt-get install -y postgresql-client 
 
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
 
-RUN curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | tee /etc/apt/sources.list.d/msprod.list
+RUN curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list | tee /etc/apt/sources.list.d/msprod.list
 
 RUN apt-get update 
-
-# RUN echo unixodbc-dev unixodbc-dev/ACCEPT_EULA boolean true | debconf-set-selections
-# RUN echo 'export ACCEPT_EULA=Y'
-
-# RUN echo 'export DEBIAN_FRONTEND=noninteractive'
 
 RUN ACCEPT_EULA=Y apt-get install -y mssql-tools
 
@@ -33,6 +36,7 @@ RUN apt-get update
 
 RUN ACCEPT_EULA=Y apt-get install -y mssql-tools
 
+# path doesn't work right maybe no bashrc in 20.04?
 RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
 
 # to check if db is running
@@ -40,34 +44,34 @@ RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
 
 # moving node modules up makes server fail to find .env for ormconfig
 # WORKDIR /usr/src
-
-RUN mkdir -p /usr/src/app/node_modules && chown -R node:node /usr/src/app
-
 WORKDIR /usr/src/app
 
-# RUN npm install -g --quiet --silent ts-node typescript
+# RUN npm install -g --quiet --silent  webpack-dev-server tsc
+
+RUN npm install -y -g ssvmup --unsafe-perm
 
 COPY server/package*.json ./
 
-COPY docker/server-prod/docker-entrypoint-server-u.sh docker/colors.cfg /usr/local/bin/
-
-USER node
-
-RUN npm install --quiet --silent && npm cache clean --force
+RUN npm install --quiet --silent  && npm cache clean --force
 
 ENV PATH /usr/src/node_modules/.bin:$PATH
 
-COPY --chown=node:node ./server .
+WORKDIR /usr/src/app
 
-EXPOSE 8080
+COPY ./server .
 
-# RUN chmod +x /docker-entrypoint-client.sh
+EXPOSE 5000
 
-ENTRYPOINT ["docker-entrypoint-server-u.sh"]
+COPY docker/server-prod/docker-entrypoint-server-u.sh docker/colors.cfg /usr/local/bin/
+
+RUN chmod +x /usr/local/bin/docker-entrypoint-server-u.sh
+
+# ENTRYPOINT ../../local/bin/docker-entrypoint-server-u.sh
 
 LABEL maintainer="Carlos Soriano <shortpoet@github>"
 
+CMD [ "npm", "run", "start" ]
+
 # CMD ["yarn", "--help"]
-# CMD ["/bin/bash", "-c" "docker-entrypoint-server-u.sh", "yarn", "start"]
 
 # docker run --rm -it -v ${PWD}:/usr/src/app -v /usr/src/app/node_modules -p 3000:3000 ${COMPOSE_PROJECT_NAME}.server:ubuntu

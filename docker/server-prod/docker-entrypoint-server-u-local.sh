@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 
@@ -15,6 +15,7 @@ else
   echo $PROVIDER
 fi
 
+. ~/.bashrc
 
 # source colors.cfg
 # filename=$(basename $0)
@@ -42,15 +43,19 @@ if [ "${PROVIDER}" == "postgres" ]; then
   sleep 2
 done
 
+# https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-configure-docker?view=sql-server-ver15
+# The IP address in the connection string is the IP address of the host machine that is running the container.
 else
   echo -e "${GR}Running under ${LB}Sql Server"
-  until /opt/mssql-tools/bin/sqlcmd -S localhost -U test -P ${MSSQL_PASSWORD} -d shortpoetdb; do
+  # sqlcmd -?
+  # sqlcmd -S db.mssql -U rust -P  -d rust_test -q "Select * from rust.content_categories"
+  # sqlcmd -S 192.168.1.108 -U test -P  -d shortpoetdb -q "Select * from vcc.admin_users"
+  until /opt/mssql-tools/bin/sqlcmd -S db.mssql -U "${MSSQL_USER}" -P "${MSSQL_PASSWORD}" -d "${MSSQL_DB}" -q ":exit"; do
   >&2 echo -e "${GR}Mssql is ${BO}unavailable ${GR}- sleeping"
   sleep 2
 done
 fi
 
-  
 >&2 echo -e "${LB}${PROVIDER} Database is up - ${RD}executing command${NC}"
 exec $cmd
 
